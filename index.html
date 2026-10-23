@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chapter Fines</title>
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="style.css?v=1">
+<link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 <header class="top">
@@ -29,13 +29,7 @@
     </section>
 
     <section class="card">
-      <div class="label" style="text-align:center">How many penalties did you get?</div>
-      <div class="counter">
-        <button type="button" id="minus" aria-label="One fewer penalty">&minus;</button>
-        <div class="n" id="n" aria-live="polite">1</div>
-        <button type="button" id="plus" aria-label="One more penalty">+</button>
-      </div>
-      <div class="total"><span id="each"></span> = <b id="total"></b></div>
+      <div class="total"><b id="fine"></b> per penalty</div>
       <p class="tiny muted" id="examples" style="text-align:center"></p>
       <a class="btn block" id="donate" href="#" target="_blank" rel="noopener">Donate</a>
       <div class="notice" id="hint"></div>
@@ -49,25 +43,9 @@
 <script src="app.js?v=2"></script>
 <script>
 (function () {
-  var F = window.Fines, $ = F.$, n = 1, data = null;
-
-  function draw() {
-    var total = n * data.fine;
-    $('#n').textContent = n;
-    $('#each').textContent = n + ' × £' + data.fine;
-    $('#total').textContent = '£' + total;
-    $('#minus').disabled = n <= 1;
-    $('#plus').disabled = n >= data.max;
-    $('#donate').href = F.donateUrl(data.charity.link, total);
-    $('#donate').textContent = 'Donate £' + total + ' to ' + data.charity.name;
-    var filled = data.charity.link.indexOf('{amount}') >= 0;
-    $('#hint').innerHTML = filled
-      ? 'The charity\'s page opens with <b>£' + total + '</b> filled in. Just finish the donation there.'
-      : 'The charity\'s page will open. Please enter <b>£' + total + '</b> as the amount.';
-  }
+  var F = window.Fines, $ = F.$;
 
   function show(d) {
-    data = d;
     $('#loading').classList.add('hide');
     $('#chapter').textContent = d.chapter || '';
     if (!d.charity) { $('#none').classList.remove('hide'); $('#main').classList.add('hide'); return; }
@@ -78,12 +56,11 @@
     $('#cAbout').classList.toggle('hide', !d.charity.about);
     $('#cWhen').textContent = d.charity.meeting_date ? 'For the meeting on ' + F.dateLabel(d.charity.meeting_date) : '';
     $('#examples').textContent = d.examples ? 'For example: ' + d.examples + '.' : '';
-    if (n > d.max) n = d.max;
-    draw();
+    $('#fine').textContent = '£' + d.fine;
+    $('#donate').href = F.donateUrl(d.charity.link, d.fine);
+    $('#donate').textContent = 'Donate to ' + d.charity.name;
+    $('#hint').innerHTML = 'The charity\'s page will open. Enter <b>£' + d.fine + ' for each penalty</b> you got (2 penalties = £' + (2 * d.fine) + ', 3 = £' + (3 * d.fine) + ').';
   }
-
-  $('#minus').addEventListener('click', function () { if (n > 1) { n--; draw(); } });
-  $('#plus').addEventListener('click', function () { if (n < data.max) { n++; draw(); } });
 
   // show the last charity seen on this phone straight away, then check for the latest
   var cached = F.store.get('fines_current');
