@@ -33,8 +33,9 @@
     <form class="card" id="form" novalidate>
       <h2>Change it</h2>
       <div class="field">
-        <label for="date">Meeting date</label>
+        <label for="date">Meeting date (Friday)</label>
         <input type="date" id="date">
+        <p class="tiny muted" id="dateNote"></p>
       </div>
       <div class="field">
         <label for="name">Charity name</label>
@@ -61,7 +62,7 @@
   </div>
 </main>
 <script src="config.js?v=1"></script>
-<script src="app.js?v=1"></script>
+<script src="app.js?v=2"></script>
 <script>
 (function () {
   var F = window.Fines, $ = F.$, key = F.key(), recent = [];
@@ -111,7 +112,14 @@
       .then(function () { F.busy(btn, false); });
   });
 
-  $('#date').value = F.todayStr();
+  function dateNote() {
+    var v = $('#date').value;
+    $('#dateNote').textContent = !v ? '' : F.isFriday(v) ? F.dateLabel(v) : 'Heads up: ' + F.dateLabel(v) + ' is not a Friday.';
+    $('#dateNote').style.color = v && !F.isFriday(v) ? 'var(--red)' : '';
+  }
+  $('#date').addEventListener('change', dateNote);
+  $('#date').value = F.nextFriday();
+  dateNote();
   if (!key) { $('#loading').classList.add('hide'); $('#denied').classList.remove('hide'); return; }
   Promise.all([F.api('whoAmI', key), F.api('getCurrent'), F.api('recentCharities', key)]).then(function (r) {
     $('#loading').classList.add('hide'); $('#app').classList.remove('hide');

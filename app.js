@@ -32,6 +32,9 @@
     return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][d.getUTCDay()] + ' ' + p[2] + ' ' + ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][p[1] - 1];
   };
   F.todayStr = function () { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); };
+  // the chapter meets on Fridays: today if it is a Friday, otherwise the coming one
+  F.nextFriday = function () { var d = new Date(); d.setDate(d.getDate() + (5 - d.getDay() + 7) % 7); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); };
+  F.isFriday = function (ds) { var p = String(ds || '').split('-').map(Number); return p.length === 3 && new Date(Date.UTC(p[0], p[1] - 1, p[2])).getUTCDay() === 5; };
   // a donation link may contain {amount}; it is swapped for the member's total so the charity page opens with it filled in
   F.donateUrl = function (link, total) { return String(link || '').split('{amount}').join(String(total)); };
 })();
