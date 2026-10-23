@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter Fines</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+<header class="top">
+  <div class="chapter" id="chapter">&nbsp;</div>
+  <h1>Fines for charity</h1>
+</header>
+<main class="wrap">
+  <div id="loading" class="card muted">Loading this week's charity…</div>
+
+  <div id="none" class="card hide">
+    <h2>No charity chosen yet</h2>
+    <p class="muted">The top table hasn't set this week's charity yet. Please check again shortly.</p>
+  </div>
+
+  <div id="main" class="hide">
+    <section class="card">
+      <div class="label">This week's fines go to</div>
+      <p class="charity" id="cName"></p>
+      <p id="cAbout" class="muted"></p>
+      <p id="cWhen" class="tiny muted"></p>
+    </section>
+
+    <section class="card">
+      <div class="label" style="text-align:center">How many penalties did you get?</div>
+      <div class="counter">
+        <button type="button" id="minus" aria-label="One fewer penalty">&minus;</button>
+        <div class="n" id="n" aria-live="polite">1</div>
+        <button type="button" id="plus" aria-label="One more penalty">+</button>
+      </div>
+      <div class="total"><span id="each"></span> = <b id="total"></b></div>
+      <p class="tiny muted" id="examples" style="text-align:center"></p>
+      <a class="btn block" id="donate" href="#" target="_blank" rel="noopener">Donate</a>
+      <div class="notice" id="hint"></div>
+    </section>
+
+    <p class="tiny muted" style="text-align:center">Your payment goes straight to the charity on its own website. The chapter never handles the money.</p>
+  </div>
+  <p class="err" id="err" role="alert"></p>
+</main>
+<script src="config.js?v=1"></script>
+<script src="app.js?v=1"></script>
+<script>
+(function () {
+  var F = window.Fines, $ = F.$, n = 1, data = null;
+
+  function draw() {
+    var total = n * data.fine;
+    $('#n').textContent = n;
+    $('#each').textContent = n + ' × £' + data.fine;
+    $('#total').textContent = '£' + total;
+    $('#minus').disabled = n <= 1;
+    $('#plus').disabled = n >= data.max;
+    $('#donate').href = F.donateUrl(data.charity.link, total);
+    $('#donate').textContent = 'Donate £' + total + ' to ' + data.charity.name;
+    var filled = data.charity.link.indexOf('{amount}') >= 0;
+    $('#hint').innerHTML = filled
+      ? 'The charity\'s page opens with <b>£' + total + '</b> filled in. Just finish the donation there.'
+      : 'The charity\'s page will open. Please enter <b>£' + total + '</b> as the amount.';
+  }
+
+  function show(d) {
+    data = d;
+    $('#loading').classList.add('hide');
+    $('#chapter').textContent = d.chapter || '';
+    if (!d.charity) { $('#none').classList.remove('hide'); $('#main').classList.add('hide'); return; }
+    $('#none').classList.add('hide');
+    $('#main').classList.remove('hide');
+    $('#cName').textContent = d.charity.name;
+    $('#cAbout').textContent = d.charity.about;
+    $('#cAbout').classList.toggle('hide', !d.charity.about);
+    $('#cWhen').textContent = d.charity.meeting_date ? 'For the meeting on ' + F.dateLabel(d.charity.meeting_date) : '';
+    $('#examples').textContent = d.examples ? 'For example: ' + d.examples + '.' : '';
+    if (n > d.max) n = d.max;
+    draw();
+  }
+
+  $('#minus').addEventListener('click', function () { if (n > 1) { n--; draw(); } });
+  $('#plus').addEventListener('click', function () { if (n < data.max) { n++; draw(); } });
+
+  // show the last charity seen on this phone straight away, then check for the latest
+  var cached = F.store.get('fines_current');
+  if (cached) show(cached);
+  F.api('getCurrent').then(function (d) { F.store.set('fines_current', d); show(d); })
+    .catch(function (e) { if (!cached) { $('#loading').classList.add('hide'); $('#err').textContent = e.message; } });
+})();
+</script>
+</body>
+</html>

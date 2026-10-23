@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fines QR Code</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="style.css?v=1">
+<style>
+  .poster { text-align: center; }
+  .poster h1 { color: var(--red); font-size: 2.2rem; margin-bottom: 4px; }
+  #qr { display: inline-block; padding: 14px; background: #fff; border: 1px solid var(--line); border-radius: 12px; margin: 14px 0 8px; }
+  #qr img, #qr canvas { display: block; width: 300px; height: 300px; max-width: 70vw; max-height: 70vw; }
+  .url { word-break: break-all; }
+  @media print {
+    body { background: #fff; }
+    .noprint { display: none !important; }
+    .card { border: 0; }
+    .poster h1 { font-size: 3rem; }
+    #qr img, #qr canvas { width: 11cm; height: 11cm; max-width: none; max-height: none; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="card poster" style="margin-top:18px">
+    <div class="label" id="chapter">&nbsp;</div>
+    <h1>Fines for charity</h1>
+    <p>Scan to see this week's charity and pay your fine (£<span id="fine">5</span> per penalty).</p>
+    <div id="qr" aria-label="QR code"></div>
+    <p class="tiny muted url" id="url"></p>
+  </section>
+  <div class="noprint">
+    <button class="btn block" type="button" onclick="window.print()">Print</button>
+    <p></p>
+    <a class="btn block ghost" id="dl" download="chapter-fines-qr.png" href="#">Save the QR code as a picture</a>
+    <p class="small muted">This code never needs changing. The top table changes the charity on their private page and the same code opens the new one.</p>
+  </div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="config.js?v=1"></script>
+<script src="app.js?v=1"></script>
+<script>
+(function () {
+  var F = window.Fines, $ = F.$;
+  var target = location.href.split('#')[0].split('?')[0].replace(/qr\.html$/, '');
+  $('#url').textContent = target;
+  new QRCode($('#qr'), { text: target, width: 600, height: 600, correctLevel: QRCode.CorrectLevel.M });
+  setTimeout(function () { var c = $('#qr canvas'); if (c) $('#dl').href = c.toDataURL('image/png'); }, 200);
+  F.api('getCurrent').then(function (d) { $('#chapter').textContent = d.chapter || ''; $('#fine').textContent = d.fine; }).catch(function () { /* poster still works */ });
+})();
+</script>
+</body>
+</html>
