@@ -3,6 +3,13 @@
   var F = window.Fines = {};
   var cfg = window.FINES_CONFIG || {};
   F.$ = function (s, r) { return (r || document).querySelector(s); };
+  F.$$ = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
+  F.copy = function (text) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    var t = document.createElement('textarea'); t.value = text; t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); } finally { t.remove(); }
+    return Promise.resolve();
+  };
   F.h = function (s) { return String(s === undefined || s === null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   F.store = {
     get: function (k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },

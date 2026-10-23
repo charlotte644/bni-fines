@@ -3,38 +3,59 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Set the Charity</title>
+<title>Top Table</title>
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 <header class="top">
-  <div class="chapter">Top table only</div>
-  <h1>Set this week's charity</h1>
+  <div class="chapter" id="chapter">Top table</div>
+  <h1>Chambers</h1>
+  <div class="tag">Where the top table decides who benefits.</div>
 </header>
 <main class="wrap">
-  <div id="loading" class="card muted">Checking your link…</div>
+  <div id="loading" class="card muted center">Unlocking chambers…</div>
 
   <div id="denied" class="card hide">
-    <h2>Private page</h2>
-    <p class="muted" id="deniedMsg">This page only works from a top-table member's private link.</p>
+    <h2>Private chambers</h2>
+    <p class="muted" id="deniedMsg">This page only opens from the top table's private link.</p>
   </div>
 
   <div id="app" class="hide">
-    <p class="small muted" id="hello"></p>
+    <section class="card" id="whoCard">
+      <div class="label">Who's at the bench?</div>
+      <div class="chips" id="who"></div>
+      <p class="tiny muted" style="margin:8px 0 0">So we can say who changed the charity. Remembered on this phone.</p>
+    </section>
 
     <section class="card">
-      <div class="label">Showing on the QR page now</div>
-      <p class="charity" id="nowName" style="font-size:1.25rem"></p>
-      <p class="tiny muted" id="nowWhen"></p>
-      <a class="btn ghost small" href="index.html" target="_blank" rel="noopener">Open the QR page</a>
-      <a class="btn ghost small" href="report.html">Fines report</a>
+      <div class="label" id="nowWhen">This Friday</div>
+      <p class="charity" id="nowName" style="font-size:1.45rem"></p>
+      <p class="tiny muted" id="nowBy" style="margin:0 0 12px"></p>
+      <div class="row">
+        <a class="btn ghost small" href="index.html" target="_blank" rel="noopener">See the QR page</a>
+        <a class="btn ghost small" href="report.html">Fines report</a>
+        <a class="btn ghost small" href="qr.html" target="_blank" rel="noopener">Print the QR</a>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="label">The judge's link</div>
+      <p class="small" style="margin-top:0">Send this to whoever is wielding the gavel. It only lets them fine members and send the fines out.</p>
+      <div class="copybox">
+        <input type="text" id="judgeLink" readonly aria-label="Judge's link">
+        <button class="btn small" type="button" id="copy">Copy</button>
+      </div>
+      <button class="btn ghost small hide" type="button" id="share" style="margin-top:10px">Share…</button>
     </section>
 
     <form class="card" id="form" novalidate>
-      <h2>Change it</h2>
+      <h2>Choose a different charity</h2>
+      <p class="small muted" style="margin-top:0" id="defaultNote"></p>
       <div class="field">
-        <label for="date">Meeting date (Friday)</label>
+        <label for="date">For the meeting on</label>
         <select id="date"></select>
       </div>
       <div class="field">
@@ -48,40 +69,52 @@
       <div class="field">
         <label for="link">Donation page link</label>
         <input type="url" id="link" placeholder="https://www.justgiving.com/…" autocomplete="off" inputmode="url">
-        <p class="tiny muted">Open the charity's donation page on your phone, copy the address from the top, and paste it here. <a href="#" id="test">Test this link</a></p>
+        <p class="tiny muted" style="margin:6px 0 0">Open the charity's donation page, copy the address from the top, and paste it here. <a href="#" id="test">Test this link</a></p>
       </div>
-      <button class="btn block" type="submit" id="save">Save and show on the QR page</button>
+      <button class="btn block" type="submit" id="save">Save the charity</button>
       <p class="err" id="err" role="alert"></p>
       <div class="ok hide" id="saved"></div>
     </form>
 
     <section class="card" id="recentCard">
-      <h2>Use a previous charity</h2>
+      <h2>Quick picks</h2>
+      <p class="small muted" style="margin-top:0">Tap one to fill in the form, then save.</p>
       <div class="list" id="recent"></div>
     </section>
   </div>
 </main>
 <script src="config.js?v=1"></script>
-<script src="app.js?v=3"></script>
+<script src="app.js?v=4"></script>
 <script>
 (function () {
-  var F = window.Fines, $ = F.$, key = F.key(), recent = [];
+  var F = window.Fines, $ = F.$, h = F.h, key = F.key(), recent = [], me = F.store.get('fines_me') || '';
 
-  function showNow(d) {
-    $('#nowName').textContent = d.charity ? d.charity.name : 'Nothing set yet';
-    $('#nowWhen').textContent = d.charity
-      ? (d.charity.meeting_date ? 'For ' + F.dateLabel(d.charity.meeting_date) + '. ' : '') + 'Set by ' + d.charity.set_by + ' on ' + d.charity.set_on + '.'
-      : '';
+  function showNow(c, date) {
+    $('#nowWhen').textContent = F.dateLabel(date) + ': fines go to';
+    $('#nowName').textContent = c.name;
+    $('#nowBy').textContent = c.is_default ? 'Our usual charity. Nothing to do unless you fancy a change.' : 'Chosen by ' + c.set_by + ' on ' + c.set_on + '.';
   }
+
+  function drawWho(people) {
+    $('#whoCard').classList.toggle('hide', !people.length);
+    $('#who').innerHTML = people.map(function (p) {
+      return '<button type="button" class="chip' + (p.name === me ? ' on' : '') + '" data-name="' + h(p.name) + '">' + h(p.name.split(' ')[0]) + ' <span class="tiny" style="opacity:.7">' + h(p.role) + '</span></button>';
+    }).join('');
+  }
+  $('#who').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-name]'); if (!b) return;
+    me = b.dataset.name; F.store.set('fines_me', me);
+    F.$$('#who .chip').forEach(function (c) { c.classList.toggle('on', c === b); });
+  });
 
   function drawRecent() {
     $('#recentCard').classList.toggle('hide', !recent.length);
     $('#recent').innerHTML = recent.map(function (c, i) {
-      return '<div><div><b>' + F.h(c.name) + '</b><div class="tiny muted">Last used ' + F.h(F.dateLabel(c.meeting_date) || c.set_on) + '</div></div>' +
+      return '<div><div><b>' + h(c.name) + '</b>' + (c.is_default ? ' <span class="pill grey">usual</span>' : '') +
+        '<div class="tiny muted">' + (c.meeting_date ? 'Last used ' + h(F.dateLabel(c.meeting_date)) : 'The default') + '</div></div>' +
         '<button type="button" class="btn ghost small" data-i="' + i + '">Use</button></div>';
     }).join('');
   }
-
   $('#recent').addEventListener('click', function (e) {
     var b = e.target.closest('button[data-i]'); if (!b) return;
     var c = recent[+b.dataset.i];
@@ -89,23 +122,32 @@
     $('#form').scrollIntoView({ behavior: 'smooth' });
   });
 
+  $('#copy').addEventListener('click', function () {
+    var v = $('#judgeLink').value;
+    F.copy(v).then(function () { $('#copy').textContent = 'Copied ✓'; setTimeout(function () { $('#copy').textContent = 'Copy'; }, 2000); });
+  });
+  if (navigator.share) $('#share').classList.remove('hide');
+  $('#share').addEventListener('click', function () {
+    navigator.share({ title: 'Judge\'s link', text: 'You\'re the judge this Friday. Here\'s your gavel:', url: $('#judgeLink').value }).catch(function () { /* cancelled */ });
+  });
+
   $('#test').addEventListener('click', function (e) {
     e.preventDefault();
     var l = $('#link').value.trim();
     if (!/^https:\/\//i.test(l)) { $('#err').textContent = 'Paste a link starting with https:// first.'; return; }
-    window.open(F.donateUrl(l, 5), '_blank', 'noopener');
+    window.open(l, '_blank', 'noopener');
   });
 
   $('#form').addEventListener('submit', function (e) {
     e.preventDefault();
     $('#err').textContent = ''; $('#saved').classList.add('hide');
-    var c = { meeting_date: $('#date').value, name: $('#name').value.trim(), about: $('#about').value.trim(), link: $('#link').value.trim() };
+    var c = { meeting_date: $('#date').value, name: $('#name').value.trim(), about: $('#about').value.trim(), link: $('#link').value.trim(), by: me };
     if (!c.name) { $('#err').textContent = 'Please give the charity\'s name.'; return; }
     if (!/^https:\/\/\S+\.\S+$/i.test(c.link)) { $('#err').textContent = 'The donation link must be a full web address starting with https://'; return; }
     var btn = $('#save'); F.busy(btn, true);
-    F.api('setCharity', key, c).then(function (d) {
-      showNow(d);
-      $('#saved').textContent = 'Saved. Anyone scanning the QR code now sees ' + c.name + '.';
+    F.api('setCharity', key, c).then(function (saved) {
+      if (c.meeting_date === F.nextFriday()) showNow(saved, c.meeting_date);
+      $('#saved').textContent = 'Done. Fines on ' + F.dateLabel(c.meeting_date) + ' will go to ' + c.name + '. The QR code needs no changes.';
       $('#saved').classList.remove('hide');
       return F.api('recentCharities', key).then(function (r) { recent = r; drawRecent(); });
     }).catch(function (er) { $('#err').textContent = er.message; })
@@ -114,10 +156,13 @@
 
   F.fillFridays($('#date'));
   if (!key) { $('#loading').classList.add('hide'); $('#denied').classList.remove('hide'); return; }
-  Promise.all([F.api('whoAmI', key), F.api('getCurrent'), F.api('recentCharities', key)]).then(function (r) {
+  Promise.all([F.api('topTableInfo', key), F.api('getCurrent'), F.api('recentCharities', key)]).then(function (r) {
     $('#loading').classList.add('hide'); $('#app').classList.remove('hide');
-    $('#hello').textContent = 'Signed in as ' + r[0].label + '. Bookmark this page so you can find it again.';
-    showNow(r[1]);
+    $('#chapter').textContent = r[1].chapter + ' · Top table';
+    $('#judgeLink').value = r[0].judge_link;
+    $('#defaultNote').textContent = 'If nobody changes it, fines go to ' + r[0].default_charity.name + '. Only fill this in for a different charity.';
+    drawWho(r[0].people);
+    showNow(r[1].charity, r[1].date);
     recent = r[2]; drawRecent();
   }).catch(function (er) {
     $('#loading').classList.add('hide'); $('#denied').classList.remove('hide'); $('#deniedMsg').textContent = er.message;

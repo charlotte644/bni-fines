@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settle Up</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=4">
+</head>
+<body>
+<header class="top">
+  <div class="chapter" id="chapter">&nbsp;</div>
+  <h1>Settle up</h1>
+  <div class="tag">Clear your name, help a good cause.</div>
+</header>
+<main class="wrap">
+  <div id="loading" class="card muted center">Finding your file…</div>
+
+  <section id="owe" class="card hide">
+    <p style="margin-top:0">Hi <span id="first"></span>, from the meeting on <span id="date"></span>:</p>
+    <div class="list" id="sins"></div>
+    <div class="total" style="margin-top:12px">Total <b id="total"></b></div>
+    <p class="small center" style="margin:4px 0 16px">for <b id="charity"></b></p>
+    <a class="btn block ghost" id="payLink" href="#" target="_blank" rel="noopener">Pay on the charity's page</a>
+    <p></p>
+    <button class="btn block green" type="button" id="paidBtn">Yes, I've paid ✓</button>
+    <p class="note">Only tap this once you've paid. It lets the top table know, nothing more.</p>
+  </section>
+
+  <section id="done" class="card hide center">
+    <div style="font-size:2.4rem">🎉</div>
+    <h2>Thank you, <span class="first"></span>!</h2>
+    <p id="doneText" class="muted"></p>
+    <p class="small" style="margin-bottom:0">Your record is clean. See you on Friday, badge on.</p>
+  </section>
+
+  <p class="err" id="err" role="alert"></p>
+</main>
+<script src="config.js?v=1"></script>
+<script src="app.js?v=4"></script>
+<script>
+(function () {
+  var F = window.Fines, $ = F.$, h = F.h, ref = (/[?&]r=([a-f0-9]{16})/.exec(location.search) || [])[1] || '';
+
+  function done(d) {
+    $('#owe').classList.add('hide'); $('#done').classList.remove('hide');
+    F.$$('.first').forEach(function (e) { e.textContent = d.first; });
+    $('#doneText').textContent = '£' + d.total + ' for ' + d.charity.name + ' is marked as paid.';
+  }
+
+  function show(d) {
+    $('#loading').classList.add('hide');
+    $('#chapter').textContent = d.chapter;
+    if (d.paid) { done(d); return; }
+    $('#first').textContent = d.first; $('#date').textContent = F.dateLabel(d.date);
+    $('#sins').innerHTML = d.reasons.map(function (r) { return '<div><span>' + h(r) + '</span></div>'; }).join('');
+    $('#total').textContent = '£' + d.total; $('#charity').textContent = d.charity.name;
+    $('#payLink').href = d.charity.link; $('#payLink').textContent = 'Pay £' + d.total + ' to ' + d.charity.name;
+    $('#owe').classList.remove('hide');
+  }
+
+  $('#paidBtn').addEventListener('click', function () {
+    var b = $('#paidBtn'); F.busy(b, true, 'Striking it from the record…');
+    F.api('markPaid', ref).then(done).catch(function (e) { $('#err').textContent = e.message; F.busy(b, false); });
+  });
+
+  F.api('payInfo', ref).then(show).catch(function (e) { $('#loading').classList.add('hide'); $('#err').textContent = e.message; });
+})();
+</script>
+</body>
+</html>

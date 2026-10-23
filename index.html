@@ -5,64 +5,62 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chapter Fines</title>
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 <header class="top">
   <div class="chapter" id="chapter">&nbsp;</div>
   <h1>Fines for charity</h1>
+  <div class="tag">Small slips. Good causes.</div>
 </header>
 <main class="wrap">
-  <div id="loading" class="card muted">Loading this week's charity…</div>
-
-  <div id="none" class="card hide">
-    <h2>No charity chosen yet</h2>
-    <p class="muted">The top table hasn't set this week's charity yet. Please check again shortly.</p>
-  </div>
+  <div id="loading" class="card muted center">Consulting the court records…</div>
 
   <div id="main" class="hide">
     <section class="card">
-      <div class="label">This week's fines go to</div>
+      <div class="label" id="when">This Friday's fines go to</div>
       <p class="charity" id="cName"></p>
-      <p id="cAbout" class="muted"></p>
-      <p id="cWhen" class="tiny muted"></p>
+      <p id="cAbout" class="muted" style="margin:0"></p>
     </section>
 
-    <section class="card">
-      <div class="total"><b id="fine"></b> per penalty</div>
-      <p class="tiny muted" id="examples" style="text-align:center"></p>
+    <section class="card center">
+      <div class="label">The going rate</div>
+      <div class="total"><b id="fine"></b> per fine</div>
+      <p class="tiny muted" id="examples" style="margin:0 0 16px"></p>
       <a class="btn block" id="donate" href="#" target="_blank" rel="noopener">Donate</a>
+      <p class="note">If the judge fined you, look out for an email with your total and an "I've paid" button.</p>
     </section>
 
-    <p class="tiny muted" style="text-align:center">Your payment goes straight to the charity on its own website. The chapter never handles the money.</p>
+    <p class="tiny muted center">Every penny goes straight to the charity on its own website. The chapter never touches the money, only the gavel.</p>
   </div>
   <p class="err" id="err" role="alert"></p>
 </main>
 <script src="config.js?v=1"></script>
-<script src="app.js?v=3"></script>
+<script src="app.js?v=4"></script>
 <script>
 (function () {
   var F = window.Fines, $ = F.$;
 
   function show(d) {
     $('#loading').classList.add('hide');
-    $('#chapter').textContent = d.chapter || '';
-    if (!d.charity) { $('#none').classList.remove('hide'); $('#main').classList.add('hide'); return; }
-    $('#none').classList.add('hide');
     $('#main').classList.remove('hide');
+    $('#chapter').textContent = d.chapter || '';
+    $('#when').textContent = 'Fines on ' + F.dateLabel(d.date) + ' go to';
     $('#cName').textContent = d.charity.name;
     $('#cAbout').textContent = d.charity.about;
     $('#cAbout').classList.toggle('hide', !d.charity.about);
-    $('#cWhen').textContent = d.charity.meeting_date ? 'For the meeting on ' + F.dateLabel(d.charity.meeting_date) : '';
-    $('#examples').textContent = d.examples ? 'For example: ' + d.examples + '.' : '';
+    $('#examples').textContent = d.examples ? 'Typical offences: ' + d.examples + '.' : '';
     $('#fine').textContent = '£' + d.fine;
-    $('#donate').href = F.donateUrl(d.charity.link, d.fine);
-    $('#donate').textContent = 'Donate to ' + d.charity.name;  }
+    $('#donate').href = d.charity.link;
+    $('#donate').textContent = 'Donate to ' + d.charity.name;
+  }
 
   // show the last charity seen on this phone straight away, then check for the latest
-  var cached = F.store.get('fines_current');
+  var cached = F.store.get('fines_current2');
   if (cached) show(cached);
-  F.api('getCurrent').then(function (d) { F.store.set('fines_current', d); show(d); })
+  F.api('getCurrent').then(function (d) { F.store.set('fines_current2', d); show(d); })
     .catch(function (e) { if (!cached) { $('#loading').classList.add('hide'); $('#err').textContent = e.message; } });
 })();
 </script>

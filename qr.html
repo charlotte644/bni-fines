@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fines QR Code</title>
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=4">
 <style>
   .poster { text-align: center; }
   .poster h1 { color: var(--red); font-size: 2.2rem; margin-bottom: 4px; }
@@ -26,7 +28,8 @@
   <section class="card poster" style="margin-top:18px">
     <div class="label" id="chapter">&nbsp;</div>
     <h1>Fines for charity</h1>
-    <p>Scan to see this week's charity and pay your fine (£<span id="fine">5</span> per penalty).</p>
+    <p class="tag" style="font-family:var(--serif);font-style:italic;font-size:1.15rem;margin:0 0 6px">Small slips. Good causes.</p>
+    <p style="margin:0">Scan to see where this week's fines go (£<span id="fine">5</span> each).</p>
     <div id="qr" aria-label="QR code"></div>
     <p class="tiny muted url" id="url"></p>
   </section>
@@ -39,7 +42,7 @@
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="config.js?v=1"></script>
-<script src="app.js?v=3"></script>
+<script src="app.js?v=4"></script>
 <script>
 (function () {
   var F = window.Fines, $ = F.$;

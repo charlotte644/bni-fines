@@ -5,19 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Judge</title>
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 <header class="top">
   <div class="chapter" id="chapter">&nbsp;</div>
-  <h1>The Judge</h1>
+  <h1>Order in court</h1>
+  <div class="tag">Firm, fair, and in aid of charity.</div>
 </header>
 <main class="wrap">
-  <div id="loading" class="card muted">Opening the court…</div>
+  <div id="loading" class="card muted">Fetching the gavel…</div>
 
   <div id="denied" class="card hide">
-    <h2>Private page</h2>
-    <p class="muted" id="deniedMsg">This page only works from the judge's private link.</p>
+    <h2>Judges only</h2>
+    <p class="muted" id="deniedMsg">This page only opens from the judge's link. Ask the top table for it.</p>
   </div>
 
   <div id="app" class="hide">
@@ -30,7 +33,7 @@
     </section>
 
     <div id="fineView">
-      <p class="small muted">Tap a member to fine them. Each fine is £<span class="fineAmt"></span>.</p>
+      <p class="small muted">Tap a member to fine them. Each fine is £<span class="fineAmt"></span>. Fines save as you go.</p>
       <div class="grid" id="grid"></div>
     </div>
 
@@ -68,16 +71,16 @@
 
 <div class="sheet hide" id="ask" role="dialog" aria-modal="true">
   <div>
-    <h2>Send the emails?</h2>
+    <h2>Deliver the verdicts?</h2>
     <p id="askText"></p>
-    <button class="btn block" type="button" id="askYes">Yes, send</button>
+    <button class="btn block" type="button" id="askYes">Yes, send them</button>
     <p></p>
     <button class="btn ghost block" type="button" id="askNo">Not yet</button>
   </div>
 </div>
 
 <script src="config.js?v=1"></script>
-<script src="app.js?v=3"></script>
+<script src="app.js?v=4"></script>
 <script>
 (function () {
   var F = window.Fines, $ = F.$, h = F.h, key = F.key('fines_judge_key');
@@ -100,7 +103,7 @@
   }
 
   function sinRow(f) {
-    return '<div class="sin"><span>' + h(f.reason) + (f.status === 'confirmed' ? ' <span class="pill">emailed</span>' : '') + '</span>' +
+    return '<div class="sin"><span>' + h(f.reason) + (f.paid ? ' <span class="pill">paid</span>' : f.status === 'confirmed' ? ' <span class="pill grey">emailed</span>' : '') + '</span>' +
       (f.id.indexOf('tmp') === 0 ? '<span class="tiny muted">saving…</span>' : '<button type="button" class="x" data-rm="' + h(f.id) + '" aria-label="Remove ' + h(f.reason) + '">&times;</button>') + '</div>';
   }
 
@@ -116,7 +119,7 @@
     var nums = [], total = 0, openCount = 0;
     fines.forEach(function (f) { if (nums.indexOf(f.member) < 0) nums.push(f.member); total += f.amount; if (f.status === 'open' && (member(f.member) || {}).has_email) openCount++; });
     nums.sort(function (a, b) { return Number(a) - Number(b); });
-    $('#sumIntro').textContent = nums.length ? nums.length + ' member' + (nums.length === 1 ? '' : 's') + ', ' + fines.length + ' fine' + (fines.length === 1 ? '' : 's') + ', ' + money(total) + ' in total.' : 'No fines yet. Go back and tap a member to fine them.';
+    $('#sumIntro').textContent = nums.length ? nums.length + ' member' + (nums.length === 1 ? '' : 's') + ', ' + fines.length + ' fine' + (fines.length === 1 ? '' : 's') + ', ' + money(total) + ' in total.' : 'No fines yet. A model chapter, so far. Go back and tap a member to fine them.';
     $('#sumList').innerHTML = nums.map(function (num) {
       var m = member(num) || { name: num, company: '', has_email: false }, list = mine(num);
       return '<div class="who"><div class="top2"><b>' + h(m.name) + '</b><b>' + money(list.reduce(function (t, f) { return t + f.amount; }, 0)) + '</b></div>' +
@@ -197,7 +200,7 @@
     var openF = fines.filter(function (f) { return f.status === 'open' && (member(f.member) || {}).has_email; }), who = [];
     openF.forEach(function (f) { if (who.indexOf(f.member) < 0) who.push(f.member); });
     if (!data.charity) { $('#err').textContent = 'No charity is set yet. Ask the top table to set this week\'s charity first.'; return; }
-    $('#askText').innerHTML = 'Each of the <b>' + who.length + ' member' + (who.length === 1 ? '' : 's') + '</b> with new fines gets an email with their total and a link to pay <b>' + h(data.charity.name) + '</b>.';
+    $('#askText').innerHTML = (who.length === 1 ? 'The <b>one member</b> with new fines gets' : 'Each of the <b>' + who.length + ' members</b> with new fines gets') + ' an email with their total and a link to pay <b>' + h(data.charity.name) + '</b>.';
     $('#ask').classList.remove('hide');
   });
   $('#askNo').addEventListener('click', function () { $('#ask').classList.add('hide'); });
@@ -205,9 +208,9 @@
     var btn = $('#askYes'); F.busy(btn, true, 'Sending…');
     queue.then(function () { return F.api('confirmFines', key, data.date); }).then(function (r) {
       fines = r.fines; drawAll(); drawSummary();
-      var html = '<div class="ok"><b>Sent.</b> ' + r.sent.map(function (s) { return h(s.name) + ' (' + money(s.total) + ')'; }).join(', ') + '.</div>';
+      var html = '<div class="ok"><b>Verdicts delivered.</b> ' + r.sent.map(function (s) { return h(s.name) + ' (' + money(s.total) + ')'; }).join(', ') + '.</div>';
       if (r.no_email.length) html += '<div class="notice">Not emailed (no address on the list): ' + r.no_email.map(h).join(', ') + '.</div>';
-      if (!r.sent.length && !r.no_email.length) html = '<div class="notice">There were no new fines to send.</div>';
+      if (!r.sent.length && !r.no_email.length) html = '<div class="notice">No new fines to send. Justice is up to date.</div>';
       $('#result').innerHTML = html; $('#result').classList.remove('hide');
       $('#ask').classList.add('hide');
     }).catch(function (e) { $('#ask').classList.add('hide'); $('#err').textContent = e.message; })
@@ -220,7 +223,7 @@
       data = d; fines = d.fines;
       $('#chapter').textContent = d.chapter;
       F.$('.fineAmt').textContent = d.fine;
-      $('#charity').innerHTML = d.charity ? 'Fines go to <b>' + h(d.charity.name) + '</b>.' : '<span style="color:var(--red)">No charity set yet. The top table needs to set one before you confirm.</span>';
+      $('#charity').innerHTML = d.charity ? 'Fines today go to <b>' + h(d.charity.name) + '</b>' + (d.charity.is_default ? ' (our usual charity).' : '.') : '<span style="color:var(--red)">No charity set yet. The top table needs to set one before you confirm.</span>';
       $('#loading').classList.add('hide'); $('#app').classList.remove('hide');
       drawAll();
     });
