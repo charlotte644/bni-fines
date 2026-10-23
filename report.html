@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fines Report</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="style.css?v=3">
+<style> .wrap { max-width: 980px; } </style>
+</head>
+<body>
+<header class="top">
+  <div class="chapter" id="chapter">Top table only</div>
+  <h1>Fines report</h1>
+</header>
+<main class="wrap">
+  <div id="loading" class="card muted">Adding it all up…</div>
+
+  <div id="denied" class="card hide">
+    <h2>Private page</h2>
+    <p class="muted" id="deniedMsg">This page only works from a top-table member's private link.</p>
+  </div>
+
+  <div id="app" class="hide">
+    <section class="card">
+      <div class="field" style="max-width:200px;margin-bottom:8px">
+        <label for="year">Year</label>
+        <select id="year"></select>
+      </div>
+      <p id="headline" style="margin:0"></p>
+      <p class="tiny muted" style="margin:4px 0 0">Only fines the judge has confirmed (emailed) are counted.</p>
+    </section>
+    <section class="card scroll">
+      <table class="rep" id="table"></table>
+    </section>
+    <a class="btn ghost small" href="update.html">Set the charity</a>
+  </div>
+  <p class="err" id="err" role="alert"></p>
+</main>
+<script src="config.js?v=1"></script>
+<script src="app.js?v=3"></script>
+<script>
+(function () {
+  var F = window.Fines, $ = F.$, h = F.h, key = F.key();
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  function money(n) { return n ? '£' + n : '<span class="muted">–</span>'; }
+  function cell(n) { return '<td>' + money(n) + '</td>'; }
+
+  function draw(r) {
+    $('#chapter').textContent = r.chapter;
+    $('#headline').innerHTML = '<b>' + r.count + '</b> fine' + (r.count === 1 ? '' : 's') + ' in ' + h(r.year) + ', <b>£' + r.total + '</b> to charity.';
+    var totals = Array(12).fill(0);
+    r.people.forEach(function (p) { p.months.forEach(function (v, i) { totals[i] += v; }); });
+    $('#table').innerHTML = '<tr><th>Member</th>' + MONTHS.map(function (m) { return '<th>' + m + '</th>'; }).join('') + '<th>Total</th><th style="text-align:left">Sins</th></tr>' +
+      r.people.map(function (p) {
+        var sins = Object.keys(p.reasons).map(function (k) { return h(k) + (p.reasons[k] > 1 ? ' ×' + p.reasons[k] : ''); }).join(', ');
+        return '<tr><td><b>' + h(p.name) + '</b></td>' + p.months.map(cell).join('') + '<td><b>' + money(p.total) + '</b></td><td style="text-align:left;white-space:normal;min-width:180px" class="tiny muted">' + sins + '</td></tr>';
+      }).join('') +
+      '<tr class="tot"><td>Total</td>' + totals.map(cell).join('') + '<td>£' + r.total + '</td><td></td></tr>';
+  }
+
+  function load() {
+    return F.api('yearReport', key, $('#year').value).then(function (r) {
+      $('#loading').classList.add('hide'); $('#app').classList.remove('hide'); draw(r);
+    });
+  }
+
+  var y = new Date().getFullYear(), opts = '';
+  for (var i = y; i >= 2026; i--) opts += '<option>' + i + '</option>';
+  $('#year').innerHTML = opts;
+  $('#year').addEventListener('change', function () { load().catch(function (e) { $('#err').textContent = e.message; }); });
+
+  if (!key) { $('#loading').classList.add('hide'); $('#denied').classList.remove('hide'); return; }
+  load().catch(function (e) { $('#loading').classList.add('hide'); $('#denied').classList.remove('hide'); $('#deniedMsg').textContent = e.message; });
+})();
+</script>
+</body>
+</html>

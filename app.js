@@ -16,11 +16,12 @@
       .then(function (r) { return r.json(); })
       .then(function (j) { if (!j.ok) throw new Error(j.error || 'Something went wrong.'); return j.data; });
   };
-  // the private top-table key lives in the link's #key=... part, is remembered on this device, and is then removed from the address bar
-  F.key = function () {
+  // a private key lives in the link's #key=... part, is remembered on this device (top table and judge separately), and is then removed from the address bar
+  F.key = function (store) {
+    store = store || 'fines_key';
     var m = /[#&]key=([A-Za-z0-9]+)/.exec(location.hash || '');
-    if (m) { F.store.set('fines_key', m[1]); try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* ignore */ } }
-    return F.store.get('fines_key') || '';
+    if (m) { F.store.set(store, m[1]); try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* ignore */ } }
+    return F.store.get(store) || '';
   };
   F.busy = function (btn, on, label) {
     if (on) { btn.dataset.l = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>' + F.h(label || 'Saving…'); }
@@ -35,6 +36,19 @@
   // the chapter meets on Fridays: today if it is a Friday, otherwise the coming one
   F.nextFriday = function () { var d = new Date(); d.setDate(d.getDate() + (5 - d.getDay() + 7) % 7); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); };
   F.isFriday = function (ds) { var p = String(ds || '').split('-').map(Number); return p.length === 3 && new Date(Date.UTC(p[0], p[1] - 1, p[2])).getUTCDay() === 5; };
+  // fills a <select> with every Friday of this year (plus January of next year once it is December), grouped by month
+  F.fillFridays = function (sel, chosen) {
+    var now = new Date(), y = now.getFullYear(), d = new Date(Date.UTC(y, 0, 1)), end = Date.UTC(y + 1, now.getMonth() === 11 ? 1 : 0, 1);
+    while (d.getUTCDay() !== 5) d.setUTCDate(d.getUTCDate() + 1);
+    var html = '', group = '';
+    for (; d.getTime() < end; d.setUTCDate(d.getUTCDate() + 7)) {
+      var ds = d.toISOString().slice(0, 10), g = F.dateLabel(ds).split(' ').slice(2).join(' ') + ' ' + ds.slice(0, 4);
+      if (g !== group) { html += (group ? '</optgroup>' : '') + '<optgroup label="' + g + '">'; group = g; }
+      html += '<option value="' + ds + '">' + F.dateLabel(ds) + '</option>';
+    }
+    sel.innerHTML = html + '</optgroup>';
+    sel.value = chosen || F.nextFriday();
+  };
   // a donation link may contain {amount}; it is swapped for the member's total so the charity page opens with it filled in
   F.donateUrl = function (link, total) { return String(link || '').split('{amount}').join(String(total)); };
 })();

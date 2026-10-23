@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chapter Fines</title>
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="style.css?v=2">
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 <header class="top">
@@ -32,7 +32,6 @@
       <div class="total"><b id="fine"></b> per penalty</div>
       <p class="tiny muted" id="examples" style="text-align:center"></p>
       <a class="btn block" id="donate" href="#" target="_blank" rel="noopener">Donate</a>
-      <div class="notice" id="hint"></div>
     </section>
 
     <p class="tiny muted" style="text-align:center">Your payment goes straight to the charity on its own website. The chapter never handles the money.</p>
@@ -40,7 +39,7 @@
   <p class="err" id="err" role="alert"></p>
 </main>
 <script src="config.js?v=1"></script>
-<script src="app.js?v=2"></script>
+<script src="app.js?v=3"></script>
 <script>
 (function () {
   var F = window.Fines, $ = F.$;
@@ -58,9 +57,7 @@
     $('#examples').textContent = d.examples ? 'For example: ' + d.examples + '.' : '';
     $('#fine').textContent = '£' + d.fine;
     $('#donate').href = F.donateUrl(d.charity.link, d.fine);
-    $('#donate').textContent = 'Donate to ' + d.charity.name;
-    $('#hint').innerHTML = 'The charity\'s page will open. Enter <b>£' + d.fine + ' for each penalty</b> you got (2 penalties = £' + (2 * d.fine) + ', 3 = £' + (3 * d.fine) + ').';
-  }
+    $('#donate').textContent = 'Donate to ' + d.charity.name;  }
 
   // show the last charity seen on this phone straight away, then check for the latest
   var cached = F.store.get('fines_current');

@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Judge</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+<header class="top">
+  <div class="chapter" id="chapter">&nbsp;</div>
+  <h1>The Judge</h1>
+</header>
+<main class="wrap">
+  <div id="loading" class="card muted">Opening the court…</div>
+
+  <div id="denied" class="card hide">
+    <h2>Private page</h2>
+    <p class="muted" id="deniedMsg">This page only works from the judge's private link.</p>
+  </div>
+
+  <div id="app" class="hide">
+    <section class="card">
+      <div class="field" style="margin-bottom:8px">
+        <label for="date">Meeting</label>
+        <select id="date"></select>
+      </div>
+      <p class="small muted" id="charity" style="margin:0"></p>
+    </section>
+
+    <div id="fineView">
+      <p class="small muted">Tap a member to fine them. Each fine is £<span class="fineAmt"></span>.</p>
+      <div class="grid" id="grid"></div>
+    </div>
+
+    <div id="sumView" class="hide">
+      <section class="card">
+        <h2>Summary</h2>
+        <p class="small muted" id="sumIntro"></p>
+        <div id="sumList"></div>
+      </section>
+      <div id="result" class="hide"></div>
+    </div>
+
+    <div class="bar">
+      <button class="btn ghost" type="button" id="toggle">Summary</button>
+      <button class="btn hide" type="button" id="confirm">Confirm &amp; email</button>
+    </div>
+  </div>
+  <p class="err" id="err" role="alert"></p>
+</main>
+
+<div class="sheet hide" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetName">
+  <div>
+    <h2 id="sheetName"></h2>
+    <p class="tiny muted" id="sheetCo" style="margin-top:-6px"></p>
+    <div class="label" style="margin-top:12px">Add a fine for</div>
+    <div class="reasons" id="reasons"></div>
+    <div id="otherBox" class="hide">
+      <div class="field"><input type="text" id="otherText" maxlength="120" placeholder="What did they do?" aria-label="Other reason" autocomplete="off"></div>
+      <button class="btn block" type="button" id="otherAdd">Add this fine</button>
+    </div>
+    <button class="btn ghost block" type="button" id="sheetClose" style="margin-top:4px">Done</button>
+    <div id="sheetSins" style="margin-top:10px"></div>
+  </div>
+</div>
+
+<div class="sheet hide" id="ask" role="dialog" aria-modal="true">
+  <div>
+    <h2>Send the emails?</h2>
+    <p id="askText"></p>
+    <button class="btn block" type="button" id="askYes">Yes, send</button>
+    <p></p>
+    <button class="btn ghost block" type="button" id="askNo">Not yet</button>
+  </div>
+</div>
+
+<script src="config.js?v=1"></script>
+<script src="app.js?v=3"></script>
+<script>
+(function () {
+  var F = window.Fines, $ = F.$, h = F.h, key = F.key('fines_judge_key');
+  var data = null, fines = [], pending = [], open = null, queue = Promise.resolve(), tmp = 0;
+
+  function toast(msg) {
+    var t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; t.setAttribute('role', 'status');
+    document.body.appendChild(t); setTimeout(function () { t.remove(); }, 2200);
+  }
+  function mine(num) { return fines.filter(function (f) { return f.member === num; }); }
+  function member(num) { return data.members.filter(function (m) { return m.number === num; })[0]; }
+  function money(n) { return '£' + n; }
+
+  function drawGrid() {
+    $('#grid').innerHTML = data.members.map(function (m) {
+      var n = mine(m.number).length;
+      return '<button type="button" class="mem' + (n ? ' fined' : '') + '" data-n="' + h(m.number) + '" aria-label="' + h(m.name + (n ? ', ' + n + ' fines' : '')) + '"><b>' + h(m.name) + '</b><span>' + h(m.company) + '</span>' +
+        (n ? '<em class="count" aria-label="' + n + ' fines">' + n + '</em>' : '') + '</button>';
+    }).join('');
+  }
+
+  function sinRow(f) {
+    return '<div class="sin"><span>' + h(f.reason) + (f.status === 'confirmed' ? ' <span class="pill">emailed</span>' : '') + '</span>' +
+      (f.id.indexOf('tmp') === 0 ? '<span class="tiny muted">saving…</span>' : '<button type="button" class="x" data-rm="' + h(f.id) + '" aria-label="Remove ' + h(f.reason) + '">&times;</button>') + '</div>';
+  }
+
+  function drawSheet() {
+    if (!open) return;
+    var m = member(open), list = mine(open);
+    $('#sheetName').textContent = m.name;
+    $('#sheetCo').textContent = m.company + (list.length ? ' · ' + list.length + ' fine' + (list.length === 1 ? '' : 's') + ' · ' + money(list.length * data.fine) : '');
+    $('#sheetSins').innerHTML = list.map(sinRow).join('');
+  }
+
+  function drawSummary() {
+    var nums = [], total = 0, openCount = 0;
+    fines.forEach(function (f) { if (nums.indexOf(f.member) < 0) nums.push(f.member); total += f.amount; if (f.status === 'open' && (member(f.member) || {}).has_email) openCount++; });
+    nums.sort(function (a, b) { return Number(a) - Number(b); });
+    $('#sumIntro').textContent = nums.length ? nums.length + ' member' + (nums.length === 1 ? '' : 's') + ', ' + fines.length + ' fine' + (fines.length === 1 ? '' : 's') + ', ' + money(total) + ' in total.' : 'No fines yet. Go back and tap a member to fine them.';
+    $('#sumList').innerHTML = nums.map(function (num) {
+      var m = member(num) || { name: num, company: '', has_email: false }, list = mine(num);
+      return '<div class="who"><div class="top2"><b>' + h(m.name) + '</b><b>' + money(list.reduce(function (t, f) { return t + f.amount; }, 0)) + '</b></div>' +
+        (m.has_email ? '' : '<div class="tiny" style="color:var(--red)">No email address on the list, so they will not be emailed.</div>') +
+        list.map(sinRow).join('') +
+        '<button type="button" class="btn ghost small" data-open="' + h(num) + '" style="margin-top:4px">+ Add a fine</button></div>';
+    }).join('');
+    $('#confirm').classList.toggle('hide', !openCount);
+    $('#confirm').textContent = 'Confirm & email (' + openCount + ')';
+  }
+
+  function drawAll() { drawGrid(); drawSheet(); if (!$('#sumView').classList.contains('hide')) drawSummary(); }
+
+  // changes are sent one at a time, so fines added quickly never trip over each other
+  function send(fn, args, wasAdd) {
+    queue = queue.then(function () {
+      return F.api.apply(null, [fn, key].concat(args)).then(function (list) {
+        if (wasAdd) pending.shift();
+        fines = list.concat(pending); drawAll();
+      }).catch(function (e) { toast(e.message); pending = []; return load(); });
+    });
+  }
+
+  function addFine(num, reason) {
+    var f = { id: 'tmp' + (++tmp), member: num, reason: reason, amount: data.fine, status: 'open' };
+    pending.push(f); fines.push(f);
+    drawAll();
+    toast(member(num).name + ': ' + reason);
+    send('addFine', [data.date, num, reason], true);
+  }
+
+  function removeFine(id) {
+    var f = fines.filter(function (x) { return x.id === id; })[0];
+    fines = fines.filter(function (x) { return x.id !== id; });
+    drawAll();
+    if (f && f.status === 'confirmed') toast('Removed. They have already been emailed, so let them know.');
+    send('removeFine', [id]);
+  }
+
+  function openSheet(num) {
+    open = num;
+    $('#reasons').innerHTML = data.reasons.map(function (r) { return '<button type="button" class="btn ghost" data-r="' + h(r) + '">' + h(r) + '</button>'; }).join('') +
+      '<button type="button" class="btn ghost" data-other="1">Other…</button>';
+    $('#otherBox').classList.add('hide'); $('#otherText').value = '';
+    drawSheet();
+    $('#sheet').classList.remove('hide');
+  }
+
+  $('#grid').addEventListener('click', function (e) { var b = e.target.closest('[data-n]'); if (b) openSheet(b.dataset.n); });
+  $('#reasons').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.other) { $('#otherBox').classList.remove('hide'); $('#otherText').focus(); return; }
+    addFine(open, b.dataset.r);
+  });
+  $('#otherAdd').addEventListener('click', function () {
+    var t = $('#otherText').value.trim();
+    if (!t) { $('#otherText').focus(); return; }
+    addFine(open, 'Other: ' + t);
+    $('#otherText').value = '';
+  });
+  $('#otherText').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); $('#otherAdd').click(); } });
+  $('#sheetClose').addEventListener('click', function () { $('#sheet').classList.add('hide'); open = null; });
+  document.addEventListener('click', function (e) {
+    var rm = e.target.closest('[data-rm]'); if (rm) { removeFine(rm.dataset.rm); return; }
+    var op = e.target.closest('[data-open]'); if (op) openSheet(op.dataset.open);
+  });
+
+  $('#toggle').addEventListener('click', function () {
+    var toSum = $('#sumView').classList.contains('hide');
+    $('#sumView').classList.toggle('hide', !toSum); $('#fineView').classList.toggle('hide', toSum);
+    $('#toggle').textContent = toSum ? 'Back to fining' : 'Summary';
+    $('#result').classList.add('hide');
+    if (toSum) drawSummary(); else $('#confirm').classList.add('hide');
+    window.scrollTo(0, 0);
+  });
+
+  $('#confirm').addEventListener('click', function () {
+    var openF = fines.filter(function (f) { return f.status === 'open' && (member(f.member) || {}).has_email; }), who = [];
+    openF.forEach(function (f) { if (who.indexOf(f.member) < 0) who.push(f.member); });
+    if (!data.charity) { $('#err').textContent = 'No charity is set yet. Ask the top table to set this week\'s charity first.'; return; }
+    $('#askText').innerHTML = 'Each of the <b>' + who.length + ' member' + (who.length === 1 ? '' : 's') + '</b> with new fines gets an email with their total and a link to pay <b>' + h(data.charity.name) + '</b>.';
+    $('#ask').classList.remove('hide');
+  });
+  $('#askNo').addEventListener('click', function () { $('#ask').classList.add('hide'); });
+  $('#askYes').addEventListener('click', function () {
+    var btn = $('#askYes'); F.busy(btn, true, 'Sending…');
+    queue.then(function () { return F.api('confirmFines', key, data.date); }).then(function (r) {
+      fines = r.fines; drawAll(); drawSummary();
+      var html = '<div class="ok"><b>Sent.</b> ' + r.sent.map(function (s) { return h(s.name) + ' (' + money(s.total) + ')'; }).join(', ') + '.</div>';
+      if (r.no_email.length) html += '<div class="notice">Not emailed (no address on the list): ' + r.no_email.map(h).join(', ') + '.</div>';
+      if (!r.sent.length && !r.no_email.length) html = '<div class="notice">There were no new fines to send.</div>';
+      $('#result').innerHTML = html; $('#result').classList.remove('hide');
+      $('#ask').classList.add('hide');
+    }).catch(function (e) { $('#ask').classList.add('hide'); $('#err').textContent = e.message; })
+      .then(function () { F.busy(btn, false); });
+  });
+
+  function load() {
+    $('#err').textContent = '';
+    return F.api('judgeLoad', key, $('#date').value).then(function (d) {
+      data = d; fines = d.fines;
+      $('#chapter').textContent = d.chapter;
+      F.$('.fineAmt').textContent = d.fine;
+      $('#charity').innerHTML = d.charity ? 'Fines go to <b>' + h(d.charity.name) + '</b>.' : '<span style="color:var(--red)">No charity set yet. The top table needs to set one before you confirm.</span>';
+      $('#loading').classList.add('hide'); $('#app').classList.remove('hide');
+      drawAll();
+    });
+  }
+  $('#date').addEventListener('change', function () { load().catch(function (e) { $('#err').textContent = e.message; }); });
+
+  F.fillFridays($('#date'));
+  if (!key) { $('#loading').classList.add('hide'); $('#denied').classList.remove('hide'); return; }
+  load().catch(function (e) { $('#loading').classList.add('hide'); $('#denied').classList.remove('hide'); $('#deniedMsg').textContent = e.message; });
+})();
+</script>
+</body>
+</html>

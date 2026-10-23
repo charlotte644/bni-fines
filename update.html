@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Set the Charity</title>
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="style.css?v=2">
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 <header class="top">
@@ -28,14 +28,14 @@
       <p class="charity" id="nowName" style="font-size:1.25rem"></p>
       <p class="tiny muted" id="nowWhen"></p>
       <a class="btn ghost small" href="index.html" target="_blank" rel="noopener">Open the QR page</a>
+      <a class="btn ghost small" href="report.html">Fines report</a>
     </section>
 
     <form class="card" id="form" novalidate>
       <h2>Change it</h2>
       <div class="field">
         <label for="date">Meeting date (Friday)</label>
-        <input type="date" id="date">
-        <p class="tiny muted" id="dateNote"></p>
+        <select id="date"></select>
       </div>
       <div class="field">
         <label for="name">Charity name</label>
@@ -62,7 +62,7 @@
   </div>
 </main>
 <script src="config.js?v=1"></script>
-<script src="app.js?v=2"></script>
+<script src="app.js?v=3"></script>
 <script>
 (function () {
   var F = window.Fines, $ = F.$, key = F.key(), recent = [];
@@ -112,14 +112,7 @@
       .then(function () { F.busy(btn, false); });
   });
 
-  function dateNote() {
-    var v = $('#date').value;
-    $('#dateNote').textContent = !v ? '' : F.isFriday(v) ? F.dateLabel(v) : 'Heads up: ' + F.dateLabel(v) + ' is not a Friday.';
-    $('#dateNote').style.color = v && !F.isFriday(v) ? 'var(--red)' : '';
-  }
-  $('#date').addEventListener('change', dateNote);
-  $('#date').value = F.nextFriday();
-  dateNote();
+  F.fillFridays($('#date'));
   if (!key) { $('#loading').classList.add('hide'); $('#denied').classList.remove('hide'); return; }
   Promise.all([F.api('whoAmI', key), F.api('getCurrent'), F.api('recentCharities', key)]).then(function (r) {
     $('#loading').classList.add('hide'); $('#app').classList.remove('hide');
