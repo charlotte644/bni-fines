@@ -39,7 +39,7 @@
   <p class="err" id="err" role="alert"></p>
 </main>
 <script src="config.js?v=1"></script>
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 <script>
 (function () {
   var F = window.Fines, $ = F.$, h = F.h, ref = (/[?&]r=([a-f0-9]{16})/.exec(location.search) || [])[1] || '';
@@ -63,7 +63,7 @@
 
   $('#paidBtn').addEventListener('click', function () {
     var b = $('#paidBtn'); F.busy(b, true, 'Striking it from the record…');
-    F.api('markPaid', ref).then(done).catch(function (e) { $('#err').textContent = e.message; F.busy(b, false); });
+    F.api('markPaid', ref).then(function (d) { return d && d.first ? d : F.api('payInfo', ref); }).then(done).catch(function (e) { $('#err').textContent = e.message; F.busy(b, false); });
   });
 
   F.api('payInfo', ref).then(show).catch(function (e) { $('#loading').classList.add('hide'); $('#err').textContent = e.message; });

@@ -19,9 +19,21 @@
     var args = [].slice.call(arguments, 1);
     if (window.FINES_MOCK) return window.FINES_MOCK(fn, args);   // offline preview only
     if (!cfg.SCRIPT_URL) return Promise.reject(new Error('This page has not been connected yet (SCRIPT_URL is empty in config.js).'));
-    return fetch(cfg.SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn: fn, args: args }) })
-      .then(function (r) { return r.json(); })
-      .then(function (j) { if (!j.ok) throw new Error(j.error || 'Something went wrong.'); return j.data; });
+    var body = JSON.stringify({ fn: fn, args: args });
+    // Google occasionally answers with a hiccup (an error page, or the request treated as a plain visit); every call is safe to repeat, so try up to three times
+    function attempt(n) {
+      return fetch(cfg.SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: body })
+        .then(function (r) { return r.text(); })
+        .then(function (t) {
+          var j = null;
+          try { j = JSON.parse(t); } catch (e) { /* not JSON: a hiccup */ }
+          if ((!j || j.retry) && n < 3) return new Promise(function (ok) { setTimeout(ok, 700 * n); }).then(function () { return attempt(n + 1); });
+          if (!j) throw new Error('Google is having a moment. Please try again.');
+          if (!j.ok) throw new Error(j.error || 'Something went wrong.');
+          return j.data;
+        });
+    }
+    return attempt(1);
   };
   // a private key lives in the link's #key=... part, is remembered on this device (top table and judge separately), and is then removed from the address bar
   F.key = function (store) {

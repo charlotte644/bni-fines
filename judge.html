@@ -80,7 +80,7 @@
 </div>
 
 <script src="config.js?v=1"></script>
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 <script>
 (function () {
   var F = window.Fines, $ = F.$, h = F.h, key = F.key('fines_judge_key');
@@ -205,12 +205,19 @@
   });
   $('#askNo').addEventListener('click', function () { $('#ask').classList.add('hide'); });
   $('#askYes').addEventListener('click', function () {
-    var btn = $('#askYes'); F.busy(btn, true, 'Sending…');
+    var btn = $('#askYes'), before = {};
+    F.busy(btn, true, 'Sending…');
+    // who had open fines before confirming, worked out here so the result is right even if the request had to be repeated
+    fines.forEach(function (f) { if (f.status === 'open') before[f.id] = f; });
     queue.then(function () { return F.api('confirmFines', key, data.date); }).then(function (r) {
       fines = r.fines; drawAll(); drawSummary();
-      var html = '<div class="ok"><b>Verdicts delivered.</b> ' + r.sent.map(function (s) { return h(s.name) + ' (' + money(s.total) + ')'; }).join(', ') + '.</div>';
-      if (r.no_email.length) html += '<div class="notice">Not emailed (no address on the list): ' + r.no_email.map(h).join(', ') + '.</div>';
-      if (!r.sent.length && !r.no_email.length) html = '<div class="notice">No new fines to send. Justice is up to date.</div>';
+      var sent = {}, none = [];
+      fines.forEach(function (f) { if (before[f.id] && f.status === 'confirmed') sent[f.member] = (sent[f.member] || 0) + f.amount; });
+      Object.keys(before).forEach(function (id) { var m = member(before[id].member); if (m && !m.has_email && none.indexOf(m.name) < 0) none.push(m.name); });
+      var names = Object.keys(sent).map(function (num) { return h(member(num).name) + ' (' + money(sent[num]) + ')'; });
+      var html = names.length ? '<div class="ok"><b>Verdicts delivered.</b> ' + names.join(', ') + '.</div>' : '';
+      if (none.length) html += '<div class="notice">Not emailed (no address on the list): ' + none.map(h).join(', ') + '.</div>';
+      if (!html) html = '<div class="notice">No new fines to send. Justice is up to date.</div>';
       $('#result').innerHTML = html; $('#result').classList.remove('hide');
       $('#ask').classList.add('hide');
     }).catch(function (e) { $('#ask').classList.add('hide'); $('#err').textContent = e.message; })
