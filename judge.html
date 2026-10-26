@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 <header class="top">
@@ -33,7 +33,7 @@
     </section>
 
     <div id="fineView">
-      <p class="small muted">Tap a member to fine them. Each fine is £<span class="fineAmt"></span>. Fines save as you go.</p>
+      <p class="small muted">Tap a member to fine them. Each fine is £<span class="fineAmt"></span> (switch on ✕2 to double one). It is all just for fun and optional for members. Fines save as you go.</p>
       <div class="grid" id="grid"></div>
     </div>
 
@@ -59,6 +59,7 @@
     <h2 id="sheetName"></h2>
     <p class="tiny muted" id="sheetCo" style="margin-top:-6px"></p>
     <div class="label" style="margin-top:12px">Add a fine for</div>
+    <button type="button" class="chip" id="dbl" aria-pressed="false">✕2 Double the next fine</button>
     <div class="reasons" id="reasons"></div>
     <div id="otherBox" class="hide">
       <div class="field"><input type="text" id="otherText" maxlength="120" placeholder="What did they do?" aria-label="Other reason" autocomplete="off"></div>
@@ -80,7 +81,7 @@
 </div>
 
 <script src="config.js?v=1"></script>
-<script src="app.js?v=5"></script>
+<script src="app.js?v=6"></script>
 <script>
 (function () {
   var F = window.Fines, $ = F.$, h = F.h, key = F.key('fines_judge_key');
@@ -103,7 +104,7 @@
   }
 
   function sinRow(f) {
-    return '<div class="sin"><span>' + h(f.reason) + (f.paid ? ' <span class="pill">paid</span>' : f.status === 'confirmed' ? ' <span class="pill grey">emailed</span>' : '') + '</span>' +
+    return '<div class="sin"><span>' + h(f.reason) + (f.doubled ? ' <b>×2</b>' : '') + (f.paid ? ' <span class="pill">paid</span>' : f.status === 'confirmed' ? ' <span class="pill grey">emailed</span>' : '') + '</span>' +
       (f.id.indexOf('tmp') === 0 ? '<span class="tiny muted">saving…</span>' : '<button type="button" class="x" data-rm="' + h(f.id) + '" aria-label="Remove ' + h(f.reason) + '">&times;</button>') + '</div>';
   }
 
@@ -111,7 +112,7 @@
     if (!open) return;
     var m = member(open), list = mine(open);
     $('#sheetName').textContent = m.name;
-    $('#sheetCo').textContent = m.company + (list.length ? ' · ' + list.length + ' fine' + (list.length === 1 ? '' : 's') + ' · ' + money(list.length * data.fine) : '');
+    $('#sheetCo').textContent = m.company + (list.length ? ' · ' + list.length + ' fine' + (list.length === 1 ? '' : 's') + ' · ' + money(list.reduce(function (t, f) { return t + f.amount; }, 0)) : '');
     $('#sheetSins').innerHTML = list.map(sinRow).join('');
   }
 
@@ -143,12 +144,22 @@
     });
   }
 
+  // the "Double it" switch applies to the next fine only, then turns itself off
+  var dbl = false;
+  function setDbl(on) {
+    dbl = on;
+    $('#dbl').classList.toggle('on', on); $('#dbl').setAttribute('aria-pressed', on ? 'true' : 'false');
+    $('#dbl').textContent = on ? '✕2 Next fine doubled (£' + (data.fine * 2) + ')' : '✕2 Double the next fine';
+  }
+  $('#dbl').addEventListener('click', function () { setDbl(!dbl); });
+
   function addFine(num, reason) {
-    var f = { id: 'tmp' + (++tmp), member: num, reason: reason, amount: data.fine, status: 'open' };
+    var d = dbl, f = { id: 'tmp' + (++tmp), member: num, reason: reason, amount: d ? data.fine * 2 : data.fine, status: 'open', doubled: d };
     pending.push(f); fines.push(f);
+    setDbl(false);
     drawAll();
-    toast(member(num).name + ': ' + reason);
-    send('addFine', [data.date, num, reason], true);
+    toast(member(num).name + ': ' + reason + (d ? ' (doubled)' : ''));
+    send('addFine', [data.date, num, reason, d], true);
   }
 
   function removeFine(id) {
@@ -164,6 +175,7 @@
     $('#reasons').innerHTML = data.reasons.map(function (r) { return '<button type="button" class="btn ghost" data-r="' + h(r) + '">' + h(r) + '</button>'; }).join('') +
       '<button type="button" class="btn ghost" data-other="1">Other…</button>';
     $('#otherBox').classList.add('hide'); $('#otherText').value = '';
+    setDbl(false);
     drawSheet();
     $('#sheet').classList.remove('hide');
   }
@@ -200,7 +212,7 @@
     var openF = fines.filter(function (f) { return f.status === 'open' && (member(f.member) || {}).has_email; }), who = [];
     openF.forEach(function (f) { if (who.indexOf(f.member) < 0) who.push(f.member); });
     if (!data.charity) { $('#err').textContent = 'No charity is set yet. Ask the top table to set this week\'s charity first.'; return; }
-    $('#askText').innerHTML = (who.length === 1 ? 'The <b>one member</b> with new fines gets' : 'Each of the <b>' + who.length + ' members</b> with new fines gets') + ' an email with their total and a link to pay <b>' + h(data.charity.name) + '</b>.';
+    $('#askText').innerHTML = (who.length === 1 ? 'The <b>one member</b> with new fines gets' : 'Each of the <b>' + who.length + ' members</b> with new fines gets') + ' a friendly email with their total, saying it is just for fun and entirely optional, with a link to donate to <b>' + h(data.charity.name) + '</b> if they would like to.';
     $('#ask').classList.remove('hide');
   });
   $('#askNo').addEventListener('click', function () { $('#ask').classList.add('hide'); });

@@ -7,13 +7,13 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 <header class="top">
   <div class="chapter" id="chapter">&nbsp;</div>
   <h1>Fines for charity</h1>
-  <div class="tag">Small slips. Good causes.</div>
+  <div class="tag">Small slips. Good causes. All just for fun.</div>
 </header>
 <main class="wrap">
   <div id="loading" class="card muted center">Consulting the court records…</div>
@@ -26,19 +26,20 @@
     </section>
 
     <section class="card center">
+      <div class="notice" style="margin:0 0 14px;text-align:left"><b>Just for fun, and entirely optional.</b> Our fines are a light-hearted chapter tradition, not a bill. Nobody has to pay and nobody is chased. If you would like to join in, it all goes to a good cause.</div>
       <div class="label">The going rate</div>
       <div class="total"><b id="fine"></b> per fine</div>
       <p class="tiny muted" id="examples" style="margin:0 0 16px"></p>
       <a class="btn block" id="donate" href="#" target="_blank" rel="noopener">Donate</a>
-      <p class="note">If the judge fined you, look out for an email with your total and an "I've paid" button.</p>
+      <p class="note">If the judge picks up on something, you will get a friendly email with your total and an "I&rsquo;ve donated" button.</p>
     </section>
 
-    <p class="tiny muted center">Every penny goes straight to the charity on its own website. The chapter never touches the money, only the gavel.</p>
+    <p class="tiny muted center">Entirely optional. Every penny goes straight to the charity on its own website; the chapter never touches the money, only the gavel.</p>
   </div>
   <p class="err" id="err" role="alert"></p>
 </main>
 <script src="config.js?v=1"></script>
-<script src="app.js?v=5"></script>
+<script src="app.js?v=6"></script>
 <script>
 (function () {
   var F = window.Fines, $ = F.$;
