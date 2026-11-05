@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poppy Appeal</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=5">
+<style>
+  .poppy { width: 84px; height: 84px; display: block; margin: 0 auto 6px; }
+  .lead { font-family: var(--serif); font-size: 1.45rem; line-height: 1.25; margin: 0 0 10px; }
+  .steps { margin: 14px 0 0; padding: 0; list-style: none; text-align: left; }
+  .steps li { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-top: 1px solid var(--line); font-size: .95rem; }
+  .steps li:first-child { border-top: 0; }
+  .steps b { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--red-soft); color: var(--red-d); font-size: .8rem; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="chapter">BNI Intrepid</div>
+  <h1>Poppy Appeal</h1>
+  <div class="tag">Lest we forget.</div>
+</header>
+<main class="wrap">
+  <section class="card center">
+    <svg class="poppy" viewBox="0 0 100 100" role="img" aria-label="A red poppy">
+      <g fill="#b4232a">
+        <circle cx="50" cy="26" r="21"/><circle cx="74" cy="44" r="21"/><circle cx="65" cy="72" r="21"/>
+        <circle cx="35" cy="72" r="21"/><circle cx="26" cy="44" r="21"/>
+      </g>
+      <g fill="#8f1b21" opacity=".55">
+        <circle cx="50" cy="30" r="12"/><circle cx="70" cy="46" r="12"/><circle cx="62" cy="68" r="12"/>
+        <circle cx="38" cy="68" r="12"/><circle cx="30" cy="46" r="12"/>
+      </g>
+      <circle cx="50" cy="50" r="10" fill="#1d2230"/>
+      <circle cx="50" cy="50" r="4" fill="#c9a24a"/>
+    </svg>
+    <p class="lead">Taken a poppy today?</p>
+    <p style="margin:0 0 16px">You can give to the Royal British Legion&rsquo;s Poppy Appeal if you would like to. Give whatever feels right, or nothing at all.</p>
+    <a class="btn block" href="https://donations.britishlegion.org.uk/" target="_blank" rel="noopener">Donate to the Poppy Appeal</a>
+    <p class="note">This opens the Royal British Legion&rsquo;s own donation page. Your gift goes straight to the Legion; the chapter never handles the money.</p>
+  </section>
+
+  <section class="card">
+    <div class="label">How it works</div>
+    <ul class="steps">
+      <li><b>1</b><span>Take a poppy from the pot. Michelle brought them in.</span></li>
+      <li><b>2</b><span>If you would like to give, tap the button above and choose your own amount.</span></li>
+      <li><b>3</b><span>That is it. Entirely voluntary, nobody is asked and nobody is chased.</span></li>
+    </ul>
+  </section>
+
+  <p class="tiny muted center">Want to know more? <a href="https://www.britishlegion.org.uk/get-involved/fundraise-for-us/poppy-appeal" target="_blank" rel="noopener">About the Poppy Appeal</a> on the Royal British Legion&rsquo;s website.</p>
+</main>
+</body>
+</html>
