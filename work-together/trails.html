@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Givers Gain Trails</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { color-scheme: light; --red:#CF2030; --red-d:#A3141F; --deep:#8E0F1A; --ink:#23262D; --muted:#5F6470; --line:#EAE5E0; --warm:#FAF6F3; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--warm); color: var(--ink); font-family: 'Inter', Arial, sans-serif; font-size: 16px; line-height: 1.45; -webkit-font-smoothing: antialiased; padding-bottom: 92px; }
+  h1, h2, h3 { margin: 0; text-wrap: balance; }
+  .wrap { max-width: 620px; margin: 0 auto; }
+  .top { background: linear-gradient(125deg, var(--deep) 0%, #C41C2B 55%, #D9303F 100%); color: #fff; padding: 26px 18px 58px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; margin: 0 0 8px; opacity: .92; }
+  .top h1 { font-size: 31px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
+  .top p.lead { margin: 10px 0 0; font-size: 15.5px; opacity: .96; }
+  main { padding: 0 14px 20px; margin-top: -38px; }
+  .tabs { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; background: #fff; border-radius: 14px; padding: 6px; box-shadow: 0 8px 24px rgba(90,20,25,.12); margin-bottom: 14px; }
+  .tabs button { font: inherit; font-size: 14.5px; font-weight: 700; border: 0; border-radius: 10px; padding: 10px 6px; background: none; color: var(--muted); cursor: pointer; }
+  .tabs button.on { background: var(--red); color: #fff; }
+  .key { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 0 4px 12px; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .key span { display: inline-flex; align-items: center; gap: 5px; } .key i { width: 9px; height: 9px; border-radius: 50%; display: block; }
+  .list { display: grid; gap: 12px; }
+  .tr { background: #fff; border-radius: 16px; padding: 15px 14px 13px; box-shadow: 0 6px 20px rgba(90,20,25,.07); }
+  .tr h2 { font-size: 18px; font-weight: 800; color: var(--red-d); letter-spacing: -.008em; line-height: 1.2; margin-bottom: 9px; }
+  .chain { position: relative; display: grid; gap: 1px; }
+  .chain::before { content: ""; position: absolute; left: 6px; top: 10px; bottom: 10px; width: 2px; background: #E3DBD3; }
+  .st { position: relative; padding: 4px 4px 4px 24px; font-size: 14px; line-height: 1.28; }
+  .st::before { content: ""; position: absolute; left: 1px; top: 8px; width: 12px; height: 12px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 3px #fff; }
+  .st b { font-weight: 700; } .st span { color: var(--muted); font-size: 13.5px; display: block; }
+  .ask { margin: 10px 0 0; padding-top: 9px; border-top: 1px solid var(--line); font-size: 14px; font-weight: 700; color: var(--ink); }
+  .band { background: linear-gradient(125deg, var(--deep) 0%, #C41C2B 60%, #D9303F 100%); color: #fff; border-radius: 16px; padding: 18px 16px; text-align: center; }
+  .band h3 { font-size: 21px; font-weight: 800; letter-spacing: -.01em; line-height: 1.2; }
+  .band p { margin: 6px 0 12px; font-size: 14.5px; }
+  .btn { display: block; background: #fff; color: var(--red-d); text-decoration: none; font-weight: 800; font-size: 18px; border-radius: 13px; padding: 14px; }
+  .more { display: block; margin-top: 10px; color: #fff; font-size: 14.5px; font-weight: 700; text-underline-offset: 3px; }
+  .foot { margin: 16px 4px 0; font-size: 13px; color: var(--muted); }
+  .bar { position: fixed; left: 0; right: 0; bottom: 0; background: #fff; box-shadow: 0 -6px 20px rgba(60,0,8,.14); padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); z-index: 5; }
+  .bar .in { max-width: 620px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .bar p { margin: 0; font-size: 14.5px; font-weight: 800; line-height: 1.2; }
+  .bar a { flex: none; background: var(--red); color: #fff; text-decoration: none; font-weight: 800; font-size: 16px; border-radius: 11px; padding: 11px 18px; }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <p class="eyebrow">BNI Intrepid &nbsp;•&nbsp; Givers Gain</p>
+  <h1>How our members pass work to each other</h1>
+  <p class="lead" id="lead"></p>
+</div></header>
+<main><div class="wrap">
+  <div class="tabs" role="group" aria-label="Show trails for"><button type="button" class="on" data-f="all">All</button><button type="button" data-f="HFL">At home</button><button type="button" data-f="SBT">In business</button></div>
+  <div class="key" id="key"></div>
+  <div class="list" id="list"></div>
+  <p class="foot">These are examples only. Ask each member exactly what they do.</p>
+</div></main>
+<div class="bar"><div class="in"><p>Want to be part of this network?</p><a href="https://bni.co.uk/en-GB/applicationregistration?chapterId=9008" target="_blank" rel="noopener">Join</a></div></div>
+<script>
+var TC = { t:'#2F7D5B', p:'#B5810F', m:'#7B3F8C', f:'#2A4A7B', b:'#1B8088' };
+var P = {
+ philip:['Philip Grunewald','t'], adam:['Adam Shephard','t'], alex:['Alex Jones','t'], anthony:['Anthony Williams','t'], trae:['Trae Williams','t'], lee:['Lee Howells','b'],
+ seamus:['Seamus Sullivan','p'], michelle:['Michelle Barber','p'], sue:['Sue Iannucci','p'], chrisa:['Chris Ashley','p'], clive:['Clive Thomas','p'],
+ andy:['Andy Mackinson','m'], daniel:['Daniel Harris','m'], sian:['Siân Roberts','m'], jonathan:['Jonathan Davies','m'], gareth:['Gareth Rees','m'],
+ kath:['Kath Hiscock','f'], stuartb:['Stuart Bourne','f'], westen:['Steve Western','f'], robbie:['Robbie Williams','f'], chrism:['Chris MacManus','f'], martin:['Martin Britton','b'],
+ spencer:['Spencer Clarke','b'], stuartm:['Stuart Meikle','b'], stevew:['Steve Williams','b'], richard:['Richard Metcalfe','b'], dawn:['Dawn Evans','b'], charlotte:['Charlotte Warren','b']
+};
+var TR = [
+ ['Buying a first home','HFL',[['sue','Finds the right home'],['chrisa','Arranges the mortgage'],['anthony','Surveys the drains before you buy'],['clive','Handles the legal side'],['westen','Sets up home insurance'],['seamus','Gets the bills sorted']],{P:[6,'Makes the new home their own'],C:[6,'Cleans before they move in'],R:[4,'Adds your advice to the move'],H:[6,'Helps the new homeowner settle in'],F:[6,'Helps the family settle in']}],
+ ['Extending the family home','HFL',[['chrisa','Looks at raising the funds'],['anthony','Groundwork and drains'],['adam','New windows and doors'],['trae','Electrics for the new rooms'],['alex','Plumbing for the new rooms'],['westen','Updates the home cover']],{P:[2,'Adds your skill to the build',1],C:[5,'Cleans up after the builders'],H:[6,'Adds the finishing touches']}],
+ ['Becoming a landlord','HFL',[['stuartb','Checks it fits your long-term plan'],['chrisa','Arranges the buy-to-let mortgage'],['sue','Finds the property'],['trae','Checks the electrics'],['philip','Fits the fire alarms'],['michelle','Finds tenants and manages it']],{P:[3,'Gets the property ready to let'],C:[5,'Cleans before tenants move in'],R:[1,'Adds your advice before they buy'],L:[6,'Supports the new landlord']}],
+ ['Selling up and downsizing','HFL',[['alex','Fixes the niggles before viewings'],['sue','Sells the house'],['clive','Handles the legal side'],['stuartb','Plans what to do with the money'],['seamus','Moves the bills across']],{P:[1,'Gets the home ready to sell'],C:[1,'Cleans and clears before viewings'],F:[5,'Helps with the next chapter'],E:[5,'Helps plan what comes next']}],
+ ['Planning to retire','HFL',[['kath','Gets the numbers in order'],['stuartb','Builds the retirement plan'],['clive','Writes the Will'],['chrisa','Reviews any mortgage and protection']],{R:[2,'Adds your advice to the plan',1],F:[4,'Helps them enjoy what comes next'],E:[4,'Helps plan the next adventure']}],
+ ['A leak at a rental home','HFL',[['michelle','Takes the tenant’s call'],['alex','Fixes the leak'],['anthony','Checks and clears the drains'],['trae','Makes the electrics safe'],['westen','Checks what the cover includes']],{P:[4,'Repairs the damage'],C:[4,'Dries out and cleans up'],L:[5,'Supports the landlord afterwards']}],
+ ['Making a home safer and cheaper to run','HFL',[['seamus','Reviews the household bills'],['adam','Upgrades the windows and doors'],['philip','Adds an alarm and CCTV'],['trae','Sorts any electrical work']],{P:[3,'Adds your improvement'],H:[4,'Helps the homeowner next']}],
+ ['Inheriting a house','HFL',[['clive','Handles the legal side'],['sue','Values the property'],['stuartb','Plans the next steps for the money'],['michelle','Lets it, if the family keep it']],{R:[2,'Adds your advice for the family'],C:[1,'Clears and cleans the house'],P:[3,'Gets the house ready'],F:[4,'Supports the family']}],
+ ['Opening a café','SBT',[['clive','Advises on hiring the staff'],['chrism','Funds the equipment'],['trae','Wires the premises'],['philip','Fits fire alarms and CCTV'],['spencer','Sets up card payments'],['richard','Supplies the machine and beans']],{P:[2,'Fits out the premises'],R:[1,'Adds your advice to the plan'],O:[5,'Supplies what the café uses'],M:[6,'Tells the town it’s open'],W:[6,'Gets the team ready to open'],E:[6,'Helps with opening night'],C:[6,'Keeps the premises clean'],S:[6,'Helps the new owner next']}],
+ ['Starting out in the trades','SBT',[['kath','Sets up the books'],['martin','Supplies the van'],['westen','Arranges the insurance'],['lee','Covers health and safety'],['dawn','Delivers first aid training'],['charlotte','Takes on the admin']],{O:[2,'Supplies the tools and kit'],R:[3,'Adds your advice for the new owner'],M:[6,'Helps win the first customers'],W:[5,'Gets the team ready for site'],T:[6,'Works alongside the new trade']}],
+ ['Taking on your first staff','SBT',[['clive','Advises on the legal side'],['dawn','Trains the new starters'],['lee','Reviews risk assessments'],['stuartm','Sets up IT and phones'],['stevew','Stocks the office'],['charlotte','Takes on the extra admin']],{W:[1,'Gets the new team up and running',1],O:[5,'Supplies what the team needs'],R:[1,'Adds your advice for the employer'],M:[2,'Helps train or grow the team'],S:[6,'Helps the growing business next']}],
+ ['Winning a big contract','SBT',[['robbie','Protects against non-payment'],['chrism','Funds the cashflow'],['martin','Adds more vans'],['lee','Helps with ISO standards'],['dawn','Trains the bigger team'],['stevew','Keeps the office supplied']],{W:[4,'Gets the extra people ready'],O:[6,'Supplies what the job needs'],R:[2,'Adds your advice to the deal'],T:[3,'Adds capacity on the job'],P:[3,'Adds capacity on the job'],B:[6,'Helps deliver the contract']}],
+ ['Moving to a new office','SBT',[['stuartm','Moves the IT and phones'],['stevew','Stocks the new office'],['richard','Installs the coffee machine'],['philip','Secures the building'],['spencer','Reviews the new bills'],['jonathan','Prints the new stationery']],{P:[1,'Fits out the new space'],C:[4,'Cleans the new premises',1],O:[3,'Supplies what the new office uses',1],M:[6,'Announces the move'],E:[6,'Hosts the opening'],B:[6,'Helps the team settle in'],S:[6,'Helps the team settle in']}],
+ ['Growing a wholesale business','SBT',[['robbie','Insures the credit you give'],['kath','Keeps the numbers clear'],['chrism','Funds the stock and growth'],['martin','Leases the delivery vans'],['spencer','Keeps overheads down'],['stuartm','Protects the IT']],{O:[4,'Supplies what the warehouse uses'],R:[2,'Adds your advice to the plan'],W:[4,'Gets the extra staff ready'],M:[3,'Finds the new customers'],B:[6,'Helps the bigger business next']}],
+ ['Supplying builders on account','SBT',[['adam','Supplies the trade'],['robbie','Checks and covers the credit'],['kath','Watches the cashflow'],['charlotte','Keeps the paperwork moving']],{T:[1,'Buys from the supplier and refers others'],O:[1,'Also supplies the trade']}],
+ ['Relaunching your brand','SBT',[['andy','Shapes the new brand'],['daniel','Makes the launch film'],['sian','Takes the new photos'],['jonathan','Prints the new look'],['gareth','Adds a cause to stand behind']],{M:[4,'Adds your skill to the launch',1],W:[4,'Brings the team along with the change'],E:[5,'Hosts the launch']}],
+ ['Hosting a charity dinner','SBT',[['gareth','Shares why it matters'],['andy','Spreads the word'],['jonathan','Prints the tickets'],['sian','Photographs the night'],['daniel','Films the story'],['richard','Supplies the coffee']],{E:[3,'Hosts or caters the night',1],M:[2,'Helps spread the word']}],
+ ['Choosing a charity of the year','',[['gareth','Explains how you can help'],['andy','Tells your team and customers'],['daniel','Films the first event'],['sian','Captures the day']],{'*':[4,'Brings your own clients along']}]
+];
+TR = TR.concat([
+ ['Getting married','HFL',[['sian','Photographs the day'],['jonathan','Prints the invitations'],['chrisa','Arranges the first mortgage together'],['clive','Writes your new Wills'],['stuartb','Plans your finances as a couple']]],
+ ['A new baby on the way','HFL',[['sian','Takes the newborn photos'],['sue','Finds a bigger home'],['chrisa','Arranges the new mortgage'],['westen','Sets up life insurance'],['clive','Updates the Wills']]],
+ ['A tenant moves out','HFL',[['michelle','Checks the property and finds new tenants'],['alex','Carries out the gas safety check'],['trae','Checks the electrics'],['philip','Tests the alarms'],['seamus','Sorts the bills']]],
+ ['After a break-in at work','SBT',[['philip','Upgrades the alarm and CCTV'],['westen','Checks what the insurance covers'],['adam','Replaces the windows and doors'],['stuartm','Gets the IT back up'],['stevew','Restocks the office']]],
+ ['Going for bigger tenders','SBT',[['lee','Helps with ISO standards'],['stuartm','Tightens up cyber security'],['dawn','Gets the team qualified'],['andy','Sharpens the message'],['daniel','Films a case study'],['jonathan','Prints the brochure']]],
+ ['Moving the fleet to electric','SBT',[['martin','Leases the electric vehicles'],['chrism','Looks at the funding'],['trae','Adds the charging points'],['spencer','Reviews the energy contract'],['kath','Keeps the numbers clear']]]
+]);
+var LABEL = { t: 'Trades', p: 'Property & Home', f: 'Finance & Insurance', b: 'Business Services', m: 'Marketing & Community' };
+var ASK = ['Could your business be in this chain?', 'Who would you pass this to?', 'Where would you step in?', 'Could this be your next referral?'];
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
+document.getElementById('lead').textContent = TR.length + ' examples of one introduction leading to the next. Do you want to be part of this network?';
+document.getElementById('key').innerHTML = Object.keys(LABEL).map(function (k) { return '<span><i style="background:' + TC[k] + '"></i>' + esc(LABEL[k]) + '</span>'; }).join('');
+function card(r, i) {
+  return '<article class="tr"><h2>' + esc(r[0]) + '</h2><div class="chain">' + r[2].map(function (s) { var p = P[s[0]]; return '<div class="st" style="--c:' + TC[p[1]] + '"><b>' + esc(p[0]) + '</b><span>' + esc(s[1]) + '</span></div>'; }).join('') + '</div><p class="ask">' + ASK[i % ASK.length] + '</p></article>';
+}
+var BAND = '<section class="band"><h3>Do you want to be part of this network?</h3><p>Only one person per profession can join, so your category could be open.</p><a class="btn" href="https://bni.co.uk/en-GB/applicationregistration?chapterId=9008" target="_blank" rel="noopener">Join Intrepid</a><a class="more" href="https://sub.hammer-and-pen.com/work-together" target="_top">See how we could work together</a></section>';
+function show(f) {
+  var list = TR.filter(function (r) { return f === 'all' || r[1] === f; }), h = '';
+  list.forEach(function (r, i) { h += card(r, i); if ((i + 1) % 6 === 0 && i + 1 < list.length) h += BAND; });
+  document.getElementById('list').innerHTML = h + BAND;
+}
+document.querySelector('.tabs').addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  [].forEach.call(this.children, function (x) { x.classList.toggle('on', x === b); });
+  show(b.dataset.f);
+});
+show('all');
+</script>
+</body>
+</html>
