@@ -86,6 +86,12 @@
   .soc { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .soc a { display: block; text-align: center; text-decoration: none; background: var(--warm); color: var(--red-d); font-weight: 700; border-radius: 12px; padding: 12px 10px; font-size: 15px; }
   .soc a:first-child { grid-column: 1 / -1; background: var(--red); color: #fff; }
+  .m .em { display: inline-block; margin-top: 5px; font-size: 13.5px; font-weight: 700; color: var(--red-d); text-underline-offset: 3px; }
+  .bar i.run { width: 100%; animation: run 10s linear both; } @keyframes run { from { width: 4%; } to { width: 100%; } }
+  .vf { width: 100%; max-width: 280px; aspect-ratio: 280 / 498; margin: 14px auto 0; border-radius: 14px; overflow: hidden; background: #1C1C1E; }
+  .vf iframe { display: block; width: 100%; height: 100%; border: 0; }
+  .skip { display: block; width: 100%; margin-top: 14px; border: 0; border-radius: 13px; padding: 14px; font-size: 16.5px; font-weight: 800; background: #F4F0EC; color: var(--ink); }
+  .skip.ready { background: var(--red); color: #fff; }
   .foot { display: none; margin: 22px 4px 0; font-size: 13px; color: var(--muted); } .finished .foot { display: block; }
   @media (max-width: 420px) { .top h1 { font-size: 27px; } .q h2 { font-size: 21px; } .m { grid-template-columns: 58px 1fr; } .m .lg { width: 58px; height: 42px; } }
 </style>
@@ -250,7 +256,7 @@ var X = {
 Object.keys(X).forEach(function (k) { M.forEach(function (m) { if (X[k].g[m[0]]) m[3][k] = X[k].g[m[0]]; if (X[k].h[m[0]]) m[4][k] = X[k].h[m[0]]; }); });
 var DOES = { P: 3, D: 3, R: 3, Y: 3, O: 3, I: 3, M: 3, W: 3, E: 3, C: 3, V: 2, N: 2, G: 2, K: 2 };
 var LIKE = { D: 'P', Y: 'R', I: 'O', V: 'H', N: 'S', G: 'S', K: 'S' };
-var path = [];
+var path = [], watched = false;
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 // Turn the answers into: tags, chosen trail steps, when you come in, who comes just before you and who comes next.
 function read(a) {
@@ -307,14 +313,26 @@ function trailsHtml(r) {
     '<div class="brief"><b>This is just a brief overview.</b> It’s based on ' + TOTAL + ' quick answers. If you join, we can recalibrate where you fit, in the trails and in our Power Teams.</div>' +
     '<details class="more"><summary>See all ' + TR.length + ' trails</summary>' + TR.map(function (x) { return '<div class="one"><b>' + esc(x[0]) + '</b><span>' + x[2].map(function (s) { return esc(P[s[0]][0]); }).join(' → ') + '</span></div>'; }).join('') + '</details></section>';
 }
-// Chapter showcase: paste each link in once. Any left blank stays hidden, and the whole panel stays hidden until there's at least one. New photos go in the album, so this page never needs changing.
-var CHAPTER = { photos: '', video: '', instagram: '', facebook: '', linkedin: '' };
+// Chapter showcase: paste each link in once. New photos go in the album, so this page never needs changing.
+var CHAPTER = { photos: 'https://photos.app.goo.gl/2d8XV6VUuhMkJ23t5', video: 'https://www.facebook.com/reel/4560018840984020', instagram: 'https://www.instagram.com/bni_intrepid/', facebook: 'https://www.facebook.com/IntrepidBNI/', linkedin: 'https://uk.linkedin.com/company/bni-intrepid-cardiff' };
+var VIDEO = 'https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(CHAPTER.video + '/') + '&show_text=false&width=280&height=498&autoplay=true&mute=true';
+// Emails shown on this public page. Only Chris Ashley for now: member addresses wait for the chapter's OK.
+var EM = { 'Chris Ashley': ['chris','chrisashleymortgages.com'] };
+function addr(n) { return EM[n] ? EM[n].join('@') : ''; }
+function mail(to, cc, subject, body) { return 'mailto:' + to + '?' + (cc ? 'cc=' + encodeURIComponent(cc) + '&' : '') + 'subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body); }
+var SIGN = '\n\nMy name: \nMy business: \nMy phone: \n\nKind regards';
+function introMail(name) { return mail(addr(name), '', 'BNI Intrepid visitor: could we have a 1-2-1?', 'Hi ' + name.split(' ')[0] + ',\n\nI visited BNI Intrepid, and the How we can work together page suggested we could help each other. Could we arrange a 1-2-1?' + SIGN); }
 function joinHtml(r) {
-  var g = r.geese.length ? M[r.geese[0].i][0] : '', first = g.split(' ')[0];
-  return '<section class="panel join"><span class="tag">Your next step</span><h2>Like what you see?</h2><p>Only one person per profession can join Intrepid, so there’s no competition in the room. Your category could be open, so ask Chris today.</p>' +
-    '<div class="cta"><a class="c1" href="tel:07813076548" target="_top">Call Chris Ashley, our Visitor Host</a><a class="c2" href="sms:07813076548" target="_top">Text Chris</a><a class="c2" href="https://bni.co.uk/en-GB/applicationregistration?chapterId=9008" target="_blank" rel="noopener">Apply to join</a></div>' +
-    (g ? '<p class="sm"><b>Start with a 1-2-1.</b> Ask ' + esc(g) + ' for one today. ' + esc(first) + '’s number is on your BNI sheet.</p>' : '') +
+  var ask = mail(addr('Chris Ashley'), '', 'A question about BNI Intrepid', 'Hi Chris,\n\nI visited BNI Intrepid and I have a question:\n\n' + SIGN);
+  var names = r.geese.map(function (x) { return M[x.i][0]; }).filter(addr);
+  var all = names.length ? mail(names.map(addr).join(','), addr('Chris Ashley'), 'BNI Intrepid visitor: could we have a 1-2-1?', 'Hi all,\n\nI visited BNI Intrepid, and the How we can work together page suggested we could help each other. Could we arrange a 1-2-1?' + SIGN) : '';
+  return '<section class="panel join"><span class="tag">Your next step</span><h2>Like what you see?</h2><p>Only one person per profession can join Intrepid, so there’s no competition in the room. Your category could be open.</p>' +
+    '<div class="cta"><a class="c1" href="https://bni.co.uk/en-GB/applicationregistration?chapterId=9008" target="_blank" rel="noopener">Join BNI Intrepid</a><a class="c2" href="' + esc(ask) + '" target="_top">Email Chris a question</a>' + (all ? '<a class="c2" href="' + esc(all) + '" target="_top">Email my golden geese</a>' : '') + '</div>' +
+    '<p class="sm">These open a ready-written email in your own email app, for you to check and send. Chris Ashley is our Visitor Host.</p>' +
     '<p class="sm">Visitors are welcome twice. After that, you can join as a member or come along as a sub.</p></section>';
+}
+function videoHtml() {
+  return '<div class="q vid"><div class="meta"><span>All done</span><span>Finding your matches</span></div><div class="bar"><i class="run"></i></div><h2 class="ch">While we find your matches, meet the chapter</h2><div class="vf"><iframe src="' + esc(VIDEO) + '" title="BNI Intrepid video" scrolling="no" allow="autoplay; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe></div><button class="skip" type="button" id="skip">Skip to my results</button></div>';
 }
 function chapterHtml() {
   var L = [['photos', 'See our photos'], ['video', 'Watch our video'], ['instagram', 'Instagram'], ['facebook', 'Facebook'], ['linkedin', 'LinkedIn']].filter(function (x) { return CHAPTER[x[0]]; });
@@ -323,7 +341,7 @@ function chapterHtml() {
 }
 function card(x) {
   var m = M[x.i];
-  return '<div class="m"><div class="lg"><img src="logos/' + m[2] + '"' + (DARK[m[2]] ? ' class="dark"' : '') + ' alt="' + esc(m[1]) + ' logo"></div><div><h3>' + esc(m[0]) + '<em>' + esc(m[1]) + '</em></h3><p>' + esc(x.why) + '</p></div></div>';
+  return '<div class="m"><div class="lg"><img src="logos/' + m[2] + '"' + (DARK[m[2]] ? ' class="dark"' : '') + ' alt="' + esc(m[1]) + ' logo"></div><div><h3>' + esc(m[0]) + '<em>' + esc(m[1]) + '</em></h3><p>' + esc(x.why) + '</p>' + (addr(m[0]) ? '<a class="em" href="' + esc(introMail(m[0])) + '" target="_top">Email ' + esc(m[0].split(' ')[0]) + '</a>' : '') + '</div></div>';
 }
 // What question n looks like: part, text, example, and choices (none = yes or no).
 function ask(n) {
@@ -342,6 +360,8 @@ function draw() {
     html = '<div class="q"><div class="meta"><span>Question ' + (n + 1) + ' of ' + TOTAL + '</span><span>' + esc(q.p) + '</span></div><div class="bar"><i style="width:' + Math.round((n + 1) / TOTAL * 100) + '%"></i></div><h2' + (q.c ? ' class="ch"' : '') + '>' + esc(q.t) + '</h2>' + (q.e ? '<p class="eg">' + esc(q.e) + '</p>' : '') +
       (q.c ? '<div class="opts">' + q.c.map(function (c, i) { return '<button class="opt" type="button" data-c="' + i + '">' + esc(c) + '</button>'; }).join('') + '</div>' : '<div class="yn"><button class="yes" type="button" data-a="1">Yes</button><button class="no" type="button" data-a="0">No</button></div>') +
       (n ? '<div class="ctl"><button class="txt" type="button" id="back">Go back</button></div>' : '') + '</div>';
+  } else if (!watched) {
+    html = videoHtml(); setTimeout(function () { var k = document.getElementById('skip'); if (k) { k.textContent = 'See my results'; k.classList.add('ready'); } }, 10000);
   } else {
     var a = read(path), r = match(a);
     html = '<div class="res">';
@@ -357,6 +377,7 @@ document.addEventListener('click', function (e) {
   if (b.dataset.a) { path.push(b.dataset.a === '1'); draw(); window.scrollTo(0, 0); return; }
   if (b.dataset.c) { path.push(+b.dataset.c); draw(); window.scrollTo(0, 0); return; }
   if (b.id === 'back') { path.pop(); draw(); window.scrollTo(0, 0); return; }
+  if (b.id === 'skip') { watched = true; draw(); window.scrollTo(0, 0); return; }
   if (b.id === 'again') { path = []; draw(); window.scrollTo(0, 0); return; }
 });
 draw();
