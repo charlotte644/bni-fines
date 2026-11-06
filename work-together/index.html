@@ -108,6 +108,9 @@
   .m .em { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; margin-top: 6px; border-radius: 50%; background: var(--red); color: #fff; } .m .em svg { width: 18px; height: 18px; }
   .st.you b small { font-weight: 600; font-size: 13px; opacity: .9; }
   .skip:disabled { opacity: .7; }
+  .lk { background: none; border: 0; padding: 0; color: inherit; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+  .joinbtn { display: block; margin: 6px 0 12px; background: #fff; color: var(--red-d); text-align: center; text-decoration: none; font-size: 26px; font-weight: 800; letter-spacing: -.012em; line-height: 1.2; border-radius: 15px; padding: 19px 14px; box-shadow: 0 8px 22px rgba(60,0,8,.38); transition: transform .08s ease; } .joinbtn:active { transform: scale(.98); }
+  .two a { background: rgba(255,255,255,.14) !important; color: #fff !important; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.55); }
   .jl { display: block; font-size: 25px; font-weight: 800; letter-spacing: -.012em; line-height: 1.2; color: inherit; text-underline-offset: 4px; }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0 12px; }
   .two a { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; text-decoration: none; background: #fff; color: var(--red-d); border-radius: 13px; padding: 12px 8px; font-size: 14px; font-weight: 800; line-height: 1.2; } .two svg { width: 26px; height: 26px; }
@@ -347,7 +350,7 @@ function addr(n) { return EM[n] ? EM[n].join('@') : ''; }
 function mail(to, cc, subject, body) { return 'mailto:' + to + '?' + (cc ? 'cc=' + encodeURIComponent(cc) + '&' : '') + 'subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body); }
 // Visitor details come first. API is the Google Apps Script web app: it saves the details, reads the website and supplies the videos.
 var API = 'https://script.google.com/macros/s/AKfycbzrT6hSj8SUDcRupYEFjfywDd1eYz1iGN2Y_t5CgQVq7ONVt2rqPwI8UDSmMMTHrgbFEw/exec';
-var aiRead = null, stars = 0, me = null, siteText = '', siteState = 'none', sitePromise = null, ref = '', sent = false, formErr = '';
+var TRAIL_THANKS = 'Thanks. Charlotte will look at your website and email you some ideas.', trailAsked = false, aiRead = null, stars = 0, me = null, siteText = '', siteState = 'none', sitePromise = null, ref = '', sent = false, formErr = '';
 var today = (function () { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); })();
 function post(o) { return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(o) }).then(function (r) { return r.json(); }); }
 if (API) fetch(API).then(function (r) { return r.json(); }).then(function (d) { if (d.videos && d.videos.length) VIDEOS = d.videos; }).catch(function () {});
@@ -451,6 +454,12 @@ document.addEventListener('submit', function (e) {
   if (!/^\S+@\S+\.\S+$/.test(d.email)) { formErr = 'Please check your email address.'; var k2 = d; draw(); ['fName:name','fCo:company','fWeb:website','fMail:email','fTel:phone','fDate:visited','fNote:note'].forEach(function (p) { var x = p.split(':'); document.getElementById(x[0]).value = k2[x[1]]; }); document.getElementById('fOk').checked = k2.consent; document.getElementById('fFeat').checked = k2.feature; return; }
   formErr = ''; startVisit(d); draw(); window.scrollTo(0, 0);
 });
+function askTrail() {
+  var t = document.getElementById('tq'), say = function (m) { if (t) t.textContent = m; };
+  say('Sending…');
+  var fail = function () { say('Sorry, that didn’t go through. Please email our Visitor Host.'); };
+  Promise.resolve(sitePromise).then(function () { return ref ? post({ action: 'trail', ref: ref }) : { ok: false }; }).then(function (r) { if (r.ok) { trailAsked = true; say(TRAIL_THANKS); } else fail(); }).catch(fail);
+}
 function reveal() {
   var b = document.getElementById('skip'); if (b) { b.textContent = 'Finishing up…'; b.disabled = true; }
   var done = false, go = function () { if (done) return; done = true; watched = true; draw(); window.scrollTo(0, 0); };
@@ -464,15 +473,16 @@ document.addEventListener('click', function (e) {
   if (b.dataset.c) { path.push(+b.dataset.c); draw(); window.scrollTo(0, 0); return; }
   if (b.id === 'back') { if (path.length >= TOTAL) watched = true; path.pop(); draw(); window.scrollTo(0, 0); return; }
   if (b.id === 'skip') { reveal(); return; }
+  if (b.id === 'trailAsk') { askTrail(); return; }
   if (b.id === 'again') { path = []; draw(); window.scrollTo(0, 0); return; }
 });
 function joinHtml(r) {
   var ask = mail(addr('Chris Ashley'), '', 'A question about BNI Intrepid', 'Hi Chris,\n\nI visited BNI Intrepid and I have a question:\n' + sign());
   var names = r.geese.map(function (x) { return M[x.i][0]; }).filter(addr);
   var all = names.length ? mail(names.map(addr).join(','), addr('Chris Ashley'), 'BNI Intrepid visitor: could we have a 1-2-1?', 'Hi all,\n\nI visited BNI Intrepid, and the How we can work together page suggested we could help each other. Could we arrange a 1-2-1?' + sign()) : '';
-  return '<section class="panel join"><span class="tag">Your next step</span><a class="jl" href="https://bni.co.uk/en-GB/applicationregistration?chapterId=9008" target="_blank" rel="noopener">Join Intrepid</a><p>Only one person per profession can join Intrepid, so there’s no competition in the room. Your category could be open.</p>' +
+  return '<section class="panel join"><span class="tag">Your next step</span><a class="joinbtn" href="https://bni.co.uk/en-GB/applicationregistration?chapterId=9008" target="_blank" rel="noopener">Join Intrepid <span aria-hidden="true">→</span></a><p>Only one person per profession can join Intrepid, so there’s no competition in the room. Your category could be open.</p>' +
     '<div class="two"><a href="' + esc(ask) + '" target="_top">' + I.mail + '<span>Email our Visitor Host</span></a>' + (all ? '<a href="' + esc(all) + '" target="_top">' + I.group + '<span>Email your golden geese</span></a>' : '') + '</div>' +
-    '<p class="sm">Visitors are welcome twice. After that, you can join as a member or come along as a sub.</p></section>' +
+    '<p class="sm" id="tq">' + (trailAsked ? TRAIL_THANKS : 'Do you want to see where you could fit in our Givers Gain Trail? <button class="lk" type="button" id="trailAsk">Click here.</button>') + '</p></section>' +
     '<section class="panel act"><a class="jl" href="' + esc(CHAPTER.photos) + '" target="_blank" rel="noopener">See us in action</a><div class="ics">' + ico(CHAPTER.instagram, 'ig', 'BNI Intrepid on Instagram') + ico(CHAPTER.facebook, 'fb', 'BNI Intrepid on Facebook') + ico(CHAPTER.linkedin, 'li', 'BNI Intrepid on LinkedIn') + '</div></section>';
 }
 function card(x) {
