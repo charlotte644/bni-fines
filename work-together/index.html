@@ -86,12 +86,28 @@
   .soc { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
   .soc a { display: block; text-align: center; text-decoration: none; background: var(--warm); color: var(--red-d); font-weight: 700; border-radius: 12px; padding: 12px 10px; font-size: 15px; }
   .soc a:first-child { grid-column: 1 / -1; background: var(--red); color: #fff; }
-  .m .em { display: inline-block; margin-top: 5px; font-size: 13.5px; font-weight: 700; color: var(--red-d); text-underline-offset: 3px; }
   .bar i.run { width: 100%; animation: run 10s linear both; } @keyframes run { from { width: 4%; } to { width: 100%; } }
   .vf { aspect-ratio: 16 / 9; margin: 14px -18px 0; background: #1C1C1E; }
   .vf iframe { display: block; width: 100%; height: 100%; border: 0; }
   .skip { display: block; width: 100%; margin-top: 14px; border: 0; border-radius: 13px; padding: 14px; font-size: 16.5px; font-weight: 800; background: #F4F0EC; color: var(--ink); }
   .skip.ready { background: var(--red); color: #fff; }
+  .fds { display: grid; gap: 10px; margin-top: 14px; }
+  .fd span { display: block; font-size: 13.5px; font-weight: 700; margin-bottom: 4px; }
+  .fd input { width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: #F7F3EF; border: 1.5px solid transparent; border-radius: 11px; padding: 11px 13px; }
+  .fd textarea { width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: #F7F3EF; border: 1.5px solid transparent; border-radius: 11px; padding: 11px 13px; resize: vertical; } .fd textarea:focus { outline: none; border-color: var(--red); background: #fff; }
+  .stars { display: flex; gap: 4px; } .stars button { border: 0; background: none; padding: 0 3px; font-size: 34px; line-height: 1; color: #DAD3CC; } .stars button.on { color: #E0A100; }
+  .fd input:focus { outline: none; border-color: var(--red); background: #fff; }
+  .ok { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; font-size: 14.5px; font-weight: 600; } .ok input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--red); flex: none; }
+  .er { margin: 10px 0 0; color: var(--red-d); font-size: 14px; font-weight: 700; }
+  .go { display: block; width: 100%; margin-top: 14px; border: 0; border-radius: 13px; padding: 15px; font-size: 18px; font-weight: 800; background: var(--red); color: #fff; } .go:hover { background: var(--red-d); }
+  .sm2 { margin: 10px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.4; }
+  .basis { margin: 0; background: #fff; border-radius: 12px; padding: 10px 14px; font-size: 14px; font-weight: 600; color: var(--muted); box-shadow: 0 6px 22px rgba(90,20,25,.08); }
+  .ics { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 12px; margin: 16px 0 12px; }
+  .ic { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #fff; text-decoration: none; font-size: 12px; font-weight: 700; }
+  .ic i { width: 46px; height: 46px; border-radius: 50%; background: #fff; color: var(--red-d); display: flex; align-items: center; justify-content: center; } .ic svg { width: 24px; height: 24px; display: block; }
+  .m .em { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; margin-top: 6px; border-radius: 50%; background: var(--red); color: #fff; } .m .em svg { width: 18px; height: 18px; }
+  .st.you b small { font-weight: 600; font-size: 13px; opacity: .9; }
+  .skip:disabled { opacity: .7; }
   .foot { display: none; margin: 22px 4px 0; font-size: 13px; color: var(--muted); } .finished .foot { display: block; }
   @media (max-width: 420px) { .top h1 { font-size: 27px; } .q h2 { font-size: 21px; } .m { grid-template-columns: 58px 1fr; } .m .lg { width: 58px; height: 42px; } }
 </style>
@@ -101,7 +117,7 @@
   <div class="wrap">
     <p class="eyebrow">BNI Intrepid &nbsp;•&nbsp; Givers Gain</p>
     <h1>How we can work together</h1>
-    <p class="lead">Thanks for visiting us. Answer 14 quick questions about what you do to see which members could send business your way, who you could help, and where you could fit in a Givers Gain Trail.</p>
+    <p class="lead">Thanks for visiting us. Tell us about your business, answer 14 quick questions, and see which members could send business your way, who you could help, and where you could fit in a Givers Gain Trail.</p>
   </div>
 </header>
 <main>
@@ -284,6 +300,7 @@ function phase(at, len) { var p = at / len; return p <= 0.34 ? 'B' : p >= 0.8 ? 
 function fits(r) {
   var t = r.t, c = [];
   r.s.forEach(function (x) { c.push({ i: T0[x[0]], f: [x[1], x[2]], b: 20 }); });
+  siteSteps().forEach(function (x) { c.push({ i: T0[x[0]], f: [x[1], x[2]], b: 32 }); });
   TR.forEach(function (row, i) { for (var k in row[3]) if (k === '*' || t[k]) c.push({ i: i, f: row[3][k], b: k === '*' ? 0 : (DOES[k] || 1) + (row[3][k][2] ? 3 : 0) }); });
   var best = {};
   c.forEach(function (x) {
@@ -298,7 +315,7 @@ function fits(r) {
   return all.slice(0, 3);
 }
 function stepHtml(s) { var p = P[s[0]]; return '<div class="st" style="--c:' + TC[p[1]] + '"><b>' + esc(p[0]) + '</b><span>' + esc(s[1]) + '</span></div>'; }
-function youHtml(x) { return '<div class="st you"><b>You</b><span>' + esc(x) + '</span></div>'; }
+function youHtml(x) { return '<div class="st you"><b>' + esc(me && me.company ? me.company : 'You') + '</b><span>' + esc(x) + '</span></div>'; }
 function fitHtml(x) {
   var r = TR[x.i], at = x.f[0], steps = r[2], html = '';
   steps.forEach(function (s, n) { if (n === at) html += youHtml(x.f[1]); html += stepHtml(s); });
@@ -310,41 +327,147 @@ function fitHtml(x) {
 var KEY = [['t', 'Trades'], ['p', 'Property & Home'], ['f', 'Finance & Insurance'], ['b', 'Business Services'], ['m', 'Marketing & Community']];
 function trailsHtml(r) {
   return '<section class="panel"><span class="tag">Your place</span><h2>Where you could fit in a Givers Gain Trail</h2><p class="why">A trail is a chain of introductions, where one member leads to the next.</p><div class="key">' + KEY.map(function (k) { return '<span><i style="background:' + TC[k[0]] + '"></i>' + esc(k[1]) + '</span>'; }).join('') + '</div><div class="list">' + fits(r).map(fitHtml).join('') + '</div>' +
-    '<div class="brief"><b>This is just a brief overview.</b> It’s based on ' + TOTAL + ' quick answers. If you join, we can recalibrate where you fit, in the trails and in our Power Teams.</div>' +
+    '<div class="brief"><b>This is just a brief overview.</b> If you join, we can recalibrate where you fit, in the trails and in our Power Teams.</div>' +
     '<details class="more"><summary>See all ' + TR.length + ' trails</summary>' + TR.map(function (x) { return '<div class="one"><b>' + esc(x[0]) + '</b><span>' + x[2].map(function (s) { return esc(P[s[0]][0]); }).join(' → ') + '</span></div>'; }).join('') + '</details></section>';
 }
 // Chapter showcase: paste each link in once. New photos go in the album, so this page never needs changing.
 // Add more chapter videos to this list; each visitor sees one at random. Facebook links only, and they must be public.
 var VIDEOS = ['https://www.facebook.com/reel/4560018840984020'];
 var CHAPTER = { photos: 'https://photos.app.goo.gl/2d8XV6VUuhMkJ23t5', instagram: 'https://www.instagram.com/bni_intrepid/', facebook: 'https://www.facebook.com/IntrepidBNI/', linkedin: 'https://uk.linkedin.com/company/bni-intrepid-cardiff' };
-var PICK = VIDEOS[Math.floor(Math.random() * VIDEOS.length)];
-var VIDEO = 'https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(PICK + '/') + '&show_text=false&width=560&height=315&autoplay=true&mute=true';
 // Member emails for the Email buttons, published on Charlotte's instruction (6 Nov 2026).
 var EM = { 'Michelle Barber': ['michelle','thegrayhouse.co.uk'], 'Seamus Sullivan': ['seamus.sullivan','uwclub.net'], 'Martin Britton': ['martin','samsmithfleet.com'], 'Trae Williams': ['trae','tralex365.com'], 'Sue Iannucci': ['sue.iannucci','theagencyuk.com'], 'Lee Howells': ['lee','safety.wales'], 'Daniel Harris': ['dan','focusshiftfilms.com'], 'Clive Thomas': ['cthomas','watkinsandgunn.co.uk'], 'Chris MacManus': ['cm','macmanus.finance'], 'Anthony Williams': ['anthony','ardrainagesolutions.com'], 'Gareth Rees': ['gareth','2wish.org.uk'], 'Dawn Evans': ['dawn','ajuda.org.uk'], 'Steve Western': ['steve','westmoreinsure.co.uk'], 'Philip Grunewald': ['pgrunewald','ava-cctv.co.uk'], 'Kath Hiscock': ['kath','seamountbiz.co.uk'], 'Andy Mackinson': ['andy','weareseriously.co.uk'], 'Richard Metcalfe': ['rich','cortilecoffee.co.uk'], 'Chris Ashley': ['chris','chrisashleymortgages.com'], 'Stuart Bourne': ['stuart.bourne','atomos.co.uk'], 'Adam Shephard': ['info','tradepricealuminium.co.uk'], 'Stuart Meikle': ['stuart.meikle','flotek.io'], 'Alex Jones': ['info','rsplumbingservices.co.uk'], 'Siân Roberts': ['exposephotographywales','gmail.com'], 'Robbie Williams': ['robbie.williams','coface.com'], 'Spencer Clarke': ['spencer','costcuttingsolutions.co.uk'], 'Steve Williams': ['steve','sabrecomputers.co.uk'], 'Charlotte Warren': ['charlotte','hammer-and-pen.com'], 'Jonathan Davies': ['glensideprinting','gmail.com'] };
 function addr(n) { return EM[n] ? EM[n].join('@') : ''; }
 function mail(to, cc, subject, body) { return 'mailto:' + to + '?' + (cc ? 'cc=' + encodeURIComponent(cc) + '&' : '') + 'subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body); }
-var SIGN = '\n\nMy name: \nMy business: \nMy phone: ';
-function introMail(name) { return mail(addr(name), '', 'BNI Intrepid visitor: could we have a 1-2-1?', 'Hi ' + name.split(' ')[0] + ',\n\nI visited BNI Intrepid, and the How we can work together page suggested we could help each other. Could we arrange a 1-2-1?' + SIGN); }
+// Visitor details come first. API is the Google Apps Script web app: it saves the details, reads the website and supplies the videos.
+var API = 'https://script.google.com/macros/s/AKfycbzrT6hSj8SUDcRupYEFjfywDd1eYz1iGN2Y_t5CgQVq7ONVt2rqPwI8UDSmMMTHrgbFEw/exec';
+var stars = 0, me = null, siteText = '', siteState = 'none', sitePromise = null, ref = '', sent = false, formErr = '';
+var today = (function () { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); })();
+function post(o) { return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(o) }).then(function (r) { return r.json(); }); }
+if (API) fetch(API).then(function (r) { return r.json(); }).then(function (d) { if (d.videos && d.videos.length) VIDEOS = d.videos; }).catch(function () {});
+function embed(u) {
+  var y = u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([\w-]{6,})/);
+  if (y) return 'https://www.youtube-nocookie.com/embed/' + y[1] + '?autoplay=1&mute=1&rel=0&playsinline=1';
+  return 'https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(u.replace(/\/?$/, '/')) + '&show_text=false&width=560&height=315&autoplay=true&mute=true';
+}
+// Words on a website that point to each drill-down question, in the same order as AREAS.
+var KW = [
+ [['extension','extensions','roofing','roofer','brickwork','bricklayer','builders','construction'],['kitchens?','bathrooms?','joinery','carpenter','carpentry','flooring'],['decorator','decorating','painter','plastering','plasterer','tiling','tiler'],['architects?','architectural','surveyors?','interior design','planning permission'],['landscaping','landscaper','driveways?','fencing','patios?']],
+ [['domestic cleaning','house cleaning','home cleaning'],['office cleaning','commercial cleaning'],['end of tenancy','after builders','deep clean'],['gardening','gardener','grounds maintenance','lawn care'],['house clearance','waste removal','rubbish removal','skip hire']],
+ [['accountants?','accountancy','bookkeeping','tax returns?'],['insurance','life cover','income protection'],['solicitors?','legal advice','wills','probate'],['mortgages?','loans','finance broker','asset finance'],['financial planning','financial adviser','pensions?','retirement planning']],
+ [['it support','managed it'],['broadband','voip','telecoms','phone systems?'],['cyber security','backups?'],['web design','website design','software development','app development'],['computer repairs?','laptop repairs?']],
+ [['tool hire','power tools','building materials','builders merchant'],['food wholesale','drinks supplier','catering supplies'],['office supplies','cleaning supplies','stationery'],['plant hire','machinery'],['signage','packaging','promotional products']],
+ [['branding','graphic design','logo design'],['social media','seo','digital marketing'],['lead generation','sales training','business development'],['copywriting','public relations'],['printing','sign writing','banners']],
+ [['recruitment','recruiter','staffing'],['hr consultancy','human resources'],['training courses','training provider','accredited training'],['workwear','uniforms?','ppe'],['business coaching','workplace wellbeing']],
+ [['venue hire','catering','caterers?'],['event planning','event management','events company'],['travel agent','holidays','cruises'],['restaurant','cafe','coffee shop'],['florist','wedding dj','entertainers?','gift shop']],
+ [['physiotherapy','physio','massage','dentist','optician'],['tutor','tuition','life coach'],['online shop','retailer'],['mobile service','home visits'],['charity','community interest company']]
+];
+// Steps found from the website: the five strongest matches, whatever line of work was chosen.
+function siteSteps() {
+  if (!siteText) return [];
+  var t = siteText.toLowerCase(), hits = [];
+  KW.forEach(function (a, i) { a.forEach(function (ws, j) { var n = 0; ws.forEach(function (w) { n += (t.match(new RegExp('\\b' + w + '\\b', 'g')) || []).length; }); if (n) hits.push({ n: n, q: AREAS[i].q[j] }); }); });
+  hits.sort(function (a, b) { return b.n - a.n; });
+  var s = []; hits.slice(0, 5).forEach(function (h) { s = s.concat(h.q.s); });
+  return s;
+}
+function detailsHtml() {
+  var f = function (id, label, type, ph, extra) { return '<label class="fd"><span>' + label + '</span><input id="' + id + '" type="' + type + '"' + (ph ? ' placeholder="' + ph + '"' : '') + (extra || '') + '></label>'; };
+  return '<form class="q" id="who" novalidate><div class="meta"><span>Your details</span><span>Before we start</span></div><div class="bar"><i style="width:3%"></i></div><h2 class="ch">Tell us about you</h2><p class="eg">We’ll use your website to see where you could fit in.</p><div class="fds">' +
+    f('fName', 'Your name', 'text', '', ' autocomplete="name"') + f('fCo', 'Company name', 'text', '', ' autocomplete="organization"') + f('fWeb', 'Company website', 'text', 'www.yourcompany.co.uk', ' autocomplete="url" inputmode="url"') + f('fMail', 'Email', 'email', '', ' autocomplete="email"') + f('fTel', 'Phone number', 'tel', '', ' autocomplete="tel"') + f('fDate', 'When did you visit?', 'date', '', ' value="' + today + '" max="' + today + '"') +
+    '<div class="fd"><span>How was your visit?</span><div class="stars" role="group" aria-label="Rate your visit out of 5">' + [1, 2, 3, 4, 5].map(function (n) { return '<button type="button" data-s="' + n + '" aria-label="' + n + ' out of 5"' + (n <= stars ? ' class="on"' : '') + '>★</button>'; }).join('') + '</div></div><label class="fd"><span>A sentence or two about your visit</span><textarea id="fNote" rows="3" maxlength="300"></textarea></label>' +
+    '<input id="fTrap" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">' +
+    '</div><label class="ok"><input id="fOk" type="checkbox"><span>I’m happy to be emailed by BNI Intrepid.</span></label><label class="ok"><input id="fFeat" type="checkbox"><span>BNI Intrepid can share my comment and name on its website and socials.</span></label>' + (formErr ? '<p class="er" role="alert">' + esc(formErr) + '</p>' : '') +
+    '<button class="go" type="submit">Start</button><p class="sm2">Your details go to BNI Intrepid so the chapter can follow up on your visit. To have them removed, email our Visitor Host.</p></form>';
+}
+function startVisit(d) {
+  me = d; siteText = ''; siteState = d.website ? 'reading' : 'none';
+  if (!API) { sitePromise = Promise.resolve(); if (d.website) siteState = 'failed'; return; }
+  sitePromise = post({ action: 'visit', name: d.name, company: d.company, website: d.website, email: d.email, phone: d.phone, visited: d.visited, consent: d.consent, stars: d.stars, note: d.note, feature: d.feature, trap: d.trap })
+    .then(function (r) { ref = r.ref || ''; siteText = r.text || ''; if (d.website) siteState = siteText ? 'read' : 'failed'; })
+    .catch(function () { if (d.website) siteState = 'failed'; });
+}
+function hostOf(u) { return String(u).replace(/^https?:\/\//i, '').replace(/^www\./i, '').split(/[\/?#]/)[0]; }
+var I = {
+ mail: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm9 7.6L4.4 7H19.6L12 12.6ZM4 8.9V17h16V8.9l-8 5.9-8-5.9Z"/></svg>',
+ group: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm7.5 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2 19c0-3.3 3.1-6 7-6s7 2.7 7 6H2Zm15.9 0c0-2.2-1-4.2-2.6-5.6.4-.1.8-.1 1.2-.1 3 0 5.5 2.4 5.5 5.7h-4.1Z"/></svg>',
+ photo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm0 11.5V17h16v-1.6l-4.5-4.5-3.7 3.7-2.3-2.3L4 16.5ZM8 10.5A1.5 1.5 0 1 0 8 7.5a1.5 1.5 0 0 0 0 3Z"/></svg>',
+ ig: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.500 5.500h-9A5.500 5.500 0 0 1 2 16.500v-9A5.500 5.500 0 0 1 7.500 2Zm0 2A3.500 3.500 0 0 0 4 7.500v9A3.500 3.500 0 0 0 7.500 20h9a3.500 3.500 0 0 0 3.500-3.500v-9A3.500 3.500 0 0 0 16.500 4h-9ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.300-3.500a1.200 1.200 0 1 1 0 2.400 1.200 1.200 0 0 1 0-2.400Z"/></svg>',
+ fb: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.500 22v-8.500h2.900l.5-3.400h-3.400V8c0-1 .3-1.700 1.700-1.700H17V3.200c-.3 0-1.400-.2-2.600-.2-2.600 0-4.400 1.600-4.400 4.500v2.600H7v3.400h3V22h3.500Z"/></svg>',
+ li: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5.200 3.500a2 2 0 1 1 0 4 2 2 0 0 1 0-4ZM3.500 9h3.400v11.500H3.500V9Zm5.600 0h3.300v1.600h.1c.5-.9 1.600-1.900 3.300-1.900 3.500 0 4.200 2.300 4.200 5.300v6.500h-3.400v-5.800c0-1.400 0-3.100-1.900-3.100s-2.200 1.500-2.200 3v5.900H9.100V9Z"/></svg>'
+};
+function ico(href, icon, label, cap, top) { return '<a class="ic" href="' + esc(href) + '"' + (top ? ' target="_top"' : ' target="_blank" rel="noopener"') + ' aria-label="' + esc(label) + '" title="' + esc(label) + '"><i>' + I[icon] + '</i>' + (cap ? '<span>' + esc(cap) + '</span>' : '') + '</a>'; }
+function sign() { return '\n\n' + me.name + (me.company ? '\n' + me.company : '') + (me.website ? '\n' + me.website : '') + (me.phone ? '\n' + me.phone : '') + (me.email ? '\n' + me.email : ''); }
+function introMail(name) { return mail(addr(name), '', 'BNI Intrepid visitor: could we have a 1-2-1?', 'Hi ' + name.split(' ')[0] + ',\n\nI visited BNI Intrepid, and the How we can work together page suggested we could help each other. Could we arrange a 1-2-1?' + sign()); }
 function joinHtml(r) {
-  var ask = mail(addr('Chris Ashley'), '', 'A question about BNI Intrepid', 'Hi Chris,\n\nI visited BNI Intrepid and I have a question:\n\n' + SIGN);
+  var ask = mail(addr('Chris Ashley'), '', 'A question about BNI Intrepid', 'Hi Chris,\n\nI visited BNI Intrepid and I have a question:\n' + sign());
   var names = r.geese.map(function (x) { return M[x.i][0]; }).filter(addr);
-  var all = names.length ? mail(names.map(addr).join(','), addr('Chris Ashley'), 'BNI Intrepid visitor: could we have a 1-2-1?', 'Hi all,\n\nI visited BNI Intrepid, and the How we can work together page suggested we could help each other. Could we arrange a 1-2-1?' + SIGN) : '';
+  var all = names.length ? mail(names.map(addr).join(','), addr('Chris Ashley'), 'BNI Intrepid visitor: could we have a 1-2-1?', 'Hi all,\n\nI visited BNI Intrepid, and the How we can work together page suggested we could help each other. Could we arrange a 1-2-1?' + sign()) : '';
   return '<section class="panel join"><span class="tag">Your next step</span><h2>Like what you see?</h2><p>Only one person per profession can join Intrepid, so there’s no competition in the room. Your category could be open.</p>' +
-    '<div class="cta"><a class="c1" href="https://bni.co.uk/en-GB/applicationregistration?chapterId=9008" target="_blank" rel="noopener">Join BNI Intrepid</a><a class="c2" href="' + esc(ask) + '" target="_top">Email Chris a question</a>' + (all ? '<a class="c2" href="' + esc(all) + '" target="_top">Email my golden geese</a>' : '') + '</div>' +
-    '<p class="sm">These open a ready-written email in your own email app, for you to check and send. Chris Ashley is our Visitor Host.</p>' +
+    '<div class="cta"><a class="c1" href="https://bni.co.uk/en-GB/applicationregistration?chapterId=9008" target="_blank" rel="noopener">Join BNI Intrepid</a></div>' +
+    '<div class="ics">' + ico(ask, 'mail', 'Email Chris Ashley, our Visitor Host', 'Chris', 1) + (all ? ico(all, 'group', 'Email my golden geese', 'My geese', 1) : '') + ico(CHAPTER.photos, 'photo', 'See our photos', 'Photos') + ico(CHAPTER.instagram, 'ig', 'BNI Intrepid on Instagram') + ico(CHAPTER.facebook, 'fb', 'BNI Intrepid on Facebook') + ico(CHAPTER.linkedin, 'li', 'BNI Intrepid on LinkedIn') + '</div>' +
     '<p class="sm">Visitors are welcome twice. After that, you can join as a member or come along as a sub.</p></section>';
 }
 function videoHtml() {
-  return '<div class="q vid"><div class="meta"><span>All done</span><span>Finding your matches</span></div><div class="bar"><i class="run"></i></div><h2 class="ch">While we find your matches, meet the chapter</h2><div class="vf"><iframe src="' + esc(VIDEO) + '" title="BNI Intrepid video" scrolling="no" allow="autoplay; fullscreen; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe></div><p class="eg" style="text-align:center">Want it bigger? Turn your phone sideways, or <a href="' + esc(PICK) + '" target="_blank" rel="noopener">watch it full screen on Facebook</a>.</p><button class="skip" type="button" id="skip">Skip to my results</button></div>';
+  var pick = VIDEOS[Math.floor(Math.random() * VIDEOS.length)];
+  return '<div class="q vid"><div class="meta"><span>All done</span><span>' + (me.website ? 'Looking at your website' : 'Finding your matches') + '</span></div><div class="bar"><i class="run"></i></div><h2 class="ch">While we look at ' + esc(me.website ? hostOf(me.website) : 'your answers') + ', meet the chapter</h2><div class="vf"><iframe src="' + esc(embed(pick)) + '" title="BNI Intrepid video" scrolling="no" allow="autoplay; fullscreen; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe></div><p class="eg" style="text-align:center">Want it bigger? Turn your phone sideways, or <a href="' + esc(pick) + '" target="_blank" rel="noopener">watch it full screen</a>.</p><button class="skip" type="button" id="skip">Skip to my results</button></div>';
 }
-function chapterHtml() {
-  var L = [['photos', 'See our photos'], ['instagram', 'Instagram'], ['facebook', 'Facebook'], ['linkedin', 'LinkedIn']].filter(function (x) { return CHAPTER[x[0]]; });
-  if (!L.length) return '';
-  return '<section class="panel"><span class="tag">Meet the chapter</span><h2>See BNI Intrepid in action</h2><p class="why">Take a look at the people behind the sheet.</p><div class="soc">' + L.map(function (x) { return '<a href="' + esc(CHAPTER[x[0]]) + '" target="_blank" rel="noopener">' + x[1] + '</a>'; }).join('') + '</div></section>';
+function basisHtml() {
+  if (siteState === 'read') return 'Based on your answers and ' + esc(hostOf(me.website)) + '.';
+  if (siteState === 'failed' || siteState === 'reading') return 'We couldn’t read your website this time, so this is based on your answers.';
+  return 'Based on your answers.';
 }
+function saveResults(a, r) {
+  if (!API || sent || !ref) return; sent = true;
+  post({ action: 'results', ref: ref, area: AREAS[path[0]].n, geese: r.geese.map(function (x) { return M[x.i][0]; }).join(', '), trails: fits(a).map(function (x) { return TR[x.i][0]; }).join(', ') }).catch(function () {});
+}
+function draw() {
+  var el = document.getElementById('flow'), n = path.length, html;
+  document.body.classList.toggle('going', !!me); document.body.classList.toggle('finished', !!me && n >= TOTAL && watched);
+  if (!me) { el.innerHTML = detailsHtml(); return; }
+  if (n < TOTAL) {
+    var q = ask(n);
+    html = '<div class="q"><div class="meta"><span>Question ' + (n + 1) + ' of ' + TOTAL + '</span><span>' + esc(q.p) + '</span></div><div class="bar"><i style="width:' + Math.round((n + 1) / TOTAL * 100) + '%"></i></div><h2' + (q.c ? ' class="ch"' : '') + '>' + esc(q.t) + '</h2>' + (q.e ? '<p class="eg">' + esc(q.e) + '</p>' : '') +
+      (q.c ? '<div class="opts">' + q.c.map(function (c, i) { return '<button class="opt" type="button" data-c="' + i + '">' + esc(c) + '</button>'; }).join('') + '</div>' : '<div class="yn"><button class="yes" type="button" data-a="1">Yes</button><button class="no" type="button" data-a="0">No</button></div>') +
+      (n ? '<div class="ctl"><button class="txt" type="button" id="back">Go back</button></div>' : '') + '</div>';
+  } else if (!watched) {
+    html = videoHtml(); setTimeout(function () { var k = document.getElementById('skip'); if (k) { k.textContent = 'See my results'; k.classList.add('ready'); } }, 10000);
+  } else {
+    var a = read(path), r = match(a);
+    saveResults(a, r);
+    html = '<div class="res"><p class="basis">' + basisHtml() + '</p>';
+    if (!r.geese.length && !r.helps.length) html += '<section class="panel"><h2>Let’s find your people together</h2><p class="why" style="margin-bottom:0">Your answers didn’t point to anyone in particular. Ask the person who invited you who they’d introduce you to.</p></section>';
+    if (r.geese.length) html += '<section class="panel goose"><span class="tag">They could help you</span><h2>Your golden geese</h2><p class="why">They could send business your way.</p><div class="list">' + r.geese.map(card).join('') + '</div></section>';
+    if (r.helps.length) html += '<section class="panel"><span class="tag">You could help them</span><h2>Who you can help</h2><p class="why">You could send business their way. In BNI, givers gain.</p><div class="list">' + r.helps.map(card).join('') + '</div></section>';
+    html += trailsHtml(a) + joinHtml(r) + '<div class="ctl"><button class="txt" type="button" id="back">Go back</button><button class="txt" type="button" id="again">Start again</button></div></div>';
+  }
+  el.innerHTML = html;
+}
+document.addEventListener('submit', function (e) {
+  if (e.target.id !== 'who') return; e.preventDefault();
+  var v = function (id) { return document.getElementById(id).value.trim(); };
+  var d = { name: v('fName'), company: v('fCo'), website: v('fWeb'), email: v('fMail'), phone: v('fTel'), visited: v('fDate'), consent: document.getElementById('fOk').checked, stars: stars, note: v('fNote'), feature: document.getElementById('fFeat').checked, trap: v('fTrap') };
+  if (!d.name || !d.company || !d.email) { var keep = d; formErr = 'Please add your name, company and email.'; draw(); ['fName:name','fCo:company','fWeb:website','fMail:email','fTel:phone','fDate:visited','fNote:note'].forEach(function (p) { var x = p.split(':'); document.getElementById(x[0]).value = keep[x[1]]; }); document.getElementById('fOk').checked = keep.consent; document.getElementById('fFeat').checked = keep.feature; return; }
+  if (!/^\S+@\S+\.\S+$/.test(d.email)) { formErr = 'Please check your email address.'; var k2 = d; draw(); ['fName:name','fCo:company','fWeb:website','fMail:email','fTel:phone','fDate:visited','fNote:note'].forEach(function (p) { var x = p.split(':'); document.getElementById(x[0]).value = k2[x[1]]; }); document.getElementById('fOk').checked = k2.consent; document.getElementById('fFeat').checked = k2.feature; return; }
+  formErr = ''; startVisit(d); draw(); window.scrollTo(0, 0);
+});
+function reveal() {
+  var b = document.getElementById('skip'); if (b) { b.textContent = 'Finishing up…'; b.disabled = true; }
+  var done = false, go = function () { if (done) return; done = true; watched = true; draw(); window.scrollTo(0, 0); };
+  if (sitePromise) sitePromise.then(go, go); else go();
+  setTimeout(go, 12000);
+}
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.s) { stars = +b.dataset.s; [].forEach.call(document.querySelectorAll('.stars button'), function (x) { x.classList.toggle('on', +x.dataset.s <= stars); }); return; }
+  if (b.dataset.a) { path.push(b.dataset.a === '1'); draw(); window.scrollTo(0, 0); return; }
+  if (b.dataset.c) { path.push(+b.dataset.c); draw(); window.scrollTo(0, 0); return; }
+  if (b.id === 'back') { if (path.length >= TOTAL) watched = true; path.pop(); draw(); window.scrollTo(0, 0); return; }
+  if (b.id === 'skip') { reveal(); return; }
+  if (b.id === 'again') { path = []; draw(); window.scrollTo(0, 0); return; }
+});
 function card(x) {
   var m = M[x.i];
-  return '<div class="m"><div class="lg"><img src="logos/' + m[2] + '"' + (DARK[m[2]] ? ' class="dark"' : '') + ' alt="' + esc(m[1]) + ' logo"></div><div><h3>' + esc(m[0]) + '<em>' + esc(m[1]) + '</em></h3><p>' + esc(x.why) + '</p>' + (addr(m[0]) ? '<a class="em" href="' + esc(introMail(m[0])) + '" target="_top">Email ' + esc(m[0].split(' ')[0]) + '</a>' : '') + '</div></div>';
+  return '<div class="m"><div class="lg"><img src="logos/' + m[2] + '"' + (DARK[m[2]] ? ' class="dark"' : '') + ' alt="' + esc(m[1]) + ' logo"></div><div><h3>' + esc(m[0]) + '<em>' + esc(m[1]) + '</em></h3><p>' + esc(x.why) + '</p>' + (addr(m[0]) ? '<a class="em" href="' + esc(introMail(m[0])) + '" target="_top" aria-label="Email ' + esc(m[0]) + '" title="Email ' + esc(m[0]) + '">' + I.mail + '</a>' : '') + '</div></div>';
 }
 // What question n looks like: part, text, example, and choices (none = yes or no).
 function ask(n) {
@@ -355,34 +478,6 @@ function ask(n) {
   if (n === 8) return { p: 'How you work', t: 'What do your customers usually need next?', c: NEXT.map(function (x) { return x[0]; }) };
   var w = WHO[n - 9]; return { p: 'Who you work with', t: w[0], e: w[1] };
 }
-function draw() {
-  var el = document.getElementById('flow'), n = path.length, html;
-  document.body.classList.toggle('going', n > 0); document.body.classList.toggle('finished', n >= TOTAL);
-  if (n < TOTAL) {
-    var q = ask(n);
-    html = '<div class="q"><div class="meta"><span>Question ' + (n + 1) + ' of ' + TOTAL + '</span><span>' + esc(q.p) + '</span></div><div class="bar"><i style="width:' + Math.round((n + 1) / TOTAL * 100) + '%"></i></div><h2' + (q.c ? ' class="ch"' : '') + '>' + esc(q.t) + '</h2>' + (q.e ? '<p class="eg">' + esc(q.e) + '</p>' : '') +
-      (q.c ? '<div class="opts">' + q.c.map(function (c, i) { return '<button class="opt" type="button" data-c="' + i + '">' + esc(c) + '</button>'; }).join('') + '</div>' : '<div class="yn"><button class="yes" type="button" data-a="1">Yes</button><button class="no" type="button" data-a="0">No</button></div>') +
-      (n ? '<div class="ctl"><button class="txt" type="button" id="back">Go back</button></div>' : '') + '</div>';
-  } else if (!watched) {
-    html = videoHtml(); setTimeout(function () { var k = document.getElementById('skip'); if (k) { k.textContent = 'See my results'; k.classList.add('ready'); } }, 10000);
-  } else {
-    var a = read(path), r = match(a);
-    html = '<div class="res">';
-    if (!r.geese.length && !r.helps.length) html += '<section class="panel"><h2>Let’s find your people together</h2><p class="why" style="margin-bottom:0">Your answers didn’t point to anyone in particular. Ask the person who invited you who they’d introduce you to.</p></section>';
-    if (r.geese.length) html += '<section class="panel goose"><span class="tag">They could help you</span><h2>Your golden geese</h2><p class="why">They could send business your way.</p><div class="list">' + r.geese.map(card).join('') + '</div></section>';
-    if (r.helps.length) html += '<section class="panel"><span class="tag">You could help them</span><h2>Who you can help</h2><p class="why">You could send business their way. In BNI, givers gain.</p><div class="list">' + r.helps.map(card).join('') + '</div></section>';
-    html += trailsHtml(a) + joinHtml(r) + chapterHtml() + '<div class="ctl"><button class="txt" type="button" id="back">Go back</button><button class="txt" type="button" id="again">Start again</button></div></div>';
-  }
-  el.innerHTML = html;
-}
-document.addEventListener('click', function (e) {
-  var b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.a) { path.push(b.dataset.a === '1'); draw(); window.scrollTo(0, 0); return; }
-  if (b.dataset.c) { path.push(+b.dataset.c); draw(); window.scrollTo(0, 0); return; }
-  if (b.id === 'back') { path.pop(); draw(); window.scrollTo(0, 0); return; }
-  if (b.id === 'skip') { watched = true; draw(); window.scrollTo(0, 0); return; }
-  if (b.id === 'again') { path = []; draw(); window.scrollTo(0, 0); return; }
-});
 draw();
 </script>
 </body>
