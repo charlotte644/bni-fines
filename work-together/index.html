@@ -71,6 +71,11 @@
   .brief { margin-top: 12px; background: var(--tint); border-radius: 12px; padding: 12px 14px; font-size: 14.5px; }
   .more { margin-top: 10px; font-size: 14px; } .more summary { cursor: pointer; color: var(--red-d); font-weight: 700; padding: 6px 0; }
   .one { border-top: 1px solid var(--line); padding: 8px 0; } .one b { display: block; font-weight: 700; } .one span { color: var(--muted); font-size: 13.5px; }
+  .q h2.ch { min-height: 0; }
+  .opts { display: grid; gap: 8px; margin-top: 16px; }
+  .opt { border: 0; text-align: left; background: #F7F3EF; color: var(--ink); border-radius: 12px; padding: 13px 15px; font-size: 15.5px; font-weight: 600; line-height: 1.3; transition: background .15s ease; }
+  .opt:hover { background: var(--tint); color: var(--red-d); }
+  .opt:active { background: var(--red); color: #fff; }
   .foot { display: none; margin: 22px 4px 0; font-size: 13px; color: var(--muted); } .finished .foot { display: block; }
   @media (max-width: 420px) { .top h1 { font-size: 27px; } .q h2 { font-size: 21px; } .m { grid-template-columns: 58px 1fr; } .m .lg { width: 58px; height: 42px; } }
 </style>
@@ -80,7 +85,7 @@
   <div class="wrap">
     <p class="eyebrow">BNI Intrepid &nbsp;•&nbsp; Givers Gain</p>
     <h1>How we can work together</h1>
-    <p class="lead">Thanks for visiting us. Answer 20 quick yes or no questions to see which members could send business your way, who you could help, and where you could fit in a Givers Gain Trail.</p>
+    <p class="lead">Thanks for visiting us. Answer 14 quick questions about what you do to see which members could send business your way, who you could help, and where you could fit in a Givers Gain Trail.</p>
   </div>
 </header>
 <main>
@@ -90,7 +95,7 @@
   </div>
 </main>
 <script>
-// Who you work with: S small businesses, B larger organisations, T trades, H homeowners, F individuals and families, L landlords, V people moving, N new businesses, G growing businesses, K premises open to the public
+// Who you work with: S small businesses, B larger organisations, T trades, H homeowners, F individuals and families, L landlords. From the answers: V moving, N new businesses, G growing, K open to the public, Z repairs, A premises, Q marketing
 // What you do: P work on property, D design and plan, R money, legal or insurance, Y future planning, O things businesses use, I IT and phones, M marketing or sales, W staff, E events and hospitality, C cleaning and upkeep
 // g = why they could send you business. h = why you could send them business.
 var M = [
@@ -153,86 +158,128 @@ var TR = [
  ['Hosting a charity dinner','SBT',[['gareth','Shares why it matters'],['andy','Spreads the word'],['jonathan','Prints the tickets'],['sian','Photographs the night'],['daniel','Films the story'],['richard','Supplies the coffee']],{E:[3,'Hosts or caters the night',1],M:[2,'Helps spread the word']}],
  ['Choosing a charity of the year','',[['gareth','Explains how you can help'],['andy','Tells your team and customers'],['daniel','Films the first event'],['sian','Captures the day']],{'*':[4,'Brings your own clients along']}]
 ];
-// Everyone answers the same 20 questions, numbered 1 to 20. Each answer feeds the golden geese, who you can help and your place in the trails.
-var QS = [
- { p: 'Who you work with', t: 'Do you work with small businesses or the self-employed?', tag: 'S' },
- { p: 'Who you work with', t: 'Do you work with larger companies or organisations?', e: 'Roughly 50 staff or more.', tag: 'B' },
- { p: 'Who you work with', t: 'Do you work with trades or construction firms?', e: 'Builders, electricians, plumbers and so on.', tag: 'T' },
- { p: 'Who you work with', t: 'Do you work with homeowners?', tag: 'H' },
- { p: 'Who you work with', t: 'Do you work with individuals and families?', tag: 'F' },
- { p: 'Who you work with', t: 'Do you work with landlords or property investors?', tag: 'L' },
- { p: 'Who you work with', t: 'Do you work with people who are moving home?', e: 'Buying, selling or renting.', tag: 'V' },
- { p: 'Who you work with', t: 'Do you work with people starting a new business?', tag: 'N' },
- { p: 'Who you work with', t: 'Do you work with businesses that are growing?', e: 'Taking on staff, winning bigger contracts or moving premises.', tag: 'G' },
- { p: 'Who you work with', t: 'Do you work with shops, cafés or other places open to the public?', tag: 'K' },
- { p: 'What you do', t: 'Do you build, fix or improve property?', tag: 'P' },
- { p: 'What you do', t: 'Do you design or plan building work?', e: 'Such as architects, surveyors or interior designers.', tag: 'D' },
- { p: 'What you do', t: 'Do you give money, legal or insurance advice?', tag: 'R' },
- { p: 'What you do', t: 'Do you help people plan for the future?', e: 'Such as retirement, Wills or protecting the family.', tag: 'Y' },
- { p: 'What you do', t: 'Do you sell something businesses use day to day?', e: 'Such as supplies or equipment.', tag: 'O' },
- { p: 'What you do', t: 'Do you provide IT, phones or software?', tag: 'I' },
- { p: 'What you do', t: 'Do you help businesses with marketing or sales?', tag: 'M' },
- { p: 'What you do', t: 'Do you help businesses with their staff?', e: 'Such as HR, recruitment, training or workwear.', tag: 'W' },
- { p: 'What you do', t: 'Do you work in events, food, travel or hospitality?', tag: 'E' },
- { p: 'What you do', t: 'Do you clean or look after homes or premises?', e: 'Such as cleaning, gardening or maintenance.', tag: 'C' }
+// Everyone answers 14 questions, numbered from 1: what you do (1 choice + 5 drill-down), how you work (3), who you work with (5).
+// Each drill-down yes can add who you work with (tags) and exact trail steps: [trail, steps before you, what you do].
+var T0 = {}; TR.forEach(function (r, i) { T0[['buy','ext','land','down','ret','leak','safe','inh','cafe','start','staff','big','office','whole','acct','brand','dinner','charity'][i]] = i; });
+var AREAS = [
+ { n: 'Building, trades and property work', tag: 'P', q: [
+  { t: 'Do you do structural work?', e: 'Such as extensions, roofing or brickwork.', g: ['T'], s: [['ext',1,'Builds the extension'],['leak',3,'Repairs the roof or walls'],['land',3,'Gets the building sound before letting']] },
+  { t: 'Do you fit interiors?', e: 'Such as kitchens, bathrooms, joinery or flooring.', g: ['H'], s: [['ext',5,'Fits out the new rooms'],['buy',6,'Fits the new kitchen or bathroom'],['cafe',2,'Fits out the café']] },
+  { t: 'Do you decorate or finish?', e: 'Such as painting, plastering or tiling.', g: ['H'], s: [['ext',5,'Finishes the walls and rooms'],['down',1,'Freshens the home for viewings'],['land',3,'Decorates before letting'],['leak',4,'Puts the room right']] },
+  { t: 'Do you design or plan building work?', e: 'Such as architects, surveyors or interior designers.', g: ['D'], s: [['ext',0,'Draws up the plans'],['office',0,'Plans the new layout'],['cafe',1,'Plans the fit-out']] },
+  { t: 'Do you work outside the home?', e: 'Such as gardens, driveways or fencing.', g: ['H'], s: [['ext',6,'Finishes the outside'],['down',1,'Smartens the outside for viewings'],['buy',6,'Sorts the garden or driveway']] } ] },
+ { n: 'Cleaning and looking after premises', tag: 'C', q: [
+  { t: 'Do you clean homes?', g: ['H'], s: [['buy',6,'Cleans before they move in'],['down',1,'Cleans before viewings']] },
+  { t: 'Do you clean offices or commercial premises?', g: ['S'], s: [['office',4,'Cleans the new premises'],['cafe',6,'Keeps the premises clean']] },
+  { t: 'Do you do end-of-tenancy or after-builders cleans?', g: ['L'], s: [['land',5,'Cleans before tenants move in'],['ext',5,'Cleans up after the builders'],['leak',4,'Dries out and cleans up']] },
+  { t: 'Do you look after gardens or grounds?', g: ['H'], s: [['down',1,'Tidies the garden for viewings'],['inh',1,'Gets the garden under control'],['land',5,'Keeps the garden tidy for tenants']] },
+  { t: 'Do you clear or remove things?', e: 'Such as rubbish, waste or house contents.', g: ['H'], s: [['inh',1,'Clears the house'],['down',2,'Clears what they can’t take'],['office',1,'Clears the old office']] } ] },
+ { n: 'Money, legal and insurance', tag: 'R', q: [
+  { t: 'Do you advise business owners on their money or tax?', g: ['S'], s: [['start',1,'Adds your advice for the new owner'],['whole',2,'Advises on the growth plan'],['ret',1,'Plans the owner’s exit']] },
+  { t: 'Do you arrange insurance or protection?', g: ['F'], s: [['buy',5,'Protects the family and home'],['land',2,'Arranges the landlord’s cover'],['start',3,'Protects the new business']] },
+  { t: 'Do you help with Wills, legal matters or estates?', g: ['F','Y'], s: [['ret',3,'Adds your legal advice'],['inh',1,'Helps sort the estate'],['staff',1,'Advises the new employer']] },
+  { t: 'Do you arrange loans, finance or mortgages?', g: ['S'], s: [['ext',1,'Arranges extra funding'],['cafe',2,'Arranges extra funding'],['big',2,'Funds the extra work']] },
+  { t: 'Do you help people invest or plan for retirement?', g: ['F','Y'], s: [['ret',2,'Adds your advice to the plan'],['land',1,'Advises before they buy'],['inh',3,'Advises on what to do with the money']] } ] },
+ { n: 'IT, phones and software', tag: 'I', q: [
+  { t: 'Do you support businesses with their IT?', g: ['S'], s: [['office',1,'Looks after the IT in the move'],['staff',4,'Gets the new starters set up']] },
+  { t: 'Do you provide phones or broadband?', g: ['S'], s: [['office',1,'Sets up phones and internet'],['cafe',5,'Gets the café online']] },
+  { t: 'Do you work on cyber security or backups?', g: ['B'], s: [['whole',6,'Keeps the data safe'],['big',6,'Keeps the contract data safe']] },
+  { t: 'Do you build websites or software?', g: ['S'], s: [['brand',1,'Builds the new website'],['start',6,'Gets the new business online'],['whole',6,'Builds the ordering system']] },
+  { t: 'Do you sell or repair computers and devices?', g: ['S'], s: [['staff',5,'Supplies the new laptops'],['start',6,'Supplies the first laptop and phone']] } ] },
+ { n: 'Products and supplies for businesses', tag: 'O', q: [
+  { t: 'Do you sell tools, equipment or materials?', g: ['T'], s: [['start',2,'Supplies the tools and kit'],['big',3,'Supplies what the job needs'],['acct',1,'Also supplies the trade']] },
+  { t: 'Do you sell food, drink or hospitality stock?', g: ['K'], s: [['cafe',6,'Supplies the stock'],['dinner',6,'Supplies food and drink for the night']] },
+  { t: 'Do you sell office or cleaning supplies?', g: ['S'], s: [['office',2,'Supplies what the new office uses'],['staff',5,'Supplies what the team needs']] },
+  { t: 'Do you supply vehicles, machinery or plant?', g: ['T'], s: [['start',2,'Supplies the equipment'],['big',3,'Supplies the extra machinery'],['whole',4,'Supplies the warehouse equipment']] },
+  { t: 'Do you supply signs, packaging or branded items?', g: ['S'], s: [['brand',4,'Puts the new look on everything'],['cafe',6,'Supplies the signs and packaging'],['whole',6,'Supplies the packaging']] } ] },
+ { n: 'Marketing, sales, design and print', tag: 'M', q: [
+  { t: 'Do you work on branding or design?', g: ['S'], s: [['brand',1,'Designs the new look'],['cafe',6,'Designs the café’s look']] },
+  { t: 'Do you do websites or social media?', g: ['S'], s: [['brand',3,'Takes the new look online'],['start',6,'Gets the new business online'],['cafe',6,'Tells the town it’s open']] },
+  { t: 'Do you help with sales or finding new customers?', g: ['S','G'], s: [['start',6,'Helps win the first customers'],['whole',3,'Finds the new customers'],['big',0,'Helps win the contract']] },
+  { t: 'Do you do PR or copywriting?', g: ['B'], s: [['dinner',2,'Gets the event noticed'],['charity',2,'Tells the story'],['brand',4,'Writes the launch story']] },
+  { t: 'Do you do signage or printed marketing?', g: ['S'], s: [['brand',4,'Adds your signs and print'],['office',6,'Updates the signs']] } ] },
+ { n: 'HR, recruitment, training and workwear', tag: 'W', q: [
+  { t: 'Do you recruit people for businesses?', g: ['G'], s: [['staff',1,'Finds the new starters'],['big',4,'Finds the extra people']] },
+  { t: 'Do you give HR advice?', g: ['S'], s: [['staff',2,'Sets up contracts and HR'],['cafe',2,'Gets the staff paperwork right']] },
+  { t: 'Do you train staff?', g: ['B'], s: [['staff',2,'Adds your training'],['big',5,'Trains the team for the job'],['start',5,'Adds your training']] },
+  { t: 'Do you supply workwear or uniforms?', g: ['T'], s: [['start',5,'Supplies the workwear'],['cafe',6,'Supplies the uniforms'],['big',3,'Kits out the bigger team'],['brand',4,'Puts the new look on the team']] },
+  { t: 'Do you coach people or support wellbeing at work?', g: ['B'], s: [['staff',6,'Supports the new team'],['big',6,'Keeps the team well through the job']] } ] },
+ { n: 'Events, food, travel and hospitality', tag: 'E', q: [
+  { t: 'Do you run a venue or provide catering?', g: ['B'], s: [['dinner',3,'Hosts or caters the night'],['brand',5,'Hosts the launch'],['office',6,'Caters the opening']] },
+  { t: 'Do you organise events?', g: ['B'], s: [['dinner',2,'Organises the night'],['brand',5,'Runs the launch event'],['charity',3,'Organises the event']] },
+  { t: 'Do you arrange travel or holidays?', g: ['F'], s: [['ret',4,'Plans the first big trip'],['down',5,'Plans what comes next'],['big',6,'Arranges the team’s travel']] },
+  { t: 'Do you run a café, restaurant or shop?', g: ['F'], s: [['charity',4,'Raises money with your customers'],['dinner',3,'Supports the night']] },
+  { t: 'Do you provide entertainment, flowers or gifts?', g: ['F'], s: [['dinner',6,'Adds something special to the night'],['office',6,'Marks the opening'],['brand',5,'Adds to the launch']] } ] },
+ { n: 'Something else', tag: '', q: [
+  { t: 'Do you look after people’s health or wellbeing?', g: ['F'], s: [['ret',4,'Helps them stay well'],['staff',6,'Looks after the team’s wellbeing']] },
+  { t: 'Do you teach or coach people?', g: ['F'], s: [['staff',2,'Coaches the new team'],['ret',4,'Helps them learn something new']] },
+  { t: 'Do you sell to the public from a shop or online?', g: ['K','F'], s: [['charity',4,'Raises money with your customers'],['buy',6,'Supplies the new home']] },
+  { t: 'Do you provide a service in people’s homes?', g: ['H'], s: [['buy',6,'Helps them settle in'],['ret',4,'Helps at home']] },
+  { t: 'Do you work with charities or community groups?', g: ['B'], s: [['dinner',1,'Brings your community along'],['charity',1,'Helps spread the word']] } ] }
 ];
-// Extra reasons for the newer questions: tag -> g (they could send you business) and h (you could send them business).
+var WHEN = [['B','At the planning stage, before anything starts'],['D','While the work or change is happening'],['A','Afterwards, once it’s done'],['','It varies']];
+var BEFORE = [['V','They’re moving home',['sue','chrisa','clive']],['D','They’re planning building work',['adam','anthony','chrisa']],['Z','Something has gone wrong or broken',['alex','trae','michelle']],['N','They’re starting or buying a business',['kath','chrism']],['G','They’re growing or winning bigger work',['chrism','robbie','dawn']],['A','They’re moving or setting up premises',['stuartm','stevew','philip']],['Y','They’re planning for the future',['stuartb','clive']],['Q','They want more customers or a new look',['andy','daniel','sian']],['','None of these',[]]];
+var NEXT = [['Funding or finance',['chrism','chrisa']],['Insurance or protection',['westen','robbie']],['Legal or accounting help',['clive','kath']],['A tradesperson',['alex','trae','adam','anthony','philip']],['Help buying, selling or letting',['sue','michelle']],['IT, supplies or lower running costs',['stuartm','stevew','spencer']],['Marketing, photos or print',['andy','daniel','sian','jonathan']],['Training, safety or admin',['dawn','lee','charlotte']],['None of these',[]]];
+var WHO = [['Do you work with small businesses or the self-employed?','','S'],['Do you work with larger companies or organisations?','Roughly 50 staff or more.','B'],['Do you work with trades or construction firms?','Builders, electricians, plumbers and so on.','T'],['Do you work with homeowners or families?','','HF'],['Do you work with landlords or property investors?','','L']];
+var TOTAL = 14;
+// Extra reasons: tag -> g (they could send you business) and h (you could send them business).
 var X = {
  V: { g: { 'Sue Iannucci': 'Meets people just as they decide to move.', 'Chris Ashley': 'Speaks to buyers before they move.', 'Clive Thomas': 'The firm’s conveyancers deal with movers every day.', 'Michelle Barber': 'Meets landlords and tenants on the move.' }, h: { 'Seamus Sullivan': 'Your movers will need their bills set up.', 'Steve Western': 'Your movers will need home insurance.' } },
  N: { g: { 'Kath Hiscock': 'Often the first call for a new business.', 'Chris MacManus': 'Funds new firms’ equipment.' }, h: { 'Spencer Clarke': 'New firms need card payments and energy set up.', 'Martin Britton': 'New firms may need a car or van.', 'Steve Western': 'New firms will need insurance.' } },
  G: { g: { 'Chris MacManus': 'Funds firms as they grow.', 'Robbie Williams': 'Works with firms taking on bigger contracts.', 'Dawn Evans': 'Trains growing teams.' }, h: { 'Lee Howells': 'Growing firms need health and safety covered.', 'Stuart Meikle': 'Growing firms need IT that keeps up.', 'Clive Thomas': 'Growing firms may need employment advice.' } },
  K: { g: { 'Richard Metcalfe': 'Supplies cafés, hotels and restaurants.', 'Spencer Clarke': 'Sets up card payments for places open to the public.' }, h: { 'Philip Grunewald': 'Your premises clients may need alarms or CCTV.', 'Trae Williams': 'Your premises clients may need an electrician.' } },
- D: { g: { 'Adam Shephard': 'Works with builders on extensions.', 'Anthony Williams': 'Works on sites from the groundwork up.' }, h: { 'Chris Ashley': 'Your clients may need funds for the build.', 'Trae Williams': 'Your projects will need an electrician.' } },
+ D: { g: { 'Adam Shephard': 'Works with builders on extensions.', 'Anthony Williams': 'Works on sites from the groundwork up.', 'Chris Ashley': 'Speaks to homeowners raising money for building work.' }, h: { 'Trae Williams': 'Your projects will need an electrician.' } },
  Y: { g: { 'Stuart Bourne': 'Helps people plan their finances for the long term.', 'Clive Thomas': 'The firm writes Wills and handles probate.', 'Kath Hiscock': 'Sees owners thinking about what comes next.' }, h: { 'Chris Ashley': 'Your clients may need protection advice.' } },
  W: { g: { 'Clive Thomas': 'The firm advises employers on employment and HR.', 'Lee Howells': 'Works with employers on safety.', 'Kath Hiscock': 'Sees firms as they take on staff.' }, h: { 'Dawn Evans': 'Your employers may need accredited staff training.' } },
  E: { g: { 'Richard Metcalfe': 'Works with hotels and hospitality.', 'Andy Mackinson': 'Runs campaigns and launches for brands.', 'Gareth Rees': 'Organises fundraising events.' }, h: { 'Siân Roberts': 'Your events may need a photographer.', 'Daniel Harris': 'Your events may need filming.' } },
- C: { g: { 'Michelle Barber': 'Rental homes need looking after between tenants.', 'Sue Iannucci': 'Homes for sale need to look their best.' }, h: { 'Spencer Clarke': 'Your premises clients may be overpaying on their bills.' } }
+ C: { g: { 'Michelle Barber': 'Rental homes need looking after between tenants.', 'Sue Iannucci': 'Homes for sale need to look their best.' }, h: { 'Spencer Clarke': 'Your premises clients may be overpaying on their bills.' } },
+ Z: { g: { 'Alex Jones': 'Called out to homes when things go wrong.', 'Trae Williams': 'Called out when the electrics fail.', 'Michelle Barber': 'Takes tenants’ calls when something breaks.' }, h: {} },
+ A: { g: { 'Stuart Meikle': 'Sets businesses up when they move.', 'Steve Williams': 'Stocks offices as they set up.', 'Philip Grunewald': 'Protects premises as firms move in.' }, h: {} },
+ Q: { g: { 'Andy Mackinson': 'Works with firms wanting to grow.', 'Daniel Harris': 'Works with brands raising their profile.', 'Siân Roberts': 'Photographs businesses and their people.' }, h: {} }
 };
 Object.keys(X).forEach(function (k) { M.forEach(function (m) { if (X[k].g[m[0]]) m[3][k] = X[k].g[m[0]]; if (X[k].h[m[0]]) m[4][k] = X[k].h[m[0]]; }); });
-// Sharper trail positions from the newer questions: [steps before you, what you do, 1 = a strong fit].
-var MORE = {
- 'Buying a first home': { V: [6, 'Helps with the move', 1] },
- 'Extending the family home': { D: [0, 'Draws up the plans', 2] },
- 'Becoming a landlord': { Y: [1, 'Adds your advice before they buy'] },
- 'Selling up and downsizing': { V: [5, 'Helps with the move', 1] },
- 'Planning to retire': { Y: [2, 'Adds your advice to the plan', 1] },
- 'Inheriting a house': { Y: [2, 'Adds your advice for the family', 1] },
- 'Opening a café': { D: [1, 'Plans the fit-out'], N: [6, 'Supports the new owner', 1], K: [6, 'Helps the café once it’s open', 1] },
- 'Starting out in the trades': { N: [6, 'Supports the new business', 1] },
- 'Taking on your first staff': { G: [6, 'Supports the growing team', 1], I: [4, 'Sets up what the team needs'] },
- 'Winning a big contract': { G: [6, 'Helps deliver the contract', 1] },
- 'Moving to a new office': { D: [0, 'Plans the new layout'], I: [1, 'Adds your tech to the move', 2] },
- 'Growing a wholesale business': { G: [6, 'Helps the business keep growing'], I: [6, 'Adds your tech as it grows'] }
-};
-TR.forEach(function (r) { var x = MORE[r[0]]; if (x) for (var k in x) r[3][k] = x[k]; });
 var DOES = { P: 3, D: 3, R: 3, Y: 3, O: 3, I: 3, M: 3, W: 3, E: 3, C: 3, V: 2, N: 2, G: 2, K: 2 };
 var LIKE = { D: 'P', Y: 'R', I: 'O', V: 'H', N: 'S', G: 'S', K: 'S' };
 var path = [];
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
-function tagsOf(p) { var t = {}; p.forEach(function (yes, i) { if (yes) { var x = QS[i].tag; t[x] = 1; if (LIKE[x]) t[LIKE[x]] = 1; } }); return t; }
-// Golden geese: their clients are the people you want, or they regularly need what you do. You can help: your clients are the people they want. Nobody appears on both lists.
-function match(t) {
-  var geese = M.map(function (m, i) { var s = 0, why = '', best = 0; for (var k in m[3]) if (t[k]) { var w = DOES[k] || 2; s += w; if (w > best) { best = w; why = m[3][k]; } } return { i: i, s: s, why: why }; })
+// Turn the answers into: tags, chosen trail steps, when you come in, who comes just before you and who comes next.
+function read(a) {
+  var area = AREAS[a[0]], t = {}, s = [];
+  function add(x) { if (!x) return; t[x] = 1; if (LIKE[x]) t[LIKE[x]] = 1; }
+  add(area.tag);
+  area.q.forEach(function (q, i) { if (a[i + 1]) { q.g.forEach(add); s = s.concat(q.s); } });
+  var b = BEFORE[a[7]], n = NEXT[a[8]];
+  add(b[0]);
+  WHO.forEach(function (w, i) { if (a[9 + i]) w[2].split('').forEach(add); });
+  return { t: t, s: s, when: WHEN[a[6]][0], pick: b[0], before: b[2], next: n[1], nextName: n[0] };
+}
+// Golden geese: their clients are the people you want, or they're there just before you're needed. You can help: the people your customers need next. Nobody appears on both lists.
+function match(r) {
+  var t = r.t, nm = {}; r.next.forEach(function (k) { nm[P[k][0]] = 1; });
+  var geese = M.map(function (m, i) { var s = 0, why = '', best = 0; for (var k in m[3]) if (t[k]) { var w = (DOES[k] || 2) + (k === r.pick ? 8 : 0); s += w; if (w > best) { best = w; why = m[3][k]; } } return { i: i, s: nm[m[0]] ? 0 : s, why: why }; })
     .filter(function (x) { return x.s > 0; }).sort(function (a, b) { return b.s - a.s || a.i - b.i; }).slice(0, 5);
   var used = {}; geese.forEach(function (x) { used[x.i] = 1; });
-  var helps = M.map(function (m, i) { var s = 0, why = ''; for (var k in m[4]) if (t[k]) { s += 2; if (!why) why = m[4][k]; } return { i: i, s: s, why: why }; })
+  var helps = M.map(function (m, i) { var s = 0, why = ''; if (nm[m[0]]) { s = 10; why = 'Your customers often need this next: ' + r.nextName.toLowerCase() + '.'; } for (var k in m[4]) if (t[k]) { s += 2; if (!why) why = m[4][k]; } return { i: i, s: s, why: why }; })
     .filter(function (x) { return x.s > 0 && !used[x.i]; }).sort(function (a, b) { return b.s - a.s || a.i - b.i; }).slice(0, 5);
   return { geese: geese, helps: helps };
 }
-// Best slot in each trail: a strong fit first, then what you do, then who you serve. Trails for your kind of customer come first, with a mix of home and business where both fit.
-function fits(t) {
-  var all = TR.map(function (r, i) {
-    var best = null;
-    for (var k in r[3]) { if (k !== '*' && !t[k]) continue; var s = k === '*' ? 0 : (DOES[k] || 1) + (r[3][k][2] || 0) * 3; if (!best || s > best.s) best = { s: s, k: k }; }
-    if (!best) return null;
-    return { i: i, s: best.s + (r[1].split('').some(function (c) { return t[c]; }) ? 2 : 0), f: r[3][best.k] };
-  }).filter(Boolean).sort(function (a, b) { return b.s - a.s || a.i - b.i; });
-  var out = all.slice(0, 3);
-  if (out.length === 3 && out[0].s >= 3 && TR[out[0].i][1] === TR[out[1].i][1] && TR[out[1].i][1] === TR[out[2].i][1]) {
-    var other = all.filter(function (x) { return x.s >= 3 && TR[x.i][1] !== TR[out[0].i][1]; })[0];
-    if (other) out[2] = other;
-  }
-  return out;
+function phase(at, len) { var p = at / len; return p <= 0.34 ? 'B' : p >= 0.8 ? 'A' : 'D'; }
+// Best slot in each trail: your exact drill-down steps first, then broader fits. A step scores more if it matches when you come in, who comes before you and who comes next.
+function fits(r) {
+  var t = r.t, c = [];
+  r.s.forEach(function (x) { c.push({ i: T0[x[0]], f: [x[1], x[2]], b: 20 }); });
+  TR.forEach(function (row, i) { for (var k in row[3]) if (k === '*' || t[k]) c.push({ i: i, f: row[3][k], b: k === '*' ? 0 : (DOES[k] || 1) + (row[3][k][2] ? 3 : 0) }); });
+  var best = {};
+  c.forEach(function (x) {
+    var row = TR[x.i], st = row[2], at = x.f[0], s = x.b;
+    if (r.when && phase(at, st.length) === r.when) s += 4;
+    if (row[1].split('').some(function (k) { return t[k]; })) s += 2;
+    if (at > 0 && r.before.indexOf(st[at - 1][0]) >= 0) s += 3;
+    if (at < st.length && r.next.indexOf(st[at][0]) >= 0) s += 3;
+    x.s = s; if (!best[x.i] || s > best[x.i].s) best[x.i] = x;
+  });
+  var all = Object.keys(best).map(function (k) { return best[k]; }).sort(function (a, b) { return b.s - a.s || a.i - b.i; });
+  return all.slice(0, 3);
 }
 function stepHtml(s) { var p = P[s[0]]; return '<div class="st" style="--c:' + TC[p[1]] + '"><b>' + esc(p[0]) + '</b><span>' + esc(s[1]) + '</span></div>'; }
 function youHtml(x) { return '<div class="st you"><b>You</b><span>' + esc(x) + '</span></div>'; }
@@ -245,34 +292,46 @@ function fitHtml(x) {
   return '<article class="tr"><h3>' + esc(r[0]) + '</h3><div class="chain">' + html + '</div><p class="pass">' + line + '</p></article>';
 }
 var KEY = [['t', 'Trades'], ['p', 'Property & Home'], ['f', 'Finance & Insurance'], ['b', 'Business Services'], ['m', 'Marketing & Community']];
-function trailsHtml(t) {
-  return '<section class="panel"><span class="tag">Your place</span><h2>Where you could fit in a Givers Gain Trail</h2><p class="why">A trail is a chain of introductions, where one member leads to the next.</p><div class="key">' + KEY.map(function (k) { return '<span><i style="background:' + TC[k[0]] + '"></i>' + esc(k[1]) + '</span>'; }).join('') + '</div><div class="list">' + fits(t).map(fitHtml).join('') + '</div>' +
-    '<div class="brief"><b>This is just a brief overview.</b> It’s based on 20 quick answers. If you join, we can recalibrate where you fit, in the trails and in our Power Teams.</div>' +
-    '<details class="more"><summary>See all ' + TR.length + ' trails</summary>' + TR.map(function (r) { return '<div class="one"><b>' + esc(r[0]) + '</b><span>' + r[2].map(function (s) { return esc(P[s[0]][0]); }).join(' → ') + '</span></div>'; }).join('') + '</details></section>';
+function trailsHtml(r) {
+  return '<section class="panel"><span class="tag">Your place</span><h2>Where you could fit in a Givers Gain Trail</h2><p class="why">A trail is a chain of introductions, where one member leads to the next.</p><div class="key">' + KEY.map(function (k) { return '<span><i style="background:' + TC[k[0]] + '"></i>' + esc(k[1]) + '</span>'; }).join('') + '</div><div class="list">' + fits(r).map(fitHtml).join('') + '</div>' +
+    '<div class="brief"><b>This is just a brief overview.</b> It’s based on ' + TOTAL + ' quick answers. If you join, we can recalibrate where you fit, in the trails and in our Power Teams.</div>' +
+    '<details class="more"><summary>See all ' + TR.length + ' trails</summary>' + TR.map(function (x) { return '<div class="one"><b>' + esc(x[0]) + '</b><span>' + x[2].map(function (s) { return esc(P[s[0]][0]); }).join(' → ') + '</span></div>'; }).join('') + '</details></section>';
 }
 function card(x) {
   var m = M[x.i];
   return '<div class="m"><div class="lg"><img src="logos/' + m[2] + '"' + (DARK[m[2]] ? ' class="dark"' : '') + ' alt="' + esc(m[1]) + ' logo"></div><div><h3>' + esc(m[0]) + '<em>' + esc(m[1]) + '</em></h3><p>' + esc(x.why) + '</p></div></div>';
 }
+// What question n looks like: part, text, example, and choices (none = yes or no).
+function ask(n) {
+  if (n === 0) return { p: 'What you do', t: 'Which is closest to what you do?', c: AREAS.map(function (a) { return a.n; }) };
+  if (n <= 5) { var q = AREAS[path[0]].q[n - 1]; return { p: 'What you do', t: q.t, e: q.e }; }
+  if (n === 6) return { p: 'How you work', t: 'When do you usually come in?', c: WHEN.map(function (w) { return w[1]; }) };
+  if (n === 7) return { p: 'How you work', t: 'What usually happens just before someone calls you?', c: BEFORE.map(function (b) { return b[1]; }) };
+  if (n === 8) return { p: 'How you work', t: 'What do your customers usually need next?', c: NEXT.map(function (x) { return x[0]; }) };
+  var w = WHO[n - 9]; return { p: 'Who you work with', t: w[0], e: w[1] };
+}
 function draw() {
   var el = document.getElementById('flow'), n = path.length, html;
-  document.body.classList.toggle('going', n > 0); document.body.classList.toggle('finished', n >= QS.length);
-  if (n < QS.length) {
-    var q = QS[n];
-    html = '<div class="q"><div class="meta"><span>Question ' + (n + 1) + ' of ' + QS.length + '</span><span>' + esc(q.p) + '</span></div><div class="bar"><i style="width:' + Math.round((n + 1) / QS.length * 100) + '%"></i></div><h2>' + esc(q.t) + '</h2>' + (q.e ? '<p class="eg">' + esc(q.e) + '</p>' : '') + '<div class="yn"><button class="yes" type="button" data-a="1">Yes</button><button class="no" type="button" data-a="0">No</button></div>' + (n ? '<div class="ctl"><button class="txt" type="button" id="back">Go back</button></div>' : '') + '</div>';
+  document.body.classList.toggle('going', n > 0); document.body.classList.toggle('finished', n >= TOTAL);
+  if (n < TOTAL) {
+    var q = ask(n);
+    html = '<div class="q"><div class="meta"><span>Question ' + (n + 1) + ' of ' + TOTAL + '</span><span>' + esc(q.p) + '</span></div><div class="bar"><i style="width:' + Math.round((n + 1) / TOTAL * 100) + '%"></i></div><h2' + (q.c ? ' class="ch"' : '') + '>' + esc(q.t) + '</h2>' + (q.e ? '<p class="eg">' + esc(q.e) + '</p>' : '') +
+      (q.c ? '<div class="opts">' + q.c.map(function (c, i) { return '<button class="opt" type="button" data-c="' + i + '">' + esc(c) + '</button>'; }).join('') + '</div>' : '<div class="yn"><button class="yes" type="button" data-a="1">Yes</button><button class="no" type="button" data-a="0">No</button></div>') +
+      (n ? '<div class="ctl"><button class="txt" type="button" id="back">Go back</button></div>' : '') + '</div>';
   } else {
-    var t = tagsOf(path), r = match(t);
+    var a = read(path), r = match(a);
     html = '<div class="res">';
     if (!r.geese.length && !r.helps.length) html += '<section class="panel"><h2>Let’s find your people together</h2><p class="why" style="margin-bottom:0">Your answers didn’t point to anyone in particular. Ask the person who invited you who they’d introduce you to.</p></section>';
     if (r.geese.length) html += '<section class="panel goose"><span class="tag">They could help you</span><h2>Your golden geese</h2><p class="why">They could send business your way.</p><div class="list">' + r.geese.map(card).join('') + '</div></section>';
     if (r.helps.length) html += '<section class="panel"><span class="tag">You could help them</span><h2>Who you can help</h2><p class="why">You could send business their way. In BNI, givers gain.</p><div class="list">' + r.helps.map(card).join('') + '</div></section>';
-    html += trailsHtml(t) + '<div class="ctl"><button class="txt" type="button" id="back">Go back</button><button class="txt" type="button" id="again">Start again</button></div></div>';
+    html += trailsHtml(a) + '<div class="ctl"><button class="txt" type="button" id="back">Go back</button><button class="txt" type="button" id="again">Start again</button></div></div>';
   }
   el.innerHTML = html;
 }
 document.addEventListener('click', function (e) {
   var b = e.target.closest('button'); if (!b) return;
   if (b.dataset.a) { path.push(b.dataset.a === '1'); draw(); window.scrollTo(0, 0); return; }
+  if (b.dataset.c) { path.push(+b.dataset.c); draw(); window.scrollTo(0, 0); return; }
   if (b.id === 'back') { path.pop(); draw(); window.scrollTo(0, 0); return; }
   if (b.id === 'again') { path = []; draw(); window.scrollTo(0, 0); return; }
 });
