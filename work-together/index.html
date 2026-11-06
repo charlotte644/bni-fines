@@ -8,61 +8,71 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* One visual world: the chapter's printed sheets. A single red flow line runs from question to result. */
-  :root { color-scheme: light; --red:#CF2030; --red-d:#A3141F; --ink:#23262D; --muted:#5F6470; --line:#E3E0DC; --tint:#FBF3F3; --gold:#B8860B; --gold-bg:#FCF5E3; --font:'Inter',Arial,sans-serif; }
+  /* Same world as the chapter's printed sheets: gradient red header, warm cards, team colours. */
+  :root { color-scheme: light; --red:#CF2030; --red-d:#A3141F; --deep:#8E0F1A; --ink:#23262D; --muted:#5F6470; --line:#EAE5E0; --warm:#FAF6F3; --tint:#FBF0F0; --gold:#9A6F06; --gold-bg:#FCF5E3; --gold-line:#EBD9A6; --font:'Inter',Arial,sans-serif; }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
-  body { background: #fff; color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.45; }
+  body { background: var(--warm); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
   h1, h2, h3 { margin: 0; text-wrap: balance; }
   button { font: inherit; cursor: pointer; }
   :focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
-  .top { background: var(--red); color: #fff; padding: 20px 16px 18px; }
-  .wrap { max-width: 640px; margin: 0 auto; }
-  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 4px; }
-  .top h1 { font-size: 27px; font-weight: 800; letter-spacing: -.01em; line-height: 1.12; }
-  .top p.lead { margin: 6px 0 0; max-width: 56ch; }
-  main { padding: 18px 16px 44px; }
-  /* flow */
-  .done { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; border: 1px solid var(--line); border-radius: 9px; padding: 8px 12px; font-size: 14px; color: var(--muted); }
-  .ans { font-size: 12px; font-weight: 800; padding: 2px 9px; border-radius: 10px; }
-  .ans.y { background: var(--red); color: #fff; } .ans.n { background: #ECE9E5; color: var(--muted); }
-  .link { width: 2px; height: 16px; background: var(--red); margin-left: 22px; }
-  .q { background: var(--tint); border: 2px solid var(--red); border-radius: 12px; padding: 16px; }
-  .q .step { font-size: 12px; font-weight: 700; color: var(--red-d); margin: 0 0 3px; }
-  .q h2 { font-size: 21px; font-weight: 700; line-height: 1.22; }
-  .q p.eg { margin: 4px 0 0; font-size: 14px; color: var(--muted); }
-  .yn { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
-  .yn button { border: 0; border-radius: 9px; padding: 14px; font-size: 18px; font-weight: 800; }
+  .wrap { max-width: 620px; margin: 0 auto; }
+  .top { background: linear-gradient(125deg, var(--deep) 0%, #C41C2B 55%, #D9303F 100%); color: #fff; padding: 26px 18px 62px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; margin: 0 0 8px; opacity: .92; }
+  .top h1 { font-size: 31px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
+  .top p.lead { margin: 10px 0 0; max-width: 52ch; font-size: 15.5px; opacity: .96; }
+  .going .top { padding: 16px 18px 56px; } .going .top h1 { font-size: 22px; } .going .top p.lead { display: none; }
+  main { padding: 0 14px 40px; margin-top: -42px; }
+  /* question */
+  .q { background: #fff; border-radius: 18px; padding: 20px 18px 18px; box-shadow: 0 10px 30px rgba(90,20,25,.12); }
+  .meta { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 13px; font-weight: 700; color: var(--red-d); }
+  .meta span:last-child { color: var(--muted); font-weight: 600; }
+  .bar { height: 7px; background: #F1ECE7; border-radius: 7px; overflow: hidden; margin: 8px 0 20px; }
+  .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--deep), var(--red)); border-radius: 7px; }
+  .q h2 { font-size: 23px; font-weight: 800; line-height: 1.22; letter-spacing: -.012em; min-height: 2.45em; }
+  .q p.eg { margin: 6px 0 0; font-size: 14.5px; color: var(--muted); }
+  .yn { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+  .yn button { border: 0; border-radius: 13px; padding: 16px; font-size: 18px; font-weight: 800; transition: transform .08s ease, background .15s ease; }
+  .yn button:active { transform: scale(.98); }
   .yes { background: var(--red); color: #fff; } .yes:hover { background: var(--red-d); }
-  .no { background: #fff; color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); } .no:hover { background: #F4F2EF; }
-  .ctl { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-  .txt { background: none; border: 0; padding: 4px 0; color: var(--red-d); font-weight: 600; text-decoration: underline; }
+  .no { background: #F4F0EC; color: var(--ink); } .no:hover { background: #EBE5DF; }
+  .ctl { display: flex; gap: 16px; margin-top: 14px; flex-wrap: wrap; }
+  .txt { background: none; border: 0; padding: 4px 0; color: var(--red-d); font-weight: 600; font-size: 14.5px; text-decoration: underline; text-underline-offset: 3px; }
   /* results */
-  .res { display: grid; gap: 22px; }
-  .sec h2 { font-size: 20px; font-weight: 800; }
-  .sec p.why { margin: 2px 0 10px; font-size: 14.5px; color: var(--muted); }
+  .res { display: grid; gap: 16px; }
+  .panel { background: #fff; border-radius: 18px; padding: 18px 16px; box-shadow: 0 6px 22px rgba(90,20,25,.08); }
+  .tag { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; background: var(--tint); color: var(--red-d); margin-bottom: 7px; }
+  .goose .tag { background: var(--gold-bg); color: var(--gold); }
+  .panel h2 { font-size: 22px; font-weight: 800; letter-spacing: -.012em; line-height: 1.2; }
+  .panel p.why { margin: 3px 0 12px; font-size: 14.5px; color: var(--muted); }
   .list { display: grid; gap: 8px; }
-  .m { display: grid; grid-template-columns: 74px 1fr; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
-  .goose .m { background: var(--gold-bg); border-color: #EBD9A6; }
-  .m .lg { width: 74px; height: 48px; display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 6px; padding: 3px; }
+  .m { display: grid; grid-template-columns: 74px 1fr; gap: 12px; align-items: center; background: var(--warm); border-radius: 12px; padding: 10px 12px; }
+  .goose .m { background: var(--gold-bg); }
+  .m .lg { width: 74px; height: 50px; display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 8px; padding: 4px; }
   .m .lg img { max-width: 100%; max-height: 100%; display: block; }
   .m .lg img.dark { filter: brightness(0); }
   .m h3 { font-size: 16px; font-weight: 700; line-height: 1.2; }
   .m h3 em { display: block; font-style: normal; font-weight: 500; color: var(--red-d); font-size: 13.5px; }
   .m p { margin: 2px 0 0; font-size: 14px; line-height: 1.35; }
-  .tr { border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
-  .tr h3 { font-size: 16.5px; font-weight: 800; color: var(--red-d); margin-bottom: 8px; }
-  .chain { display: grid; gap: 5px; }
-  .st { border-left: 4px solid var(--line); background: #F7F6F4; border-radius: 0 7px 7px 0; padding: 6px 10px; font-size: 14px; line-height: 1.3; }
+  /* trails */
+  .tr { background: var(--warm); border-radius: 14px; padding: 14px 14px 12px; }
+  .tr h3 { font-size: 17px; font-weight: 800; color: var(--red-d); margin-bottom: 10px; letter-spacing: -.005em; }
+  .chain { position: relative; display: grid; gap: 2px; }
+  .chain::before { content: ""; position: absolute; left: 6px; top: 12px; bottom: 12px; width: 2px; background: #E3DBD3; }
+  .st { position: relative; padding: 5px 8px 5px 24px; font-size: 14px; line-height: 1.3; }
+  .st::before { content: ""; position: absolute; left: 1px; top: 10px; width: 12px; height: 12px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 3px var(--warm); }
   .st b { display: block; font-weight: 700; } .st span { color: var(--muted); font-size: 13.5px; }
-  .st.you { background: var(--red); border-left-color: var(--red-d); color: #fff; border-radius: 7px; padding: 9px 12px; }
+  .st.you { background: var(--red); color: #fff; border-radius: 11px; padding: 9px 12px 10px 24px; margin: 4px 0; box-shadow: 0 5px 14px rgba(207,32,48,.28); }
+  .st.you::before { background: #fff; box-shadow: 0 0 0 3px var(--red-d); left: 1px; top: 14px; }
   .st.you b { font-size: 15.5px; font-weight: 800; } .st.you span { color: #fff; font-size: 14px; }
-  .pass { margin: 8px 0 0; font-size: 13.5px; color: var(--muted); }
-  .brief { margin-top: 12px; background: var(--tint); border-radius: 10px; padding: 12px 14px; font-size: 14.5px; }
-  .more { margin-top: 12px; font-size: 14px; } .more summary { cursor: pointer; color: var(--red-d); font-weight: 700; padding: 4px 0; }
+  .pass { margin: 9px 0 0; font-size: 13.5px; color: var(--muted); }
+  .key { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: -4px 0 12px; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .key span { display: inline-flex; align-items: center; gap: 5px; } .key i { width: 9px; height: 9px; border-radius: 50%; display: block; }
+  .brief { margin-top: 12px; background: var(--tint); border-radius: 12px; padding: 12px 14px; font-size: 14.5px; }
+  .more { margin-top: 10px; font-size: 14px; } .more summary { cursor: pointer; color: var(--red-d); font-weight: 700; padding: 6px 0; }
   .one { border-top: 1px solid var(--line); padding: 8px 0; } .one b { display: block; font-weight: 700; } .one span { color: var(--muted); font-size: 13.5px; }
-  .foot { margin-top: 26px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
-  @media (max-width: 420px) { .top h1 { font-size: 24px; } .q h2 { font-size: 19px; } .m { grid-template-columns: 58px 1fr; } .m .lg { width: 58px; height: 40px; } }
+  .foot { display: none; margin: 22px 4px 0; font-size: 13px; color: var(--muted); } .finished .foot { display: block; }
+  @media (max-width: 420px) { .top h1 { font-size: 27px; } .q h2 { font-size: 21px; } .m { grid-template-columns: 58px 1fr; } .m .lg { width: 58px; height: 42px; } }
 </style>
 </head>
 <body>
@@ -70,7 +80,7 @@
   <div class="wrap">
     <p class="eyebrow">BNI Intrepid &nbsp;•&nbsp; Givers Gain</p>
     <h1>How we can work together</h1>
-    <p class="lead">Thanks for visiting us. Answer a few yes or no questions to see which members could send business your way, who you could help, and where you could fit in a Givers Gain Trail.</p>
+    <p class="lead">Thanks for visiting us. Answer 20 quick yes or no questions to see which members could send business your way, who you could help, and where you could fit in a Givers Gain Trail.</p>
   </div>
 </header>
 <main>
@@ -80,8 +90,8 @@
   </div>
 </main>
 <script>
-// Customers: S small businesses, B larger organisations, T trades, H homeowners, F individuals and families, L landlords
-// What you do: P work on property, O things businesses use, M marketing or training, R money, legal or insurance, W staff, E events and hospitality, C cleaning and upkeep
+// Who you work with: S small businesses, B larger organisations, T trades, H homeowners, F individuals and families, L landlords, V people moving, N new businesses, G growing businesses, K premises open to the public
+// What you do: P work on property, D design and plan, R money, legal or insurance, Y future planning, O things businesses use, I IT and phones, M marketing or sales, W staff, E events and hospitality, C cleaning and upkeep
 // g = why they could send you business. h = why you could send them business.
 var M = [
  ['Michelle Barber','The Gray House','L01.png',{L:'Looks after landlords and rental homes every day.',P:'Rental homes always need reliable people to look after them.'},{L:'Your landlords may want a lettings and property manager.'}],
@@ -114,37 +124,6 @@ var M = [
  ['Gareth Rees','2Wish','L11.png',{},{B:'Your larger clients may be looking for a charity to support.',F:'2Wish supports families after the sudden death of a child or young person.'}]
 ];
 var DARK = { 'L08w.png': 1 };
-var Q = {
- biz:  { t: 'Do you sell to other businesses?', y: 'small', n: 'public' },
- small:{ t: 'Do you work with small businesses or the self-employed?', tag: 'S', y: 'big', n: 'big' },
- big:  { t: 'Do you work with larger companies or organisations?', e: 'Roughly 50 staff or more.', tag: 'B', y: 'trade', n: 'trade' },
- trade:{ t: 'Do you work with trades or construction firms?', e: 'Builders, electricians, plumbers and so on.', tag: 'T', y: 'public', n: 'public' },
- public:{ t: 'Do you sell to the public?', y: 'home', n: 'land' },
- home: { t: 'Do you work with homeowners?', tag: 'H', y: 'fam', n: 'fam' },
- fam:  { t: 'Do you help people plan their money or their future?', e: 'Or support individuals and families in other ways.', tag: 'F', y: 'land', n: 'land' },
- land: { t: 'Do you work with landlords or property investors?', tag: 'L', y: 'prop', n: 'prop' },
- prop: { t: 'Do you build, fix or improve property?', tag: 'P', y: 'adv', n: 'adv' },
- adv:  { t: 'Do you give money, legal or insurance advice?', tag: 'R', y: 'ops', n: 'ops' },
- ops:  { t: 'Do you sell something businesses use day to day?', e: 'Such as supplies, equipment or IT.', tag: 'O', y: 'grow', n: 'grow' },
- grow: { t: 'Do you help businesses grow?', e: 'Such as marketing, sales, or training their people.', tag: 'M', y: 'staff', n: 'staff' },
- staff:{ t: 'Do you help businesses with their staff?', e: 'Such as HR, recruitment or workwear.', tag: 'W', y: 'host', n: 'host' },
- host: { t: 'Do you work in events, food, travel or hospitality?', tag: 'E', y: 'care', n: 'care' },
- care: { t: 'Do you clean or look after homes or premises?', e: 'Such as cleaning, gardening or maintenance.', tag: 'C', y: null, n: null }
-};
-var OFFER = { P: 1, R: 1, O: 1, M: 1 };
-var path = [], cur = 'biz';
-function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
-function tagsOf(p) { var t = {}; p.forEach(function (a) { var x = Q[a.k].tag; if (a.yes && x) t[x] = 1; }); return t; }
-// Golden geese: their clients are the people you want, or they regularly need what you do. What you do counts for more.
-// You can help: your clients are the people they want. Nobody appears on both lists.
-function match(t) {
-  var geese = M.map(function (m, i) { var s = 0, why = '', best = 0; for (var k in m[3]) if (t[k]) { var w = OFFER[k] ? 3 : 2; s += w; if (w > best) { best = w; why = m[3][k]; } } return { i: i, s: s, why: why }; })
-    .filter(function (x) { return x.s > 0; }).sort(function (a, b) { return b.s - a.s || a.i - b.i; }).slice(0, 5);
-  var used = {}; geese.forEach(function (x) { used[x.i] = 1; });
-  var helps = M.map(function (m, i) { var s = 0, why = ''; for (var k in m[4]) if (t[k]) { s += 2; if (!why) why = m[4][k]; } return { i: i, s: s, why: why }; })
-    .filter(function (x) { return x.s > 0 && !used[x.i]; }).sort(function (a, b) { return b.s - a.s || a.i - b.i; }).slice(0, 5);
-  return { geese: geese, helps: helps };
-}
 // Givers Gain Trails: same chains as the printed trails sheet. Each has who it suits (home or business) and where a visitor could slot in: tag: [steps before you, what you do].
 var TC = { t:'#2F7D5B', p:'#B5810F', m:'#7B3F8C', f:'#2A4A7B', b:'#1B8088' };
 var P = {
@@ -174,64 +153,128 @@ var TR = [
  ['Hosting a charity dinner','SBT',[['gareth','Shares why it matters'],['andy','Spreads the word'],['jonathan','Prints the tickets'],['sian','Photographs the night'],['daniel','Films the story'],['richard','Supplies the coffee']],{E:[3,'Hosts or caters the night',1],M:[2,'Helps spread the word']}],
  ['Choosing a charity of the year','',[['gareth','Explains how you can help'],['andy','Tells your team and customers'],['daniel','Films the first event'],['sian','Captures the day']],{'*':[4,'Brings your own clients along']}]
 ];
-var DOES = { P: 1, R: 1, O: 1, M: 1, W: 1, E: 1, C: 1 };
-// Best slot in each trail: what you do counts for more than who you serve, and trails for your kind of customer come first. Keeps a mix of home and business.
+// Everyone answers the same 20 questions, numbered 1 to 20. Each answer feeds the golden geese, who you can help and your place in the trails.
+var QS = [
+ { p: 'Who you work with', t: 'Do you work with small businesses or the self-employed?', tag: 'S' },
+ { p: 'Who you work with', t: 'Do you work with larger companies or organisations?', e: 'Roughly 50 staff or more.', tag: 'B' },
+ { p: 'Who you work with', t: 'Do you work with trades or construction firms?', e: 'Builders, electricians, plumbers and so on.', tag: 'T' },
+ { p: 'Who you work with', t: 'Do you work with homeowners?', tag: 'H' },
+ { p: 'Who you work with', t: 'Do you work with individuals and families?', tag: 'F' },
+ { p: 'Who you work with', t: 'Do you work with landlords or property investors?', tag: 'L' },
+ { p: 'Who you work with', t: 'Do you work with people who are moving home?', e: 'Buying, selling or renting.', tag: 'V' },
+ { p: 'Who you work with', t: 'Do you work with people starting a new business?', tag: 'N' },
+ { p: 'Who you work with', t: 'Do you work with businesses that are growing?', e: 'Taking on staff, winning bigger contracts or moving premises.', tag: 'G' },
+ { p: 'Who you work with', t: 'Do you work with shops, cafés or other places open to the public?', tag: 'K' },
+ { p: 'What you do', t: 'Do you build, fix or improve property?', tag: 'P' },
+ { p: 'What you do', t: 'Do you design or plan building work?', e: 'Such as architects, surveyors or interior designers.', tag: 'D' },
+ { p: 'What you do', t: 'Do you give money, legal or insurance advice?', tag: 'R' },
+ { p: 'What you do', t: 'Do you help people plan for the future?', e: 'Such as retirement, Wills or protecting the family.', tag: 'Y' },
+ { p: 'What you do', t: 'Do you sell something businesses use day to day?', e: 'Such as supplies or equipment.', tag: 'O' },
+ { p: 'What you do', t: 'Do you provide IT, phones or software?', tag: 'I' },
+ { p: 'What you do', t: 'Do you help businesses with marketing or sales?', tag: 'M' },
+ { p: 'What you do', t: 'Do you help businesses with their staff?', e: 'Such as HR, recruitment, training or workwear.', tag: 'W' },
+ { p: 'What you do', t: 'Do you work in events, food, travel or hospitality?', tag: 'E' },
+ { p: 'What you do', t: 'Do you clean or look after homes or premises?', e: 'Such as cleaning, gardening or maintenance.', tag: 'C' }
+];
+// Extra reasons for the newer questions: tag -> g (they could send you business) and h (you could send them business).
+var X = {
+ V: { g: { 'Sue Iannucci': 'Meets people just as they decide to move.', 'Chris Ashley': 'Speaks to buyers before they move.', 'Clive Thomas': 'The firm’s conveyancers deal with movers every day.', 'Michelle Barber': 'Meets landlords and tenants on the move.' }, h: { 'Seamus Sullivan': 'Your movers will need their bills set up.', 'Steve Western': 'Your movers will need home insurance.' } },
+ N: { g: { 'Kath Hiscock': 'Often the first call for a new business.', 'Chris MacManus': 'Funds new firms’ equipment.' }, h: { 'Spencer Clarke': 'New firms need card payments and energy set up.', 'Martin Britton': 'New firms may need a car or van.', 'Steve Western': 'New firms will need insurance.' } },
+ G: { g: { 'Chris MacManus': 'Funds firms as they grow.', 'Robbie Williams': 'Works with firms taking on bigger contracts.', 'Dawn Evans': 'Trains growing teams.' }, h: { 'Lee Howells': 'Growing firms need health and safety covered.', 'Stuart Meikle': 'Growing firms need IT that keeps up.', 'Clive Thomas': 'Growing firms may need employment advice.' } },
+ K: { g: { 'Richard Metcalfe': 'Supplies cafés, hotels and restaurants.', 'Spencer Clarke': 'Sets up card payments for places open to the public.' }, h: { 'Philip Grunewald': 'Your premises clients may need alarms or CCTV.', 'Trae Williams': 'Your premises clients may need an electrician.' } },
+ D: { g: { 'Adam Shephard': 'Works with builders on extensions.', 'Anthony Williams': 'Works on sites from the groundwork up.' }, h: { 'Chris Ashley': 'Your clients may need funds for the build.', 'Trae Williams': 'Your projects will need an electrician.' } },
+ Y: { g: { 'Stuart Bourne': 'Helps people plan their finances for the long term.', 'Clive Thomas': 'The firm writes Wills and handles probate.', 'Kath Hiscock': 'Sees owners thinking about what comes next.' }, h: { 'Chris Ashley': 'Your clients may need protection advice.' } },
+ W: { g: { 'Clive Thomas': 'The firm advises employers on employment and HR.', 'Lee Howells': 'Works with employers on safety.', 'Kath Hiscock': 'Sees firms as they take on staff.' }, h: { 'Dawn Evans': 'Your employers may need accredited staff training.' } },
+ E: { g: { 'Richard Metcalfe': 'Works with hotels and hospitality.', 'Andy Mackinson': 'Runs campaigns and launches for brands.', 'Gareth Rees': 'Organises fundraising events.' }, h: { 'Siân Roberts': 'Your events may need a photographer.', 'Daniel Harris': 'Your events may need filming.' } },
+ C: { g: { 'Michelle Barber': 'Rental homes need looking after between tenants.', 'Sue Iannucci': 'Homes for sale need to look their best.' }, h: { 'Spencer Clarke': 'Your premises clients may be overpaying on their bills.' } }
+};
+Object.keys(X).forEach(function (k) { M.forEach(function (m) { if (X[k].g[m[0]]) m[3][k] = X[k].g[m[0]]; if (X[k].h[m[0]]) m[4][k] = X[k].h[m[0]]; }); });
+// Sharper trail positions from the newer questions: [steps before you, what you do, 1 = a strong fit].
+var MORE = {
+ 'Buying a first home': { V: [6, 'Helps with the move', 1] },
+ 'Extending the family home': { D: [0, 'Draws up the plans', 2] },
+ 'Becoming a landlord': { Y: [1, 'Adds your advice before they buy'] },
+ 'Selling up and downsizing': { V: [5, 'Helps with the move', 1] },
+ 'Planning to retire': { Y: [2, 'Adds your advice to the plan', 1] },
+ 'Inheriting a house': { Y: [2, 'Adds your advice for the family', 1] },
+ 'Opening a café': { D: [1, 'Plans the fit-out'], N: [6, 'Supports the new owner', 1], K: [6, 'Helps the café once it’s open', 1] },
+ 'Starting out in the trades': { N: [6, 'Supports the new business', 1] },
+ 'Taking on your first staff': { G: [6, 'Supports the growing team', 1], I: [4, 'Sets up what the team needs'] },
+ 'Winning a big contract': { G: [6, 'Helps deliver the contract', 1] },
+ 'Moving to a new office': { D: [0, 'Plans the new layout'], I: [1, 'Adds your tech to the move', 2] },
+ 'Growing a wholesale business': { G: [6, 'Helps the business keep growing'], I: [6, 'Adds your tech as it grows'] }
+};
+TR.forEach(function (r) { var x = MORE[r[0]]; if (x) for (var k in x) r[3][k] = x[k]; });
+var DOES = { P: 3, D: 3, R: 3, Y: 3, O: 3, I: 3, M: 3, W: 3, E: 3, C: 3, V: 2, N: 2, G: 2, K: 2 };
+var LIKE = { D: 'P', Y: 'R', I: 'O', V: 'H', N: 'S', G: 'S', K: 'S' };
+var path = [];
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+function tagsOf(p) { var t = {}; p.forEach(function (yes, i) { if (yes) { var x = QS[i].tag; t[x] = 1; if (LIKE[x]) t[LIKE[x]] = 1; } }); return t; }
+// Golden geese: their clients are the people you want, or they regularly need what you do. You can help: your clients are the people they want. Nobody appears on both lists.
+function match(t) {
+  var geese = M.map(function (m, i) { var s = 0, why = '', best = 0; for (var k in m[3]) if (t[k]) { var w = DOES[k] || 2; s += w; if (w > best) { best = w; why = m[3][k]; } } return { i: i, s: s, why: why }; })
+    .filter(function (x) { return x.s > 0; }).sort(function (a, b) { return b.s - a.s || a.i - b.i; }).slice(0, 5);
+  var used = {}; geese.forEach(function (x) { used[x.i] = 1; });
+  var helps = M.map(function (m, i) { var s = 0, why = ''; for (var k in m[4]) if (t[k]) { s += 2; if (!why) why = m[4][k]; } return { i: i, s: s, why: why }; })
+    .filter(function (x) { return x.s > 0 && !used[x.i]; }).sort(function (a, b) { return b.s - a.s || a.i - b.i; }).slice(0, 5);
+  return { geese: geese, helps: helps };
+}
+// Best slot in each trail: a strong fit first, then what you do, then who you serve. Trails for your kind of customer come first, with a mix of home and business where both fit.
 function fits(t) {
   var all = TR.map(function (r, i) {
     var best = null;
-    for (var k in r[3]) { if (k !== '*' && !t[k]) continue; var s = k === '*' ? 0 : DOES[k] ? 3 : 1; if (!best || s > best.s) best = { s: s, k: k }; }
+    for (var k in r[3]) { if (k !== '*' && !t[k]) continue; var s = k === '*' ? 0 : (DOES[k] || 1) + (r[3][k][2] || 0) * 3; if (!best || s > best.s) best = { s: s, k: k }; }
     if (!best) return null;
-    return { i: i, s: best.s + (r[3][best.k][2] ? 3 : 0) + (r[1].split('').some(function (c) { return t[c]; }) ? 2 : 0), f: r[3][best.k] };
+    return { i: i, s: best.s + (r[1].split('').some(function (c) { return t[c]; }) ? 2 : 0), f: r[3][best.k] };
   }).filter(Boolean).sort(function (a, b) { return b.s - a.s || a.i - b.i; });
   var out = all.slice(0, 3);
-  // If all three are on one side, swap the last for the best real fit on the other side.
   if (out.length === 3 && out[0].s >= 3 && TR[out[0].i][1] === TR[out[1].i][1] && TR[out[1].i][1] === TR[out[2].i][1]) {
     var other = all.filter(function (x) { return x.s >= 3 && TR[x.i][1] !== TR[out[0].i][1]; })[0];
     if (other) out[2] = other;
   }
   return out;
 }
-function stepHtml(s) { var p = P[s[0]]; return '<div class="st" style="border-left-color:' + TC[p[1]] + '"><b>' + esc(p[0]) + '</b><span>' + esc(s[1]) + '</span></div>'; }
+function stepHtml(s) { var p = P[s[0]]; return '<div class="st" style="--c:' + TC[p[1]] + '"><b>' + esc(p[0]) + '</b><span>' + esc(s[1]) + '</span></div>'; }
+function youHtml(x) { return '<div class="st you"><b>You</b><span>' + esc(x) + '</span></div>'; }
 function fitHtml(x) {
   var r = TR[x.i], at = x.f[0], steps = r[2], html = '';
-  steps.forEach(function (s, n) { if (n === at) html += '<div class="st you"><b>You</b><span>' + esc(x.f[1]) + '</span></div>'; html += stepHtml(s); });
-  if (at >= steps.length) html += '<div class="st you"><b>You</b><span>' + esc(x.f[1]) + '</span></div>';
+  steps.forEach(function (s, n) { if (n === at) html += youHtml(x.f[1]); html += stepHtml(s); });
+  if (at >= steps.length) html += youHtml(x.f[1]);
   var before = at > 0 ? P[steps[at - 1][0]][0] : '', after = at < steps.length ? P[steps[at][0]][0] : '';
   var line = before && after ? esc(before) + ' could pass work to you, and you could pass it on to ' + esc(after) + '.' : before ? esc(before) + ' could pass work to you.' : 'You could start this trail, and pass work on to ' + esc(after) + '.';
   return '<article class="tr"><h3>' + esc(r[0]) + '</h3><div class="chain">' + html + '</div><p class="pass">' + line + '</p></article>';
 }
+var KEY = [['t', 'Trades'], ['p', 'Property & Home'], ['f', 'Finance & Insurance'], ['b', 'Business Services'], ['m', 'Marketing & Community']];
 function trailsHtml(t) {
-  return '<section class="sec"><h2>Where you could fit in a Givers Gain Trail</h2><p class="why">A trail is a chain of introductions, where one member leads to the next. Here’s where you could slot in.</p><div class="list">' + fits(t).map(fitHtml).join('') + '</div>' +
-    '<div class="brief"><b>This is just a brief overview.</b> It’s based on a few quick answers. If you join, we can recalibrate where you fit, in the trails and in our Power Teams.</div>' +
+  return '<section class="panel"><span class="tag">Your place</span><h2>Where you could fit in a Givers Gain Trail</h2><p class="why">A trail is a chain of introductions, where one member leads to the next.</p><div class="key">' + KEY.map(function (k) { return '<span><i style="background:' + TC[k[0]] + '"></i>' + esc(k[1]) + '</span>'; }).join('') + '</div><div class="list">' + fits(t).map(fitHtml).join('') + '</div>' +
+    '<div class="brief"><b>This is just a brief overview.</b> It’s based on 20 quick answers. If you join, we can recalibrate where you fit, in the trails and in our Power Teams.</div>' +
     '<details class="more"><summary>See all ' + TR.length + ' trails</summary>' + TR.map(function (r) { return '<div class="one"><b>' + esc(r[0]) + '</b><span>' + r[2].map(function (s) { return esc(P[s[0]][0]); }).join(' → ') + '</span></div>'; }).join('') + '</details></section>';
 }
 function card(x) {
   var m = M[x.i];
   return '<div class="m"><div class="lg"><img src="logos/' + m[2] + '"' + (DARK[m[2]] ? ' class="dark"' : '') + ' alt="' + esc(m[1]) + ' logo"></div><div><h3>' + esc(m[0]) + '<em>' + esc(m[1]) + '</em></h3><p>' + esc(x.why) + '</p></div></div>';
 }
-function trail() {
-  return path.map(function (a) { return '<div class="done"><span>' + esc(Q[a.k].t) + '</span><span class="ans ' + (a.yes ? 'y' : 'n') + '">' + (a.yes ? 'Yes' : 'No') + '</span></div><div class="link"></div>'; }).join('');
-}
 function draw() {
-  var el = document.getElementById('flow'), html = trail();
-  if (cur) {
-    var q = Q[cur];
-    html += '<div class="q"><p class="step">Question ' + (path.length + 1) + '</p><h2>' + esc(q.t) + '</h2>' + (q.e ? '<p class="eg">' + esc(q.e) + '</p>' : '') + '<div class="yn"><button class="yes" type="button" data-a="1">Yes</button><button class="no" type="button" data-a="0">No</button></div>' + (path.length ? '<div class="ctl"><button class="txt" type="button" id="back">Go back</button></div>' : '') + '</div>';
+  var el = document.getElementById('flow'), n = path.length, html;
+  document.body.classList.toggle('going', n > 0); document.body.classList.toggle('finished', n >= QS.length);
+  if (n < QS.length) {
+    var q = QS[n];
+    html = '<div class="q"><div class="meta"><span>Question ' + (n + 1) + ' of ' + QS.length + '</span><span>' + esc(q.p) + '</span></div><div class="bar"><i style="width:' + Math.round((n + 1) / QS.length * 100) + '%"></i></div><h2>' + esc(q.t) + '</h2>' + (q.e ? '<p class="eg">' + esc(q.e) + '</p>' : '') + '<div class="yn"><button class="yes" type="button" data-a="1">Yes</button><button class="no" type="button" data-a="0">No</button></div>' + (n ? '<div class="ctl"><button class="txt" type="button" id="back">Go back</button></div>' : '') + '</div>';
   } else {
-    var r = match(tagsOf(path));
-    html += '<div class="res">';
-    if (!r.geese.length && !r.helps.length) html += '<div class="q"><h2>Let’s find your people together</h2><p class="eg">Your answers didn’t point to anyone in particular. Ask the person who invited you who they’d introduce you to.</p></div>';
-    if (r.geese.length) html += '<section class="sec goose"><h2>Your golden geese</h2><p class="why">They could send business your way.</p><div class="list">' + r.geese.map(card).join('') + '</div></section>';
-    if (r.helps.length) html += '<section class="sec"><h2>Who you can help</h2><p class="why">You could send business their way. In BNI, givers gain.</p><div class="list">' + r.helps.map(card).join('') + '</div></section>';
-    html += trailsHtml(tagsOf(path)) + '<div class="ctl"><button class="txt" type="button" id="back">Go back</button><button class="txt" type="button" id="again">Start again</button></div></div>';
+    var t = tagsOf(path), r = match(t);
+    html = '<div class="res">';
+    if (!r.geese.length && !r.helps.length) html += '<section class="panel"><h2>Let’s find your people together</h2><p class="why" style="margin-bottom:0">Your answers didn’t point to anyone in particular. Ask the person who invited you who they’d introduce you to.</p></section>';
+    if (r.geese.length) html += '<section class="panel goose"><span class="tag">They could help you</span><h2>Your golden geese</h2><p class="why">They could send business your way.</p><div class="list">' + r.geese.map(card).join('') + '</div></section>';
+    if (r.helps.length) html += '<section class="panel"><span class="tag">You could help them</span><h2>Who you can help</h2><p class="why">You could send business their way. In BNI, givers gain.</p><div class="list">' + r.helps.map(card).join('') + '</div></section>';
+    html += trailsHtml(t) + '<div class="ctl"><button class="txt" type="button" id="back">Go back</button><button class="txt" type="button" id="again">Start again</button></div></div>';
   }
   el.innerHTML = html;
 }
 document.addEventListener('click', function (e) {
   var b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.a) { var yes = b.dataset.a === '1', q = Q[cur]; path.push({ k: cur, yes: yes }); cur = yes ? q.y : q.n; draw(); var f = document.querySelector('.q, .res'); if (f && f.scrollIntoView) f.scrollIntoView({ block: 'start' }); return; }
-  if (b.id === 'back') { cur = path.pop().k; draw(); return; }
-  if (b.id === 'again') { path = []; cur = 'biz'; draw(); window.scrollTo(0, 0); return; }
+  if (b.dataset.a) { path.push(b.dataset.a === '1'); draw(); window.scrollTo(0, 0); return; }
+  if (b.id === 'back') { path.pop(); draw(); window.scrollTo(0, 0); return; }
+  if (b.id === 'again') { path = []; draw(); window.scrollTo(0, 0); return; }
 });
 draw();
 </script>
