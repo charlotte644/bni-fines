@@ -300,7 +300,9 @@ function phase(at, len) { var p = at / len; return p <= 0.34 ? 'B' : p >= 0.8 ? 
 function fits(r) {
   var t = r.t, c = [];
   r.s.forEach(function (x) { c.push({ i: T0[x[0]], f: [x[1], x[2]], b: 20 }); });
-  siteSteps().forEach(function (x) { c.push({ i: T0[x[0]], f: [x[1], x[2]], b: 32 }); });
+  var placed = aiRead && aiRead.placements && aiRead.placements.length;
+  if (placed) aiRead.placements.forEach(function (p) { c.push({ i: p.trail, f: [p.before, p.step], b: 40 }); });
+  else siteSteps().forEach(function (x) { c.push({ i: T0[x[0]], f: [x[1], x[2]], b: 32 }); });
   TR.forEach(function (row, i) { for (var k in row[3]) if (k === '*' || t[k]) c.push({ i: i, f: row[3][k], b: k === '*' ? 0 : (DOES[k] || 1) + (row[3][k][2] ? 3 : 0) }); });
   var best = {};
   c.forEach(function (x) {
@@ -340,7 +342,7 @@ function addr(n) { return EM[n] ? EM[n].join('@') : ''; }
 function mail(to, cc, subject, body) { return 'mailto:' + to + '?' + (cc ? 'cc=' + encodeURIComponent(cc) + '&' : '') + 'subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body); }
 // Visitor details come first. API is the Google Apps Script web app: it saves the details, reads the website and supplies the videos.
 var API = 'https://script.google.com/macros/s/AKfycbzrT6hSj8SUDcRupYEFjfywDd1eYz1iGN2Y_t5CgQVq7ONVt2rqPwI8UDSmMMTHrgbFEw/exec';
-var stars = 0, me = null, siteText = '', siteState = 'none', sitePromise = null, ref = '', sent = false, formErr = '';
+var aiRead = null, stars = 0, me = null, siteText = '', siteState = 'none', sitePromise = null, ref = '', sent = false, formErr = '';
 var today = (function () { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); })();
 function post(o) { return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(o) }).then(function (r) { return r.json(); }); }
 if (API) fetch(API).then(function (r) { return r.json(); }).then(function (d) { if (d.videos && d.videos.length) VIDEOS = d.videos; }).catch(function () {});
@@ -382,8 +384,8 @@ function detailsHtml() {
 function startVisit(d) {
   me = d; siteText = ''; siteState = d.website ? 'reading' : 'none';
   if (!API) { sitePromise = Promise.resolve(); if (d.website) siteState = 'failed'; return; }
-  sitePromise = post({ action: 'visit', name: d.name, company: d.company, website: d.website, email: d.email, phone: d.phone, visited: d.visited, consent: d.consent, stars: d.stars, note: d.note, feature: d.feature, trap: d.trap })
-    .then(function (r) { ref = r.ref || ''; siteText = r.text || ''; if (d.website) siteState = siteText ? 'read' : 'failed'; })
+  sitePromise = post({ action: 'visit', name: d.name, company: d.company, website: d.website, email: d.email, phone: d.phone, visited: d.visited, consent: d.consent, stars: d.stars, note: d.note, feature: d.feature, trap: d.trap, trails: TR.map(function (t) { return { name: t[0], steps: t[2].map(function (s) { return P[s[0]][0] + ': ' + s[1]; }) }; }) })
+    .then(function (r) { ref = r.ref || ''; siteText = r.text || ''; aiRead = r.ai || null; if (d.website) siteState = siteText ? 'read' : 'failed'; })
     .catch(function () { if (d.website) siteState = 'failed'; });
 }
 function hostOf(u) { return String(u).replace(/^https?:\/\//i, '').replace(/^www\./i, '').split(/[\/?#]/)[0]; }
@@ -409,10 +411,13 @@ function joinHtml(r) {
 }
 function videoHtml() {
   var pick = VIDEOS[Math.floor(Math.random() * VIDEOS.length)];
-  return '<div class="q vid"><div class="meta"><span>All done</span><span>' + (me.website ? 'Looking at your website' : 'Finding your matches') + '</span></div><div class="bar"><i class="run"></i></div><h2 class="ch">While we look at ' + esc(me.website ? hostOf(me.website) : 'your answers') + ', meet the chapter</h2><div class="vf"><iframe src="' + esc(embed(pick)) + '" title="BNI Intrepid video" scrolling="no" allow="autoplay; fullscreen; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe></div><p class="eg" style="text-align:center">Want it bigger? Turn your phone sideways, or <a href="' + esc(pick) + '" target="_blank" rel="noopener">watch it full screen</a>.</p><button class="skip" type="button" id="skip">Skip to my results</button></div>';
+  return '<div class="q vid"><div class="meta"><span>All done</span><span>Putting your results together</span></div><div class="bar"><i class="run"></i></div><h2 class="ch">While we put your results together, meet the chapter</h2><div class="vf"><iframe src="' + esc(embed(pick)) + '" title="BNI Intrepid video" scrolling="no" allow="autoplay; fullscreen; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe></div><p class="eg" style="text-align:center">Want it bigger? Turn your phone sideways, or <a href="' + esc(pick) + '" target="_blank" rel="noopener">watch it full screen</a>.</p><button class="skip" type="button" id="skip">Skip to my results</button></div>';
 }
 function basisHtml() {
-  if (siteState === 'read') return 'Based on your answers and ' + esc(hostOf(me.website)) + '.';
+  var used = aiRead && aiRead.placements && aiRead.placements.length;
+  if (used) return (aiRead.summary ? esc(aiRead.summary) + ' ' : '') + 'Based on your answers and ' + esc(hostOf(me.website)) + '.';
+  if (siteState === 'read' && siteSteps().length) return 'Based on your answers and ' + esc(hostOf(me.website)) + '.';
+  if (siteState === 'read') return 'We read ' + esc(hostOf(me.website)) + ', but it didn’t tell us enough, so this is based on your answers.';
   if (siteState === 'failed' || siteState === 'reading') return 'We couldn’t read your website this time, so this is based on your answers.';
   return 'Based on your answers.';
 }
@@ -454,7 +459,7 @@ function reveal() {
   var b = document.getElementById('skip'); if (b) { b.textContent = 'Finishing up…'; b.disabled = true; }
   var done = false, go = function () { if (done) return; done = true; watched = true; draw(); window.scrollTo(0, 0); };
   if (sitePromise) sitePromise.then(go, go); else go();
-  setTimeout(go, 12000);
+  setTimeout(go, 20000);
 }
 document.addEventListener('click', function (e) {
   var b = e.target.closest('button'); if (!b) return;
