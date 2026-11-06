@@ -83,12 +83,12 @@
   .cta a { display: block; text-align: center; text-decoration: none; font-weight: 800; border-radius: 12px; padding: 13px 10px; font-size: 15px; line-height: 1.25; }
   .cta .c1 { grid-column: 1 / -1; background: #fff; color: var(--red-d); font-size: 16px; }
   .cta .c2 { background: rgba(255,255,255,.16); color: #fff; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.6); }
-  .soc { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .soc { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
   .soc a { display: block; text-align: center; text-decoration: none; background: var(--warm); color: var(--red-d); font-weight: 700; border-radius: 12px; padding: 12px 10px; font-size: 15px; }
   .soc a:first-child { grid-column: 1 / -1; background: var(--red); color: #fff; }
   .m .em { display: inline-block; margin-top: 5px; font-size: 13.5px; font-weight: 700; color: var(--red-d); text-underline-offset: 3px; }
   .bar i.run { width: 100%; animation: run 10s linear both; } @keyframes run { from { width: 4%; } to { width: 100%; } }
-  .vf { width: 100%; max-width: 280px; aspect-ratio: 280 / 498; margin: 14px auto 0; border-radius: 14px; overflow: hidden; background: #1C1C1E; }
+  .vf { aspect-ratio: 16 / 9; margin: 14px -18px 0; background: #1C1C1E; }
   .vf iframe { display: block; width: 100%; height: 100%; border: 0; }
   .skip { display: block; width: 100%; margin-top: 14px; border: 0; border-radius: 13px; padding: 14px; font-size: 16.5px; font-weight: 800; background: #F4F0EC; color: var(--ink); }
   .skip.ready { background: var(--red); color: #fff; }
@@ -314,13 +314,15 @@ function trailsHtml(r) {
     '<details class="more"><summary>See all ' + TR.length + ' trails</summary>' + TR.map(function (x) { return '<div class="one"><b>' + esc(x[0]) + '</b><span>' + x[2].map(function (s) { return esc(P[s[0]][0]); }).join(' → ') + '</span></div>'; }).join('') + '</details></section>';
 }
 // Chapter showcase: paste each link in once. New photos go in the album, so this page never needs changing.
-var CHAPTER = { photos: 'https://photos.app.goo.gl/2d8XV6VUuhMkJ23t5', video: 'https://www.facebook.com/reel/4560018840984020', instagram: 'https://www.instagram.com/bni_intrepid/', facebook: 'https://www.facebook.com/IntrepidBNI/', linkedin: 'https://uk.linkedin.com/company/bni-intrepid-cardiff' };
-var VIDEO = 'https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(CHAPTER.video + '/') + '&show_text=false&width=280&height=498&autoplay=true&mute=true';
+// Add more chapter videos to this list; each visitor sees one at random. Facebook links only, and they must be public.
+var VIDEOS = ['https://www.facebook.com/reel/4560018840984020'];
+var CHAPTER = { photos: 'https://photos.app.goo.gl/2d8XV6VUuhMkJ23t5', instagram: 'https://www.instagram.com/bni_intrepid/', facebook: 'https://www.facebook.com/IntrepidBNI/', linkedin: 'https://uk.linkedin.com/company/bni-intrepid-cardiff' };
+var VIDEO = 'https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(VIDEOS[Math.floor(Math.random() * VIDEOS.length)] + '/') + '&show_text=false&width=560&height=315&autoplay=true&mute=true';
 // Member emails for the Email buttons, published on Charlotte's instruction (6 Nov 2026).
 var EM = { 'Michelle Barber': ['michelle','thegrayhouse.co.uk'], 'Seamus Sullivan': ['seamus.sullivan','uwclub.net'], 'Martin Britton': ['martin','samsmithfleet.com'], 'Trae Williams': ['trae','tralex365.com'], 'Sue Iannucci': ['sue.iannucci','theagencyuk.com'], 'Lee Howells': ['lee','safety.wales'], 'Daniel Harris': ['dan','focusshiftfilms.com'], 'Clive Thomas': ['cthomas','watkinsandgunn.co.uk'], 'Chris MacManus': ['cm','macmanus.finance'], 'Anthony Williams': ['anthony','ardrainagesolutions.com'], 'Gareth Rees': ['gareth','2wish.org.uk'], 'Dawn Evans': ['dawn','ajuda.org.uk'], 'Steve Western': ['steve','westmoreinsure.co.uk'], 'Philip Grunewald': ['pgrunewald','ava-cctv.co.uk'], 'Kath Hiscock': ['kath','seamountbiz.co.uk'], 'Andy Mackinson': ['andy','weareseriously.co.uk'], 'Richard Metcalfe': ['rich','cortilecoffee.co.uk'], 'Chris Ashley': ['chris','chrisashleymortgages.com'], 'Stuart Bourne': ['stuart.bourne','atomos.co.uk'], 'Adam Shephard': ['info','tradepricealuminium.co.uk'], 'Stuart Meikle': ['stuart.meikle','flotek.io'], 'Alex Jones': ['info','rsplumbingservices.co.uk'], 'Siân Roberts': ['exposephotographywales','gmail.com'], 'Robbie Williams': ['robbie.williams','coface.com'], 'Spencer Clarke': ['spencer','costcuttingsolutions.co.uk'], 'Steve Williams': ['steve','sabrecomputers.co.uk'], 'Charlotte Warren': ['charlotte','hammer-and-pen.com'], 'Jonathan Davies': ['glensideprinting','gmail.com'] };
 function addr(n) { return EM[n] ? EM[n].join('@') : ''; }
 function mail(to, cc, subject, body) { return 'mailto:' + to + '?' + (cc ? 'cc=' + encodeURIComponent(cc) + '&' : '') + 'subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body); }
-var SIGN = '\n\nMy name: \nMy business: \nMy phone: \n\nKind regards';
+var SIGN = '\n\nMy name: \nMy business: \nMy phone: ';
 function introMail(name) { return mail(addr(name), '', 'BNI Intrepid visitor: could we have a 1-2-1?', 'Hi ' + name.split(' ')[0] + ',\n\nI visited BNI Intrepid, and the How we can work together page suggested we could help each other. Could we arrange a 1-2-1?' + SIGN); }
 function joinHtml(r) {
   var ask = mail(addr('Chris Ashley'), '', 'A question about BNI Intrepid', 'Hi Chris,\n\nI visited BNI Intrepid and I have a question:\n\n' + SIGN);
@@ -332,10 +334,10 @@ function joinHtml(r) {
     '<p class="sm">Visitors are welcome twice. After that, you can join as a member or come along as a sub.</p></section>';
 }
 function videoHtml() {
-  return '<div class="q vid"><div class="meta"><span>All done</span><span>Finding your matches</span></div><div class="bar"><i class="run"></i></div><h2 class="ch">While we find your matches, meet the chapter</h2><div class="vf"><iframe src="' + esc(VIDEO) + '" title="BNI Intrepid video" scrolling="no" allow="autoplay; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe></div><button class="skip" type="button" id="skip">Skip to my results</button></div>';
+  return '<div class="q vid"><div class="meta"><span>All done</span><span>Finding your matches</span></div><div class="bar"><i class="run"></i></div><h2 class="ch">While we find your matches, meet the chapter</h2><div class="vf"><iframe src="' + esc(VIDEO) + '" title="BNI Intrepid video" scrolling="no" allow="autoplay; fullscreen; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe></div><p class="eg" style="text-align:center">Tap play, then use the full-screen button or turn your phone sideways to see it bigger.</p><button class="skip" type="button" id="skip">Skip to my results</button></div>';
 }
 function chapterHtml() {
-  var L = [['photos', 'See our photos'], ['video', 'Watch our video'], ['instagram', 'Instagram'], ['facebook', 'Facebook'], ['linkedin', 'LinkedIn']].filter(function (x) { return CHAPTER[x[0]]; });
+  var L = [['photos', 'See our photos'], ['instagram', 'Instagram'], ['facebook', 'Facebook'], ['linkedin', 'LinkedIn']].filter(function (x) { return CHAPTER[x[0]]; });
   if (!L.length) return '';
   return '<section class="panel"><span class="tag">Meet the chapter</span><h2>See BNI Intrepid in action</h2><p class="why">Take a look at the people behind the sheet.</p><div class="soc">' + L.map(function (x) { return '<a href="' + esc(CHAPTER[x[0]]) + '" target="_blank" rel="noopener">' + x[1] + '</a>'; }).join('') + '</div></section>';
 }
