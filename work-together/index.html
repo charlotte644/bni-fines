@@ -71,7 +71,7 @@
 <main>
   <div class="wrap">
     <div id="flow" aria-live="polite"></div>
-    <p class="foot">These are suggestions based on your answers and what each member does. Every member’s number is on your BNI sheet. Made by Charlotte Warren for BNI Intrepid.</p>
+    <p class="foot">These are suggestions based on your answers and what each member does. Every member’s number is on your BNI sheet.</p>
   </div>
 </main>
 <script>
@@ -147,7 +147,7 @@ function trail() {
 function mineHtml() {
   var n = Object.keys(kept).filter(function (k) { return kept[k]; });
   if (!n.length) return '<div class="mine" id="mine"><h2>Who will you stay in touch with?</h2><p>Tick “Stay in touch” on anyone above to make your list.</p></div>';
-  return '<div class="mine" id="mine"><h2>Your people to stay in touch with</h2><p>' + n.map(function (k) { return esc(M[k][0]) + ' (' + esc(M[k][1]) + ')'; }).join(', ') + '</p><button class="btn" type="button" id="copy">Copy my list</button> <span id="copied" class="note"></span></div>';
+  return '<div class="mine" id="mine"><h2>Your people to stay in touch with</h2><p>' + n.map(function (k) { return esc(M[k][0]) + ' (' + esc(M[k][1]) + ')'; }).join(', ') + '</p></div>';
 }
 function draw() {
   var el = document.getElementById('flow'), html = trail();
@@ -169,11 +169,6 @@ document.addEventListener('click', function (e) {
   if (b.dataset.a) { var yes = b.dataset.a === '1', q = Q[cur]; path.push({ k: cur, yes: yes }); cur = yes ? q.y : q.n; draw(); var f = document.querySelector('.q, .res'); if (f && f.scrollIntoView) f.scrollIntoView({ block: 'start' }); return; }
   if (b.id === 'back') { cur = path.pop().k; draw(); return; }
   if (b.id === 'again') { path = []; cur = 'biz'; kept = {}; draw(); window.scrollTo(0, 0); return; }
-  if (b.id === 'copy') {
-    var txt = Object.keys(kept).filter(function (k) { return kept[k]; }).map(function (k) { return M[k][0] + ', ' + M[k][1]; }).join('\n');
-    var say = function (m) { document.getElementById('copied').textContent = m; };
-    try { navigator.clipboard.writeText(txt).then(function () { say(' Copied'); }, function () { say(' Couldn’t copy, so please note these names on your sheet.'); }); } catch (x) { say(' Couldn’t copy, so please note these names on your sheet.'); }
-  }
 });
 document.addEventListener('change', function (e) {
   var c = e.target; if (!c.dataset || c.dataset.k === undefined) return;
