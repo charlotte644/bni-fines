@@ -108,6 +108,11 @@
   .m .em { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; margin-top: 6px; border-radius: 50%; background: var(--red); color: #fff; } .m .em svg { width: 18px; height: 18px; }
   .st.you b small { font-weight: 600; font-size: 13px; opacity: .9; }
   .skip:disabled { opacity: .7; }
+  .jl { display: block; font-size: 25px; font-weight: 800; letter-spacing: -.012em; line-height: 1.2; color: inherit; text-underline-offset: 4px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0 12px; }
+  .two a { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; text-decoration: none; background: #fff; color: var(--red-d); border-radius: 13px; padding: 12px 8px; font-size: 14px; font-weight: 800; line-height: 1.2; } .two svg { width: 26px; height: 26px; }
+  .act { text-align: center; } .act .jl { color: var(--red-d); } .act .ics { margin: 14px 0 2px; }
+  .act .ic i { background: var(--red); color: #fff; }
   .foot { display: none; margin: 22px 4px 0; font-size: 13px; color: var(--muted); } .finished .foot { display: block; }
   @media (max-width: 420px) { .top h1 { font-size: 27px; } .q h2 { font-size: 21px; } .m { grid-template-columns: 58px 1fr; } .m .lg { width: 58px; height: 42px; } }
 </style>
@@ -117,7 +122,7 @@
   <div class="wrap">
     <p class="eyebrow">BNI Intrepid &nbsp;•&nbsp; Givers Gain</p>
     <h1>How we can work together</h1>
-    <p class="lead">Thanks for visiting us. Tell us about your business, answer 14 quick questions, and see which members could send business your way, who you could help, and where you could fit in a Givers Gain Trail.</p>
+    <p class="lead">Thanks for visiting us. Tell us about your business, answer 14 quick questions, and see which members could send business your way and who you could refer work to.</p>
   </div>
 </header>
 <main>
@@ -374,7 +379,7 @@ function siteSteps() {
 }
 function detailsHtml() {
   var f = function (id, label, type, ph, extra) { return '<label class="fd"><span>' + label + '</span><input id="' + id + '" type="' + type + '"' + (ph ? ' placeholder="' + ph + '"' : '') + (extra || '') + '></label>'; };
-  return '<form class="q" id="who" novalidate><div class="meta"><span>Your details</span><span>Before we start</span></div><div class="bar"><i style="width:3%"></i></div><h2 class="ch">Tell us about you</h2><p class="eg">We’ll use your website to see where you could fit in.</p><div class="fds">' +
+  return '<form class="q" id="who" novalidate><div class="meta"><span>Your details</span><span>Before we start</span></div><div class="bar"><i style="width:3%"></i></div><h2 class="ch">Tell us about you</h2><p class="eg">Then we’ll show you who could help you, and who you could help.</p><div class="fds">' +
     f('fName', 'Your name', 'text', '', ' autocomplete="name"') + f('fCo', 'Company name', 'text', '', ' autocomplete="organization"') + f('fWeb', 'Company website', 'text', 'www.yourcompany.co.uk', ' autocomplete="url" inputmode="url"') + f('fMail', 'Email', 'email', '', ' autocomplete="email"') + f('fTel', 'Phone number', 'tel', '', ' autocomplete="tel"') + f('fDate', 'When did you visit?', 'date', '', ' value="' + today + '" max="' + today + '"') +
     '<div class="fd"><span>How was your visit?</span><div class="stars" role="group" aria-label="Rate your visit out of 5">' + [1, 2, 3, 4, 5].map(function (n) { return '<button type="button" data-s="' + n + '" aria-label="' + n + ' out of 5"' + (n <= stars ? ' class="on"' : '') + '>★</button>'; }).join('') + '</div></div><label class="fd"><span>A sentence or two about your visit</span><textarea id="fNote" rows="3" maxlength="300"></textarea></label>' +
     '<input id="fTrap" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">' +
@@ -384,7 +389,7 @@ function detailsHtml() {
 function startVisit(d) {
   me = d; siteText = ''; siteState = d.website ? 'reading' : 'none';
   if (!API) { sitePromise = Promise.resolve(); if (d.website) siteState = 'failed'; return; }
-  sitePromise = post({ action: 'visit', name: d.name, company: d.company, website: d.website, email: d.email, phone: d.phone, visited: d.visited, consent: d.consent, stars: d.stars, note: d.note, feature: d.feature, trap: d.trap, trails: TR.map(function (t) { return { name: t[0], steps: t[2].map(function (s) { return P[s[0]][0] + ': ' + s[1]; }) }; }) })
+  sitePromise = post({ action: 'visit', name: d.name, company: d.company, website: d.website, email: d.email, phone: d.phone, visited: d.visited, consent: d.consent, stars: d.stars, note: d.note, feature: d.feature, trap: d.trap })
     .then(function (r) { ref = r.ref || ''; siteText = r.text || ''; aiRead = r.ai || null; if (d.website) siteState = siteText ? 'read' : 'failed'; })
     .catch(function () { if (d.website) siteState = 'failed'; });
 }
@@ -400,15 +405,6 @@ var I = {
 function ico(href, icon, label, cap, top) { return '<a class="ic" href="' + esc(href) + '"' + (top ? ' target="_top"' : ' target="_blank" rel="noopener"') + ' aria-label="' + esc(label) + '" title="' + esc(label) + '"><i>' + I[icon] + '</i>' + (cap ? '<span>' + esc(cap) + '</span>' : '') + '</a>'; }
 function sign() { return '\n\n' + me.name + (me.company ? '\n' + me.company : '') + (me.website ? '\n' + me.website : '') + (me.phone ? '\n' + me.phone : '') + (me.email ? '\n' + me.email : ''); }
 function introMail(name) { return mail(addr(name), '', 'BNI Intrepid visitor: could we have a 1-2-1?', 'Hi ' + name.split(' ')[0] + ',\n\nI visited BNI Intrepid, and the How we can work together page suggested we could help each other. Could we arrange a 1-2-1?' + sign()); }
-function joinHtml(r) {
-  var ask = mail(addr('Chris Ashley'), '', 'A question about BNI Intrepid', 'Hi Chris,\n\nI visited BNI Intrepid and I have a question:\n' + sign());
-  var names = r.geese.map(function (x) { return M[x.i][0]; }).filter(addr);
-  var all = names.length ? mail(names.map(addr).join(','), addr('Chris Ashley'), 'BNI Intrepid visitor: could we have a 1-2-1?', 'Hi all,\n\nI visited BNI Intrepid, and the How we can work together page suggested we could help each other. Could we arrange a 1-2-1?' + sign()) : '';
-  return '<section class="panel join"><span class="tag">Your next step</span><h2>Like what you see?</h2><p>Only one person per profession can join Intrepid, so there’s no competition in the room. Your category could be open.</p>' +
-    '<div class="cta"><a class="c1" href="https://bni.co.uk/en-GB/applicationregistration?chapterId=9008" target="_blank" rel="noopener">Join BNI Intrepid</a></div>' +
-    '<div class="ics">' + ico(ask, 'mail', 'Email Chris Ashley, our Visitor Host', 'Chris', 1) + (all ? ico(all, 'group', 'Email my golden geese', 'My geese', 1) : '') + ico(CHAPTER.photos, 'photo', 'See our photos', 'Photos') + ico(CHAPTER.instagram, 'ig', 'BNI Intrepid on Instagram') + ico(CHAPTER.facebook, 'fb', 'BNI Intrepid on Facebook') + ico(CHAPTER.linkedin, 'li', 'BNI Intrepid on LinkedIn') + '</div>' +
-    '<p class="sm">Visitors are welcome twice. After that, you can join as a member or come along as a sub.</p></section>';
-}
 function videoHtml() {
   var pick = VIDEOS[Math.floor(Math.random() * VIDEOS.length)];
   return '<div class="q vid"><div class="meta"><span>All done</span><span>Putting your results together</span></div><div class="bar"><i class="run"></i></div><h2 class="ch">While we put your results together, meet the chapter</h2><div class="vf"><iframe src="' + esc(embed(pick)) + '" title="BNI Intrepid video" scrolling="no" allow="autoplay; fullscreen; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe></div><p class="eg" style="text-align:center">Want it bigger? Turn your phone sideways, or <a href="' + esc(pick) + '" target="_blank" rel="noopener">watch it full screen</a>.</p><button class="skip" type="button" id="skip">Skip to my results</button></div>';
@@ -423,7 +419,7 @@ function basisHtml() {
 }
 function saveResults(a, r) {
   if (!API || sent || !ref) return; sent = true;
-  post({ action: 'results', ref: ref, area: AREAS[path[0]].n, geese: r.geese.map(function (x) { return M[x.i][0]; }).join(', '), trails: fits(a).map(function (x) { return TR[x.i][0]; }).join(', ') }).catch(function () {});
+  post({ action: 'results', ref: ref, area: AREAS[path[0]].n, geese: r.geese.map(function (x) { return M[x.i][0]; }).join(', '), trails: '' }).catch(function () {});
 }
 function draw() {
   var el = document.getElementById('flow'), n = path.length, html;
@@ -439,11 +435,11 @@ function draw() {
   } else {
     var a = read(path), r = match(a);
     saveResults(a, r);
-    html = '<div class="res"><p class="basis">' + basisHtml() + '</p>';
+    html = '<div class="res">';
     if (!r.geese.length && !r.helps.length) html += '<section class="panel"><h2>Let’s find your people together</h2><p class="why" style="margin-bottom:0">Your answers didn’t point to anyone in particular. Ask the person who invited you who they’d introduce you to.</p></section>';
     if (r.geese.length) html += '<section class="panel goose"><span class="tag">They could help you</span><h2>Your golden geese</h2><p class="why">They could send business your way.</p><div class="list">' + r.geese.map(card).join('') + '</div></section>';
     if (r.helps.length) html += '<section class="panel"><span class="tag">You could help them</span><h2>Who you can help</h2><p class="why">You could send business their way. In BNI, givers gain.</p><div class="list">' + r.helps.map(card).join('') + '</div></section>';
-    html += trailsHtml(a) + joinHtml(r) + '<div class="ctl"><button class="txt" type="button" id="back">Go back</button><button class="txt" type="button" id="again">Start again</button></div></div>';
+    html += joinHtml(r) + '<div class="ctl"><button class="txt" type="button" id="back">Go back</button><button class="txt" type="button" id="again">Start again</button></div></div>';
   }
   el.innerHTML = html;
 }
@@ -470,6 +466,15 @@ document.addEventListener('click', function (e) {
   if (b.id === 'skip') { reveal(); return; }
   if (b.id === 'again') { path = []; draw(); window.scrollTo(0, 0); return; }
 });
+function joinHtml(r) {
+  var ask = mail(addr('Chris Ashley'), '', 'A question about BNI Intrepid', 'Hi Chris,\n\nI visited BNI Intrepid and I have a question:\n' + sign());
+  var names = r.geese.map(function (x) { return M[x.i][0]; }).filter(addr);
+  var all = names.length ? mail(names.map(addr).join(','), addr('Chris Ashley'), 'BNI Intrepid visitor: could we have a 1-2-1?', 'Hi all,\n\nI visited BNI Intrepid, and the How we can work together page suggested we could help each other. Could we arrange a 1-2-1?' + sign()) : '';
+  return '<section class="panel join"><span class="tag">Your next step</span><a class="jl" href="https://bni.co.uk/en-GB/applicationregistration?chapterId=9008" target="_blank" rel="noopener">Join Intrepid</a><p>Only one person per profession can join Intrepid, so there’s no competition in the room. Your category could be open.</p>' +
+    '<div class="two"><a href="' + esc(ask) + '" target="_top">' + I.mail + '<span>Email our Visitor Host</span></a>' + (all ? '<a href="' + esc(all) + '" target="_top">' + I.group + '<span>Email your golden geese</span></a>' : '') + '</div>' +
+    '<p class="sm">Visitors are welcome twice. After that, you can join as a member or come along as a sub.</p></section>' +
+    '<section class="panel act"><a class="jl" href="' + esc(CHAPTER.photos) + '" target="_blank" rel="noopener">See us in action</a><div class="ics">' + ico(CHAPTER.instagram, 'ig', 'BNI Intrepid on Instagram') + ico(CHAPTER.facebook, 'fb', 'BNI Intrepid on Facebook') + ico(CHAPTER.linkedin, 'li', 'BNI Intrepid on LinkedIn') + '</div></section>';
+}
 function card(x) {
   var m = M[x.i];
   return '<div class="m"><div class="lg"><img src="logos/' + m[2] + '"' + (DARK[m[2]] ? ' class="dark"' : '') + ' alt="' + esc(m[1]) + ' logo"></div><div><h3>' + esc(m[0]) + '<em>' + esc(m[1]) + '</em></h3><p>' + esc(x.why) + '</p>' + (addr(m[0]) ? '<a class="em" href="' + esc(introMail(m[0])) + '" target="_top" aria-label="Email ' + esc(m[0]) + '" title="Email ' + esc(m[0]) + '">' + I.mail + '</a>' : '') + '</div></div>';
