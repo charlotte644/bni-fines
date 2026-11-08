@@ -339,7 +339,7 @@ function events() {
 function needCoord() { return trail().filter(function (s) { return s[0] !== 'charlotte'; }).length >= 3; }
 function coordQ() {
   var n = trail().filter(function (s) { return s[0] !== 'charlotte'; }).length;
-  return '<div class="card"><div class="meta"><span>One last question</span><span>' + esc(ev.n) + '</span></div>' + bar(qs.length + 3, qs.length + 4) + '<h2>Your trail has ' + n + ' people on it. Would you like one point of contact who keeps everyone on track for you?</h2><p class="lead">Hammer and Pen can liaise with everyone on your trail, so you only deal with one person throughout.</p><div class="yn"><button class="yes" type="button" data-c="1">Yes</button><button class="no" type="button" data-c="0">No</button></div><button class="txt" type="button" id="back">Go back</button></div>';
+  return '<div class="card"><div class="meta"><span>One last question</span><span>' + esc(ev.n) + '</span></div>' + bar(qs.length + 3, qs.length + 4) + '<h2>Your trail has ' + n + ' people on it. Would you like one point of contact who keeps everyone on track for you?</h2><div class="yn"><button class="yes" type="button" data-c="1">Yes</button><button class="no" type="button" data-c="0">No</button></div><button class="txt" type="button" id="back">Go back</button></div>';
 }
 function question() {
   var n = ans.length, q = ev.steps[qs[n]];
