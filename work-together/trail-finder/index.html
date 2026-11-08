@@ -60,6 +60,7 @@
   .box b.does { display: block; font-size: 15.5px; font-weight: 800; line-height: 1.25; }
   .who { margin-top: 3px; font-size: 14.5px; } .who em { font-style: normal; color: var(--muted); }
   .tier { margin-top: 5px; font-size: 13px; color: var(--muted); }
+  .spread { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: var(--tint); border-left: 3px solid var(--red); font-size: 14.5px; } .spread b { color: var(--red-d); }
   .send { background: linear-gradient(125deg, var(--deep) 0%, #C41C2B 60%, #D9303F 100%); color: var(--white); }
   .send h3 { font-size: 21px; font-weight: 800; letter-spacing: -.01em; }
   .send p { margin: 6px 0 0; font-size: 14.5px; }
@@ -351,6 +352,14 @@ function events() {
   EV.forEach(function (x, i) { if (x.g !== g) { g = x.g; h += '<div class="grp">' + (g === 'Life' ? 'In your life' : 'In your business') + '</div>'; } h += '<button class="ev" type="button" data-e="' + i + '">' + esc(x.n) + '<small>' + esc(x.s) + '</small></button>'; });
   return '<div class="card"><div class="meta"><span>What’s happening?</span><span>Hi ' + esc(me.n.split(' ')[0]) + '</span></div>' + bar(2, 8) + '<h2>What’s happening in your life or business?</h2><div class="events">' + h + '</div></div>';
 }
+// Spreading the cost of a whole-team quote: business trails go to Chris MacManus, home projects to Chris Ashley
+var SPREAD_HOME = ['Extending the family home', 'Becoming a landlord'];
+function spread(t) {
+  if (t.filter(function (s) { return s[0] !== 'charlotte'; }).length < 3) return '';
+  var who = ev.g === 'Business' ? 'chrism' : SPREAD_HOME.indexOf(ev.n) >= 0 ? 'chrisa' : '';
+  if (!who) return '';
+  return '<div class="spread"><b>Whole-team quote too much in one go?</b> You may be able to spread the cost. ' + esc(P[who][0]) + ' of ' + esc(P[who][1]) + ' can talk you through your options on the call.</div>';
+}
 function needCoord() { return trail().filter(function (s) { return s[0] !== 'charlotte'; }).length >= 3; }
 function coordQ() {
   var n = trail().filter(function (s) { return s[0] !== 'charlotte'; }).length;
@@ -370,7 +379,7 @@ function result() {
   var book = slot === null
     ? '<section class="card send"><h3>Book your call with Hammer and Pen</h3><p>A quick call to check what you need. Then we’ll bring your team together on one Google Meet.</p><div class="slots">' + SLOTS.map(function (s, i) { return '<button type="button" data-t="' + i + '">' + esc(s) + '</button>'; }).join('') + '</div><p class="sm">Free times as of 7 November. The live page would always show current times.</p></section>'
     : '<section class="card send"><h3>You’re booked in, ' + first + '</h3><p>Hammer and Pen will call you on ' + esc(SLOTS[slot]) + '. In the live version you’d get a confirmation email. Nothing was booked in this demo.</p></section>';
-  return '<div class="res"><section class="card"><h2>' + first + '’s trail: ' + esc(ev.n.toLowerCase()) + '</h2><p class="lead">' + t.length + (t.length === 1 ? ' step' : ' steps') + ', in the order you’ll need them.</p><div class="chain">' + steps + '</div></section>' + book +
+  return '<div class="res"><section class="card"><h2>' + first + '’s trail: ' + esc(ev.n.toLowerCase()) + '</h2><p class="lead">' + t.length + (t.length === 1 ? ' step' : ' steps') + ', in the order you’ll need them.</p><div class="chain">' + steps + '</div>' + spread(t) + '</section>' + book +
     '<section class="card"><h2>What happens next</h2><ol class="next"><li><b>We speak.</b> Hammer and Pen calls you to understand what you need and who you need first.</li><li><b>We bring your team together.</b> We arrange one Google Meet at a time that suits you, with 5 minutes for each person on your trail.</li><li><b>You meet them all at once.</b> Each member has 5 minutes to explain how they’d help, answer your questions and give you a quote.</li><li><b>You get a clear plan.</b> We email you who’s doing what next.</li></ol></section>' +
     '<button class="txt" type="button" id="again">Start again</button><p class="foot">These are examples of what members offer. Ask each member exactly what they do.</p></div>';
 }
