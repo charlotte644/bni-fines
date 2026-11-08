@@ -128,7 +128,8 @@ var EV = [
   ['sian','Photograph your dishes','Would you like professional photos of your food?',false],
   ['andy','Make your signs and front of house stand out','Would you like new signage, lightboxes or neon?',false],
   ['daniel','Fill more tables with social media video','Would you like more bookings from social media?',false],
-  ['charlotte','Answer your calls, enquiries and bookings','Do calls and messages get missed during service?',false] ] },
+  ['charlotte','Answer your calls, enquiries and bookings','Do calls and messages get missed during service?',false],
+  ['stuartm','Set up reliable Wi-Fi and phone lines','Is your Wi-Fi or phone line letting you down?',false] ] },
  { g:'Business', n:'Opening a café', s:'New premises, new venture', steps:[
   ['kath','Set up your books and VAT','Do you already have an accountant?',true],
   ['clive','Advise on hiring staff','Will you be taking on staff?',false],
@@ -144,14 +145,21 @@ var EV = [
   ['stevew','Stock cups, cleaning and catering supplies','Do you still need catering and cleaning supplies?',false],
   ['daniel','Get your opening seen on social media','Would you like your opening filmed and shared on social media?',false],
   ['andy','Brand the shopfront and signage','Do you need signage or branding for the shopfront?',false],
-  ['charlotte','Handle the admin while you open','Would you like help with calls, invoices and admin?',false] ] },
+  ['charlotte','Handle the admin while you open','Would you like help with calls, invoices and admin?',false],
+  ['westen','Arrange your business insurance','Is your business insurance already sorted?',true],
+  ['adam','Fit an aluminium shopfront and doors','Does the premises need a new shopfront or doors?',false],
+  ['stuartm','Set up reliable Wi-Fi and phone lines','Do you need Wi-Fi or phone lines set up?',false],
+  ['jonathan','Print your menus','Do you need menus printed?',false],
+  ['sian','Photograph your food and space','Would you like professional photos of your food and café?',false] ] },
  { g:'Business', n:'Starting in the trades', s:'Going it alone', steps:[
   ['kath','Set up your books','Do you already have an accountant?',true],
   ['martin','Supply your van','Do you need a van?',false],
   ['westen','Arrange your insurance','Is your business insurance already sorted?',true],
   ['lee','Get your health and safety accreditation','Do you need health and safety paperwork or accreditation for site work?',false],
   ['dawn','Train in first aid, manual handling and ladder safety','Do you need first aid, manual handling or ladder safety training?',false],
-  ['charlotte','Take on the admin','Would you like help with the admin?',false] ] },
+  ['charlotte','Take on the admin','Would you like help with the admin?',false],
+  ['spencer','Set up card payments and business bills','Do you need card payments or business bills set up?',false],
+  ['robbie','Check new customers can pay','Would you like to check new customers can pay before you start work?',false] ] },
  { g:'Business', n:'Taking on your first staff', s:'From one to a team', steps:[
   ['clive','Advise on contracts and employment law','Do you already have employment contracts in place?',true],
   ['kath','Set up payroll','Is your payroll already set up?',true],
@@ -160,7 +168,9 @@ var EV = [
   ['stuartm','Set up IT and phones','Will your staff need computers, emails or phones?',false],
   ['stevew','Stock the workplace','Do you need desks, supplies or PPE for your staff?',false],
   ['gareth','Offer payroll giving to a local charity','Would you like to give your team a way to support a local charity?',false],
-  ['charlotte','Take on the extra admin','Would you like help with the extra admin?',false] ] },
+  ['charlotte','Take on the extra admin','Would you like help with the extra admin?',false],
+  ['westen','Arrange employers’ liability insurance','Do you already have employers’ liability insurance?',true],
+  ['richard','Keep the team in coffee','Would you like a coffee machine for the team?',false] ] },
  { g:'Business', n:'Winning a big contract', s:'Scaling up safely', steps:[
   ['robbie','Protect against non-payment','Is the customer paying you on credit terms?',false],
   ['chrism','Fund the cashflow','Will you need funding to deliver the work?',false],
@@ -178,7 +188,8 @@ var EV = [
   ['stevew','Furnish and stock the office','Do you need furniture or supplies?',false],
   ['richard','Install a coffee machine','Would you like a coffee machine?',false],
   ['jonathan','Print the new stationery','Do you need new stationery with your new address?',false],
-  ['andy','Put up the new signs','Does the new office need signs or displays?',false] ] },
+  ['andy','Put up the new signs','Does the new office need signs or displays?',false],
+  ['chrism','Fund the fit-out or the premises','Do you need funding for the move or the premises?',false] ] },
  { g:'Business', n:'Growing a wholesale business', s:'More stock, more customers', steps:[
   ['robbie','Insure the credit you give','Do you sell to customers on credit?',false],
   ['kath','Keep the numbers clear','Do you already have an accountant?',true],
@@ -231,7 +242,8 @@ var EV = [
   ['daniel','Film a case study','Would you like a video case study?',false],
   ['jonathan','Print the brochure','Do you need a printed brochure?',false],
   ['robbie','Check the buyer’s credit','Would you like to check the buyer can pay?',false],
-  ['charlotte','Keep the bid paperwork and deadlines on track','Would you like help keeping the paperwork and deadlines on track?',false] ] },
+  ['charlotte','Keep the bid paperwork and deadlines on track','Would you like help keeping the paperwork and deadlines on track?',false],
+  ['gareth','Show social value with a charity partner','Do the tenders ask about social value?',false] ] },
  { g:'Business', n:'Moving the fleet to electric', s:'Cleaner, cheaper miles', steps:[
   ['martin','Lease the electric vehicles'],
   ['chrism','Look at the funding','Would you like to compare funding options?',false],
@@ -261,7 +273,8 @@ var EV = [
   ['sue','Find a bigger home','Are you thinking of moving?',false],
   ['chrisa','Arrange the new mortgage','Will you need a new mortgage?',false],
   ['westen','Set up life insurance','Do you already have life insurance?',true],
-  ['clive','Update your Wills'] ] },
+  ['clive','Update your Wills'],
+  ['stuartb','Plan for your child’s future','Would you like to start saving or investing for your child?',false] ] },
  { g:'Life', n:'Extending the family home', s:'More room without moving', steps:[
   ['chrisa','Raise the funds','Do you need to borrow for the work?',false],
   ['anthony','Sort the groundwork and drains','Will the extension affect the drains?',false],
@@ -317,7 +330,8 @@ var EV = [
   ['seamus','Review your household bills'],
   ['adam','Upgrade the windows and doors','Are your windows or doors draughty?',false],
   ['philip','Add an alarm and CCTV','Would you like an alarm or CCTV?',false],
-  ['trae','Fit an EV charger or solar electrics','Would you like an EV charger or solar panels?',false] ] }
+  ['trae','Fit an EV charger or solar electrics','Would you like an EV charger or solar panels?',false],
+  ['anthony','Protect your home from flooding','Is your home at risk of flooding?',false] ] }
 ];
 var me = null, ev = null, qs = [], ans = [], slot = null, err = '', coord = null;
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
