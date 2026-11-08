@@ -343,7 +343,7 @@ function question() {
 var SLOTS = ['Mon 9 Nov, 16:15', 'Tue 10 Nov, 11:15', 'Thu 12 Nov, 14:15', 'Thu 12 Nov, 16:15', 'Mon 16 Nov, 14:45', 'Tue 17 Nov, 10:00'];
 function result() {
   var t = trail();
-  var steps = t.map(function (s, i) { var p = P[s[0]]; return '<div class="st" style="--c:' + TC[p[4]] + '"><div class="no-n">' + (i + 1) + '</div><div class="box"><b class="does">' + esc(s[1]) + '</b><div class="who">' + esc(p[0]) + ' <em>' + esc(p[1]) + '</em></div>' + (s[0] === 'charlotte' ? '<div class="tier">' + (ev.g === 'Life' ? 'One-off help until it’s done: monthly, or a fixed price if there’s a deadline.' : 'Choose one of three support levels, on a 6 or 12-month retainer.') + '</div>' : '') + '</div></div>'; }).join('');
+  var steps = t.map(function (s, i) { var p = P[s[0]]; return '<div class="st" style="--c:' + TC[p[4]] + '"><div class="no-n">' + (i + 1) + '</div><div class="box"><b class="does">' + esc(s[1]) + '</b><div class="who">' + esc(p[0]) + ' <em>' + esc(p[1]) + '</em></div>' + '</div></div>'; }).join('');
   var first = esc(me.n.split(' ')[0]);
   if (!t.length) return '<div class="res"><section class="card"><h2>It sounds like you’re already sorted</h2><p class="lead">Go back if you’d like to change an answer, or start again for something else.</p></section><button class="txt" type="button" id="again">Start again</button></div>';
   var book = slot === null
