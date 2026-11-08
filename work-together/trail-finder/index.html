@@ -353,12 +353,13 @@ function events() {
   return '<div class="card"><div class="meta"><span>What’s happening?</span><span>Hi ' + esc(me.n.split(' ')[0]) + '</span></div>' + bar(2, 8) + '<h2>What’s happening in your life or business?</h2><div class="events">' + h + '</div></div>';
 }
 // Spreading the cost of a whole-team quote: business trails go to Chris MacManus, home projects to Chris Ashley
-var SPREAD_HOME = ['Extending the family home', 'Becoming a landlord'];
+var SPREAD_HOME = ['Extending the family home', 'Becoming a landlord'], SPREAD_SKIP = ['Hosting a charity dinner', 'Choosing a charity of the year'];
 function spread(t) {
   if (t.filter(function (s) { return s[0] !== 'charlotte'; }).length < 3) return '';
+  if (SPREAD_SKIP.indexOf(ev.n) >= 0) return '';
   var who = ev.g === 'Business' ? 'chrism' : SPREAD_HOME.indexOf(ev.n) >= 0 ? 'chrisa' : '';
   if (!who) return '';
-  return '<div class="spread"><b>Whole-team quote too much in one go?</b> You may be able to spread the cost. ' + esc(P[who][0]) + ' of ' + esc(P[who][1]) + ' can talk you through your options on the call.</div>';
+  return '<div class="spread"><b>Whole-team quote too much in one go?</b> You may be able to spread the cost. ' + esc(P[who][0]) + ' of ' + esc(P[who][1]) + ' can talk you through your options.</div>';
 }
 function needCoord() { return trail().filter(function (s) { return s[0] !== 'charlotte'; }).length >= 3; }
 function coordQ() {
