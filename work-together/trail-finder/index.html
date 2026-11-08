@@ -245,6 +245,7 @@ var EV = [
   ['chrisa','Arrange your mortgage','Do you already have a mortgage agreed?',true],
   ['anthony','Survey the drains before you buy','Would you like the drains checked before you buy?',false],
   ['clive','Handle the legal side','Do you already have a solicitor for the legal side?',true],
+$2
   ['westen','Set up your home insurance','Is your home insurance already sorted?',true],
   ['seamus','Get your bills sorted'] ] },
  { g:'Life', n:'Getting married', s:'Planning the day and after', steps:[
@@ -254,6 +255,7 @@ var EV = [
   ['clive','Write your new Wills','Would you like to update your Wills?',false],
   ['stuartb','Plan your finances as a couple'],
   ['seamus','Combine your household bills','Are you moving in together?',false] ] },
+$2
  { g:'Life', n:'A new baby on the way', s:'Making room and planning ahead', steps:[
   ['sian','Take the newborn photos','Would you like newborn photos?',false],
   ['sue','Find a bigger home','Are you thinking of moving?',false],
@@ -266,6 +268,7 @@ var EV = [
   ['adam','Fit new windows and doors','Do you want bi-folds, sliding doors or a roof lantern?',false],
   ['trae','Wire the new rooms'],
   ['alex','Plumb the new rooms','Will the new rooms need plumbing or heating?',false],
+$2
   ['westen','Update your home cover'] ] },
  { g:'Life', n:'Becoming a landlord', s:'Your first rental', steps:[
   ['stuartb','Check it fits your long-term plan','Would you like financial planning advice first?',false],
@@ -276,11 +279,13 @@ var EV = [
   ['alex','Carry out the gas safety check','Does the property have gas?',false],
   ['philip','Fit the fire alarms','Does the property need new alarms?',false],
   ['westen','Arrange landlord insurance','Is your landlord insurance already sorted?',true],
+$2
   ['michelle','Find tenants and manage it','Would you like someone to manage it for you?',false] ] },
  { g:'Life', n:'Selling up and downsizing', s:'The next chapter', steps:[
   ['alex','Fix the niggles before viewings','Are there any plumbing jobs to fix before you sell?',false],
   ['sue','Sell your home','Do you already have an estate agent?',true],
   ['clive','Handle the legal side','Do you already have a solicitor?',true],
+$2
   ['stuartb','Plan what to do with the money','Would you like advice on what to do with the money?',false],
   ['michelle','Find a rental while you look','Will you need somewhere to rent in between?',false],
   ['seamus','Move the bills across'] ] },
@@ -297,6 +302,7 @@ var EV = [
   ['westen','Check what the cover includes','Will you need to claim on insurance?',false] ] },
  { g:'Life', n:'Inheriting a house', s:'Next steps for the family', steps:[
   ['clive','Handle probate and the legal side'],
+$2
   ['sue','Value or sell the property','Are you thinking of selling?',false],
   ['stuartb','Plan the next steps for the money','Would you like advice on the money?',false],
   ['michelle','Let it, if the family keep it','Are you thinking of letting it out?',false],
@@ -337,7 +343,7 @@ function question() {
 var SLOTS = ['Mon 9 Nov, 16:15', 'Tue 10 Nov, 11:15', 'Thu 12 Nov, 14:15', 'Thu 12 Nov, 16:15', 'Mon 16 Nov, 14:45', 'Tue 17 Nov, 10:00'];
 function result() {
   var t = trail();
-  var steps = t.map(function (s, i) { var p = P[s[0]]; return '<div class="st" style="--c:' + TC[p[4]] + '"><div class="no-n">' + (i + 1) + '</div><div class="box"><b class="does">' + esc(s[1]) + '</b><div class="who">' + esc(p[0]) + ' <em>' + esc(p[1]) + '</em></div>' + (s[0] === 'charlotte' ? '<div class="tier">Choose one of three support levels, on a 6 or 12-month retainer.</div>' : '') + '</div></div>'; }).join('');
+  var steps = t.map(function (s, i) { var p = P[s[0]]; return '<div class="st" style="--c:' + TC[p[4]] + '"><div class="no-n">' + (i + 1) + '</div><div class="box"><b class="does">' + esc(s[1]) + '</b><div class="who">' + esc(p[0]) + ' <em>' + esc(p[1]) + '</em></div>' + (s[0] === 'charlotte' ? '<div class="tier">' + (ev.g === 'Life' ? 'One-off help until it’s done: monthly, or a fixed price if there’s a deadline.' : 'Choose one of three support levels, on a 6 or 12-month retainer.') + '</div>' : '') + '</div></div>'; }).join('');
   var first = esc(me.n.split(' ')[0]);
   if (!t.length) return '<div class="res"><section class="card"><h2>It sounds like you’re already sorted</h2><p class="lead">Go back if you’d like to change an answer, or start again for something else.</p></section><button class="txt" type="button" id="again">Start again</button></div>';
   var book = slot === null
