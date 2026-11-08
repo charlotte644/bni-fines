@@ -99,23 +99,22 @@ var P = {
  dawn:['Dawn Evans','Ajuda Ltd','','','b'],
  charlotte:['Hammer and Pen','','','','b'],
  jonathan:['Jonathan Davies','Glenside Printing','','','m'],
- stuartb:['Stuart Bourne','Atomos Wealth Planning','','','f']
+ stuartb:['Stuart Bourne','Atomos Wealth Planning','','','f'],
+ andy:['Andy Mackinson','Seriously','','','m']
 };
 // Each step: member, what they'd do, and the question that decides if it stays. drop = the answer that removes it.
 var EV = [
- { g:'Life', n:'Buying a home', s:'First home or next move', steps:[
-  ['sue','Find the right home','Have you already found your home?',true],
-  ['chrisa','Arrange your mortgage','Do you already have a mortgage agreed?',true],
-  ['anthony','Survey the drains before you buy','Would you like the drains checked before you buy?',false],
-  ['clive','Handle the legal side','Do you already have a solicitor for the legal side?',true],
-  ['westen','Set up your home insurance','Is your home insurance already sorted?',true],
-  ['seamus','Get your bills sorted'] ] },
- { g:'Life', n:'Getting married', s:'Planning the day and after', steps:[
-  ['sian','Photograph the day','Do you already have a photographer?',true],
-  ['jonathan','Print the invitations','Do you still need invitations printing?',false],
-  ['chrisa','Arrange a mortgage together','Are you planning to buy a home together?',false],
-  ['clive','Write your new Wills','Would you like to update your Wills?',false],
-  ['stuartb','Plan your finances as a couple'] ] },
+ { g:'Business', n:'Running a restaurant', s:'Busy, safe and profitable', steps:[
+  ['philip','Check your fire alarms and CCTV','Are your fire alarms and CCTV fully up to date?',true],
+  ['anthony','Keep grease out of your drains','Do your drains ever block or smell?',false],
+  ['lee','Cover health and safety','Would you like help with health and safety?',false],
+  ['westen','Review your insurance','Is your business insurance already sorted?',true],
+  ['seamus','Check your energy bills'],
+  ['spencer','Look at your card payment fees'],
+  ['chrism','Fund new kitchen equipment','Are you planning new kitchen equipment?',false],
+  ['jonathan','Print your menus and signage','Do you need menus or signage printed?',false],
+  ['sian','Photograph your dishes','Would you like professional photos of your food?',false],
+  ['andy','Fill more tables','Would you like more bookings from your marketing?',false] ] },
  { g:'Business', n:'Opening a café', s:'New premises, new venture', steps:[
   ['chrism','Fund the equipment','Do you need funding for equipment?',false],
   ['trae','Wire the premises','Does the premises need electrical work?',false],
@@ -129,7 +128,20 @@ var EV = [
   ['westen','Arrange your insurance','Is your business insurance already sorted?',true],
   ['lee','Cover health and safety','Would you like help with health and safety?',false],
   ['dawn','Deliver first aid training','Do you need first aid training?',false],
-  ['charlotte','Take on the admin','Would you like help with the admin?',false] ] }
+  ['charlotte','Take on the admin','Would you like help with the admin?',false] ] },
+ { g:'Life', n:'Buying a home', s:'First home or next move', steps:[
+  ['sue','Find the right home','Have you already found your home?',true],
+  ['chrisa','Arrange your mortgage','Do you already have a mortgage agreed?',true],
+  ['anthony','Survey the drains before you buy','Would you like the drains checked before you buy?',false],
+  ['clive','Handle the legal side','Do you already have a solicitor for the legal side?',true],
+  ['westen','Set up your home insurance','Is your home insurance already sorted?',true],
+  ['seamus','Get your bills sorted'] ] },
+ { g:'Life', n:'Getting married', s:'Planning the day and after', steps:[
+  ['sian','Photograph the day','Do you already have a photographer?',true],
+  ['jonathan','Print the invitations','Do you still need invitations printing?',false],
+  ['chrisa','Arrange a mortgage together','Are you planning to buy a home together?',false],
+  ['clive','Write your new Wills','Would you like to update your Wills?',false],
+  ['stuartb','Plan your finances as a couple'] ] }
 ];
 var me = null, ev = null, qs = [], ans = [], slot = null, err = '';
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
