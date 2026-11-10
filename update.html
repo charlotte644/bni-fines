@@ -36,14 +36,15 @@
       <p class="tiny muted" id="nowBy" style="margin:0 0 12px"></p>
       <div class="row">
         <a class="btn ghost small" href="index.html" target="_blank" rel="noopener">See the QR page</a>
-        <a class="btn ghost small" href="report.html">Fines report</a>
+
         <a class="btn ghost small" href="qr.html" target="_blank" rel="noopener">Print the QR</a>
       </div>
     </section>
 
-    <section class="card">
+    <!-- 10 Nov 2026: judge's link switched off (fines are just noted during the meeting). Kept hidden so the script below still finds its elements. -->
+    <section class="card hide">
       <div class="label">The judge's link</div>
-      <p class="small" style="margin-top:0">Send this to whoever is wielding the gavel. It only lets them fine members and send the fines out.</p>
+      <p class="small" style="margin-top:0">Send this to whoever is wielding the gavel. They just note the fines during the meeting. Nothing is emailed and there is nothing to confirm.</p>
       <div class="copybox">
         <input type="text" id="judgeLink" readonly aria-label="Judge's link">
         <button class="btn small" type="button" id="copy">Copy</button>
