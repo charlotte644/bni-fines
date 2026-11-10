@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2wish · Our 2026 Charity</title>
+<meta name="description" content="BNI Intrepid is proud to support 2wish, our charity for 2026. Read how 2wish helps families after the sudden death of a child or young adult, and donate.">
+<meta property="og:title" content="2wish · BNI Intrepid's charity for 2026">
+<meta property="og:image" content="img/walk.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F9FC; --card:#FFFFFF; --ink:#2F3B48; --muted:#5D6B79; --line:#DCE6F0;
+  --sky:#7BADD3; --sky-d:#3F7FB0; --sky-l:#E6F0F9; --slate:#54565A; --gold:#E9B949; --on:#FFFFFF;
+  --shadow:0 10px 30px rgba(44,78,110,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111A24; --card:#18232F; --ink:#EAF1F8; --muted:#A9BACB; --line:#273646;
+    --sky:#8DBBE0; --sky-d:#A9CDEB; --sky-l:#1C2C3D; --slate:#C9D3DD; --gold:#F0C866; --on:#0F1A25;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111A24; --card:#18232F; --ink:#EAF1F8; --muted:#A9BACB; --line:#273646;
+  --sky:#8DBBE0; --sky-d:#A9CDEB; --sky-l:#1C2C3D; --slate:#C9D3DD; --gold:#F0C866; --on:#0F1A25;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,sans-serif;font-size:17px;line-height:1.6;padding-bottom:84px;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:var(--sky-d)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+
+/* top strip */
+.strip{background:var(--sky-l);border-bottom:1px solid var(--line);font-size:14px;font-weight:700;color:var(--muted)}
+.strip .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:10px;padding-bottom:10px}
+.strip img{height:34px;width:auto;background:#fff;border-radius:8px;padding:3px 6px}
+.strip span b{color:var(--sky-d)}
+
+/* hero */
+.hero{position:relative;min-height:520px;display:flex;align-items:flex-end;color:#fff;overflow:hidden}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,40,60,.05) 20%,rgba(16,34,52,.82) 100%)}
+.hero .wrap{position:relative;z-index:1;padding-top:60px;padding-bottom:40px;width:100%}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.35);padding:6px 14px;border-radius:99px;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase}
+.badge img{width:18px;height:18px}
+h1{font-size:clamp(34px,6vw,58px);line-height:1.08;margin:16px 0 12px;font-weight:900;letter-spacing:-.01em;max-width:780px}
+.hero p{font-size:clamp(17px,2.2vw,20px);max-width:640px;margin:0 0 22px;opacity:.95}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 24px;border-radius:99px;font-weight:800;font-size:17px;text-decoration:none;border:0;cursor:pointer;font-family:inherit;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn.give{background:var(--gold);color:#2B2410;box-shadow:0 6px 18px rgba(233,185,73,.35)}
+.btn.talk{background:#fff;color:#2F5F86}
+.btn.talk.alt{background:var(--sky-d);color:var(--on)}
+
+/* sections */
+section{padding:56px 0}
+.eyebrow{color:var(--sky-d);font-weight:900;font-size:14px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 6px}
+h2{font-size:clamp(26px,4vw,38px);line-height:1.15;margin:0 0 14px;font-weight:900}
+.lead{font-size:19px;color:var(--muted);max-width:720px;margin:0 0 26px}
+
+/* numbers */
+.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:-46px;position:relative;z-index:2}
+.num{background:var(--card);border-radius:18px;padding:18px 16px;box-shadow:var(--shadow);text-align:center;border:1px solid var(--line)}
+.num b{display:block;font-size:30px;font-weight:900;color:var(--sky-d);line-height:1.1}
+.num span{font-size:14px;color:var(--muted);font-weight:700}
+
+/* story */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center}
+.split img{border-radius:22px;box-shadow:var(--shadow);width:100%;aspect-ratio:4/3;object-fit:cover}
+blockquote{margin:18px 0 0;padding:16px 20px;background:var(--sky-l);border-left:5px solid var(--sky);border-radius:0 14px 14px 0;font-style:italic;color:var(--ink)}
+blockquote cite{display:block;margin-top:6px;font-style:normal;font-weight:800;font-size:14px;color:var(--muted)}
+
+/* services */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:var(--card);border-radius:20px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line);display:flex;flex-direction:column}
+.card img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.card div{padding:16px 18px 20px}
+.card h3{margin:0 0 6px;font-size:19px;font-weight:900}
+.card p{margin:0;color:var(--muted);font-size:15.5px}
+
+/* hope stories */
+.band{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.hope{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.hope article{background:var(--bg);border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
+.hope article img{width:100%;aspect-ratio:16/9;object-fit:cover}
+.hope article img.wide{aspect-ratio:1024/320;object-fit:contain;background:#E8F1F9}
+.hope article.tall img{object-position:center 30%}
+.hope article div{padding:18px 20px 22px}
+.hope h3{margin:0 0 8px;font-size:20px;font-weight:900}
+.hope p{margin:0 0 8px;color:var(--muted);font-size:15.5px}
+.tag{display:inline-block;background:var(--sky-l);color:var(--sky-d);font-weight:900;font-size:12px;letter-spacing:.06em;text-transform:uppercase;border-radius:99px;padding:3px 10px;margin-bottom:8px}
+.quotes{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:22px}
+.quotes blockquote{margin:0;font-size:19px}
+
+/* partner */
+.partner{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;background:linear-gradient(135deg,var(--sky-l),var(--card));border:1px solid var(--line);border-radius:24px;padding:26px;box-shadow:var(--shadow)}
+.partner img{width:130px;height:130px;border-radius:18px;object-fit:cover;background:#fff}
+.partner p{margin:0 0 8px;color:var(--muted)}
+
+/* gareth / cta */
+.cta{background:linear-gradient(135deg,#4E87B5,#7BADD3);color:#fff;border-radius:26px;padding:36px 28px;text-align:center;position:relative;overflow:hidden}
+.cta::before{content:"";position:absolute;width:260px;height:260px;right:-60px;top:-70px;background:url(img/star.png) center/contain no-repeat;opacity:.18}
+.cta h2{color:#fff}
+.cta p{max-width:620px;margin:0 auto 22px;font-size:18px;opacity:.96}
+.cta .btns{justify-content:center}
+.ways{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0 0;text-align:left}
+.ways div{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);border-radius:16px;padding:14px 16px;font-size:15.5px}
+.ways b{display:block;font-size:16.5px}
+
+footer{padding:30px 0 20px;color:var(--muted);font-size:13.5px;text-align:center}
+footer a{color:var(--muted)}
+
+/* sticky bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+.bar .in{max-width:1040px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.bar .t{flex:1;font-weight:800;font-size:14.5px;color:var(--muted);line-height:1.3}
+.bar .btn{min-height:46px;padding:0 20px;font-size:16px}
+
+/* gareth sheet */
+.sheet{position:fixed;inset:0;z-index:30;background:rgba(10,20,30,.55);display:none;align-items:flex-end;justify-content:center;padding:16px}
+.sheet.on{display:flex}
+.sheet .box{background:var(--card);color:var(--ink);border-radius:22px;max-width:440px;width:100%;padding:24px 22px 20px;box-shadow:0 20px 50px rgba(0,0,0,.3);margin-bottom:max(10px,env(safe-area-inset-bottom))}
+.sheet h3{margin:0 0 4px;font-size:22px;font-weight:900}
+.sheet p{margin:0 0 16px;color:var(--muted);font-size:15.5px}
+.sheet .btn{width:100%;margin-bottom:10px}
+.sheet .x{background:transparent;color:var(--muted);border:1px solid var(--line)}
+@media (min-width:700px){.sheet{align-items:center}}
+
+@media (max-width:860px){
+  .cards{grid-template-columns:1fr 1fr}
+  .nums{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .hero{min-height:560px}
+  .split,.hope,.quotes,.ways{grid-template-columns:1fr}
+  .cards{grid-template-columns:1fr}
+  .partner{grid-template-columns:1fr;text-align:center}
+  .partner img{margin:0 auto}
+  .btns .btn{flex:1 1 100%}
+  .bar .t{display:none}
+  .bar .btn{flex:1;padding:0 12px}
+  section{padding:44px 0}
+}
+</style>
+</head>
+<body>
+
+<div class="strip"><div class="wrap"><img src="img/logo.png" alt="2wish logo"><span>BNI Intrepid · <b>Our charity for 2026</b></span></div></div>
+
+<header class="hero">
+  <img src="img/walk.jpg" alt="Families walking together at the 2wish For Our Stars Memory Walk 2026 at Margam Country Park">
+  <div class="wrap">
+    <span class="badge"><img src="img/star.png" alt="">BNI Intrepid's 2026 charity</span>
+    <h1>Nobody should face the sudden loss of a child alone.</h1>
+    <p>This year BNI Intrepid is proud to stand behind <b>2wish</b>, the Welsh charity that supports everyone affected by the sudden and unexpected death of a child or young adult aged 25 or under.</p>
+    <div class="btns">
+      <a class="btn give" href="https://2wish.enthuse.com/donate" target="_blank" rel="noopener">💛 Donate now</a>
+      <button class="btn talk" type="button" data-gareth>Speak to Gareth</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="nums">
+    <div class="num"><b>10,000+</b><span>people supported</span></div>
+    <div class="num"><b>2012</b><span>founded in Wales</span></div>
+    <div class="num"><b>0 to 25</b><span>the ages they cover</span></div>
+    <div class="num"><b>40+</b><span>voices in Côr Seren, their choir</span></div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">How it began</p>
+      <h2>Born from love, built to help</h2>
+      <p>On 22 February 2012, Rhian Mannings lost her baby son George, just 1 year, 1 week and 1 day old. Five days later her husband Paul died too. In the darkest days imaginable, Rhian found there was no one ready to help her family.</p>
+      <p>So she created it. 2wish was founded in George and Paul's memory, and today its team (each with their own story of loss) is there for families from the very first hours, and for as long as they need.</p>
+      <blockquote>“You do not need to face it all alone.”<cite>The 2wish team</cite></blockquote>
+    </div>
+    <img src="img/rhian.jpg" alt="Rhian Mannings with her son George, black and white photo">
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <p class="eyebrow">What your donation does</p>
+    <h2>Real help, right when it's needed</h2>
+    <p class="lead">From the hospital room to years down the line, 2wish wraps support around the whole family: parents, brothers and sisters, grandparents and friends.</p>
+    <div class="cards">
+      <div class="card"><img src="img/immediate.jpg" alt="A 2wish team member on the phone"><div><h3>Immediate support</h3><p>Fast emotional and practical help after a sudden death, including in-person support and memory making.</p></div></div>
+      <div class="card"><img src="img/counselling.jpg" alt="A counselling session"><div><h3>Counselling</h3><p>Ongoing therapeutic support, in person and online, to help families find a way forward over time.</p></div></div>
+      <div class="card"><img src="img/play.jpg" alt="A play therapy session with a young child"><div><h3>Play therapy</h3><p>Gentle, specialist support for children who have lost a brother, sister or friend.</p></div></div>
+      <div class="card"><img src="img/room.jpg" alt="A calm, comfortable bereavement room"><div><h3>Bereavement rooms</h3><p>Funding calm, private rooms and memory boxes in hospitals, so families have space when it matters most.</p></div></div>
+      <div class="card"><img src="img/training.jpg" alt="Professionals at a training session"><div><h3>Training</h3><p>Trauma-informed training for professionals and organisations, so every family meets compassion.</p></div></div>
+      <div class="card"><img src="img/welfare.jpg" alt="2wish staff supporting someone outdoors"><div><h3>Event welfare</h3><p>On-site emotional care at events, with a safe space ready if the unthinkable happens.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Stories of hope</p>
+    <h2>What 2wish makes possible</h2>
+    <p class="lead">Grief never goes away, but with the right people beside them families find strength, connection and ways to keep their loved ones' memories alive.</p>
+
+    <div class="hope">
+      <article>
+        <img class="wide" src="img/dani.jpg" alt="Honouring Darcy's Memory: Dani Elm recognised on a national stage">
+        <div><span class="tag">November 2026</span><h3>Dani Elm, recognised on a national stage</h3>
+        <p>Supported by 2wish after losing her daughter Darcy in 2018, Dani was nominated for the Women of the Year Awards 2026 in London.</p>
+        <p>Her memoir, <i>Our Last Steps</i>, has sold around 500 copies and raised about £2,600 for charity, shared with 2wish.</p></div>
+      </article>
+      <article>
+        <img src="img/walk.jpg" alt="Supporters walking at the For Our Stars Memory Walk">
+        <div><span class="tag">August 2026</span><h3>For Our Stars Memory Walk</h3>
+        <p>Families came together at Margam Country Park to remember much-loved children and young people, sharing memories so that nobody had to feel alone in their grief.</p></div>
+      </article>
+      <article>
+        <img src="img/dip.jpg" alt="Brave dippers in fancy dress at the Elephant Dip in Saundersfoot">
+        <div><span class="tag">October 2026</span><h3>The Elephant Dip, Saundersfoot</h3>
+        <p>Dippers braved the sea in memory of loved ones, raising vital funds so families keep getting support when they need it most.</p></div>
+      </article>
+      <article class="tall">
+        <img src="img/choir.jpg" alt="Côr Seren, the 2wish choir, singing on a grand staircase">
+        <div><span class="tag">Since 2016</span><h3>Côr Seren, the 2wish choir</h3>
+        <p>Started to bring bereaved parents together through song, the choir now has over 40 members. More than a choir, it's a safe place to belong and find strength.</p></div>
+      </article>
+    </div>
+
+    <div class="quotes">
+      <blockquote>“2wish have been a lifeline which I will always be grateful.”<cite>Eve's family, sharing their story with 2wish</cite></blockquote>
+      <blockquote>“Through 2wish we were offered thoughtful support which was offered with the utmost care and dignity.”<cite>Harry's family</cite></blockquote>
+    </div>
+    <p style="margin-top:18px">Brothers and sisters are not forgotten either: in 2026 two bereaved siblings on the 2wish team started online support sessions for adults who have lost a brother or sister. <a href="https://2wish.org.uk/get-support/support-resources/families/" target="_blank" rel="noopener">Read the families' own stories on the 2wish website</a>.</p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="partner">
+      <img src="img/bni-partner.jpg" alt="BNI Intrepid Cardiff, a corporate supporter of 2wish">
+      <div>
+        <p class="eyebrow">Proud partners</p>
+        <h2 style="margin-bottom:8px">BNI Intrepid × 2wish</h2>
+        <p>BNI Intrepid is listed among 2wish's corporate supporters, alongside businesses like HSBC, Hugh James and the Royal Mint. Our member <b>Gareth Rees</b> represents 2wish in the chapter, and every pound we raise this year goes straight to their work.</p>
+        <p>Givers Gain is what BNI is all about. This is Givers Gain at its best.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="cta">
+      <h2>Be part of it</h2>
+      <p>Every donation helps a family who has just lost the person they love most. Give what feels right, or talk to Gareth about how you or your business can get involved.</p>
+      <div class="btns">
+        <a class="btn give" href="https://2wish.enthuse.com/donate" target="_blank" rel="noopener">💛 Donate now</a>
+        <button class="btn talk" type="button" data-gareth>Speak to Gareth</button>
+      </div>
+      <div class="ways">
+        <div><b>Give once or monthly</b>A regular gift helps 2wish plan support ahead.</div>
+        <div><b>Get your business involved</b>Sponsorship, team challenges and volunteering.</div>
+        <div><b>Join an event</b>Memory walks, the Elephant Dip, golf days and more.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Donations go straight to 2wish through their own Enthuse page; nothing passes through BNI Intrepid.<br>
+    Pictures and stories from <a href="https://2wish.org.uk" target="_blank" rel="noopener">2wish.org.uk</a>. Need support yourself? Call 2wish on <a href="tel:01443853125">01443 853125</a> or email <a href="mailto:info@2wish.org.uk">info@2wish.org.uk</a>.
+  </div>
+</footer>
+
+<div class="bar"><div class="in">
+  <span class="t">Support 2wish, BNI Intrepid's charity for 2026</span>
+  <a class="btn give" href="https://2wish.enthuse.com/donate" target="_blank" rel="noopener">💛 Donate now</a>
+  <button class="btn talk alt" type="button" data-gareth>Speak to Gareth</button>
+</div></div>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="gt">
+  <div class="box">
+    <h3 id="gt">Speak to Gareth</h3>
+    <p>Gareth Rees represents 2wish at BNI Intrepid. He'd love to hear from you about donating, fundraising or getting your business involved.</p>
+    <a class="btn talk alt" href="tel:07545809247">📞 Call 07545 809247</a>
+    <a class="btn talk alt" href="mailto:gareth@2wish.org.uk?subject=Supporting%202wish%20(BNI%20Intrepid)">✉️ Email Gareth</a>
+    <button class="btn x" type="button" id="close">Close</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var s=document.getElementById('sheet');
+  document.querySelectorAll('[data-gareth]').forEach(function(b){b.addEventListener('click',function(){s.classList.add('on')})});
+  document.getElementById('close').addEventListener('click',function(){s.classList.remove('on')});
+  s.addEventListener('click',function(e){if(e.target===s)s.classList.remove('on')});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')s.classList.remove('on')});
+})();
+</script>
+</body>
+</html>
