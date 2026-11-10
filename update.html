@@ -52,11 +52,16 @@
     </section>
 
     <form class="card" id="form" novalidate>
-      <h2>Choose a different charity</h2>
+      <h2>Redirect to a different charity</h2>
       <p class="small muted" style="margin-top:0" id="defaultNote"></p>
       <div class="field">
-        <label for="date">For the meeting on</label>
+        <label for="date">From the meeting on</label>
         <select id="date"></select>
+      </div>
+      <div class="field">
+        <label for="until">Until the meeting on <span class="muted">(optional)</span></label>
+        <select id="until"></select>
+        <p class="tiny muted" style="margin:6px 0 0">Leave as "Just that Friday" for one week. Afterwards it goes back to our usual charity by itself.</p>
       </div>
       <div class="field">
         <label for="name">Charity name</label>
@@ -92,7 +97,7 @@
   function showNow(c, date) {
     $('#nowWhen').textContent = F.dateLabel(date) + ': fines go to';
     $('#nowName').textContent = c.name;
-    $('#nowBy').textContent = c.is_default ? 'Our usual charity. Nothing to do unless you fancy a change.' : 'Chosen by ' + c.set_by + ' on ' + c.set_on + '.';
+    $('#nowBy').textContent = c.is_default ? 'Our usual charity. Nothing to do unless you want to redirect it elsewhere.' : 'Chosen by ' + c.set_by + ' on ' + c.set_on + (c.until && c.until !== c.meeting_date ? ', until ' + F.dateLabel(c.until) : '') + '. Then it goes back to our usual charity.';
   }
 
   function drawWho(people) {
@@ -141,13 +146,15 @@
   $('#form').addEventListener('submit', function (e) {
     e.preventDefault();
     $('#err').textContent = ''; $('#saved').classList.add('hide');
-    var c = { meeting_date: $('#date').value, name: $('#name').value.trim(), about: $('#about').value.trim(), link: $('#link').value.trim(), by: me };
+    var c = { meeting_date: $('#date').value, until: $('#until').value, name: $('#name').value.trim(), about: $('#about').value.trim(), link: $('#link').value.trim(), by: me };
+    if (c.until && c.until < c.meeting_date) { $('#err').textContent = 'The end date must be on or after the start date.'; return; }
     if (!c.name) { $('#err').textContent = 'Please give the charity\'s name.'; return; }
     if (!/^https:\/\/\S+\.\S+$/i.test(c.link)) { $('#err').textContent = 'The donation link must be a full web address starting with https://'; return; }
     var btn = $('#save'); F.busy(btn, true);
     F.api('setCharity', key, c).then(function (saved) {
-      if (c.meeting_date === F.nextFriday()) showNow(saved, c.meeting_date);
-      $('#saved').textContent = 'Done. Fines on ' + F.dateLabel(c.meeting_date) + ' will go to ' + c.name + '. The QR code needs no changes.';
+      var nf = F.nextFriday(), end = c.until || c.meeting_date;
+      if (c.meeting_date <= nf && nf <= end) showNow(saved, nf);
+      $('#saved').textContent = 'Done. Fines ' + (end !== c.meeting_date ? 'from ' + F.dateLabel(c.meeting_date) + ' until ' + F.dateLabel(end) : 'on ' + F.dateLabel(c.meeting_date)) + ' will go to ' + c.name + ', then back to our usual charity. The QR code needs no changes.';
       $('#saved').classList.remove('hide');
       return F.api('recentCharities', key).then(function (r) { recent = r; drawRecent(); });
     }).catch(function (er) { $('#err').textContent = er.message; })
@@ -155,12 +162,15 @@
   });
 
   F.fillFridays($('#date'));
+  F.fillFridays($('#until'));
+  $('#until').insertAdjacentHTML('afterbegin', '<option value="">Just that Friday</option>');
+  $('#until').value = '';
   if (!key) { $('#loading').classList.add('hide'); $('#denied').classList.remove('hide'); return; }
   Promise.all([F.api('topTableInfo', key), F.api('getCurrent'), F.api('recentCharities', key)]).then(function (r) {
     $('#loading').classList.add('hide'); $('#app').classList.remove('hide');
     $('#chapter').textContent = r[1].chapter + ' · Top table';
     $('#judgeLink').value = r[0].judge_link;
-    $('#defaultNote').textContent = 'If nobody changes it, fines go to ' + r[0].default_charity.name + '. Only fill this in for a different charity.';
+    $('#defaultNote').textContent = 'We almost always donate to ' + r[0].default_charity.name + ', so there is usually nothing to do. Only fill this in if you want to redirect the donations to a different charity for a while.';
     drawWho(r[0].people);
     showNow(r[1].charity, r[1].date);
     recent = r[2]; drawRecent();
