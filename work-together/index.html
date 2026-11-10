@@ -88,7 +88,7 @@
   .soc a:first-child { grid-column: 1 / -1; background: var(--red); color: #fff; }
   .bar i.run { width: 100%; animation: run 10s linear both; } @keyframes run { from { width: 4%; } to { width: 100%; } }
   .vf { aspect-ratio: 16 / 9; margin: 14px -18px 0; background: #1C1C1E; }
-  .vf iframe { display: block; width: 100%; height: 100%; border: 0; }
+  .vf iframe, .vf video { display: block; width: 100%; height: 100%; border: 0; background: #000; }
   .skip { display: block; width: 100%; margin-top: 14px; border: 0; border-radius: 13px; padding: 14px; font-size: 16.5px; font-weight: 800; background: #F4F0EC; color: var(--ink); }
   .skip.ready { background: var(--red); color: #fff; }
   .fds { display: grid; gap: 10px; margin-top: 14px; }
@@ -341,8 +341,8 @@ function trailsHtml(r) {
     '<details class="more"><summary>See all ' + TR.length + ' trails</summary>' + TR.map(function (x) { return '<div class="one"><b>' + esc(x[0]) + '</b><span>' + x[2].map(function (s) { return esc(P[s[0]][0]); }).join(' → ') + '</span></div>'; }).join('') + '</details></section>';
 }
 // Chapter showcase: paste each link in once. New photos go in the album, so this page never needs changing.
-// Add more chapter videos to this list; each visitor sees one at random. Facebook links only, and they must be public.
-var VIDEOS = ['https://www.facebook.com/reel/4560018840984020'];
+// Chapter videos: each visitor sees one at random. An .mp4 in the video/ folder plays by itself (muted); Facebook or YouTube links also work.
+var VIDEOS = ['video/intrepid.mp4'];
 var CHAPTER = { photos: 'https://photos.app.goo.gl/2d8XV6VUuhMkJ23t5', instagram: 'https://www.instagram.com/bni_intrepid/', facebook: 'https://www.facebook.com/IntrepidBNI/', linkedin: 'https://uk.linkedin.com/company/bni-intrepid-cardiff' };
 // Member emails for the Email buttons, published on Charlotte's instruction (6 Nov 2026).
 var EM = { 'Michelle Barber': ['michelle','thegrayhouse.co.uk'], 'Seamus Sullivan': ['seamus.sullivan','uwclub.net'], 'Martin Britton': ['martin','samsmithfleet.com'], 'Trae Williams': ['trae','tralex365.com'], 'Sue Iannucci': ['sue.iannucci','theagencyuk.com'], 'Lee Howells': ['lee','safety.wales'], 'Daniel Harris': ['dan','focusshiftfilms.com'], 'Clive Thomas': ['cthomas','watkinsandgunn.co.uk'], 'Chris MacManus': ['cm','macmanus.finance'], 'Anthony Williams': ['anthony','ardrainagesolutions.com'], 'Gareth Rees': ['gareth','2wish.org.uk'], 'Dawn Evans': ['dawn','ajuda.org.uk'], 'Steve Western': ['steve','westmoreinsure.co.uk'], 'Philip Grunewald': ['pgrunewald','ava-cctv.co.uk'], 'Kath Hiscock': ['kath','seamountbiz.co.uk'], 'Andy Mackinson': ['andy','weareseriously.co.uk'], 'Richard Metcalfe': ['rich','cortilecoffee.co.uk'], 'Chris Ashley': ['chris','chrisashleymortgages.com'], 'Stuart Bourne': ['stuart.bourne','atomos.co.uk'], 'Adam Shephard': ['info','tradepricealuminium.co.uk'], 'Stuart Meikle': ['stuart.meikle','flotek.io'], 'Alex Jones': ['info','rsplumbingservices.co.uk'], 'Siân Roberts': ['exposephotographywales','gmail.com'], 'Robbie Williams': ['robbie.williams','coface.com'], 'Spencer Clarke': ['spencer','costcuttingsolutions.co.uk'], 'Steve Williams': ['steve','sabrecomputers.co.uk'], 'Charlotte Warren': ['charlotte','hammer-and-pen.com'], 'Jonathan Davies': ['glensideprinting','gmail.com'] };
@@ -353,7 +353,7 @@ var API = 'https://script.google.com/macros/s/AKfycbzrT6hSj8SUDcRupYEFjfywDd1eYz
 var TRAIL_THANKS = 'Thanks. Charlotte will look at your website and email you some ideas.', trailAsked = false, aiRead = null, stars = 0, me = null, siteText = '', siteState = 'none', sitePromise = null, ref = '', sent = false, formErr = '';
 var today = (function () { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); })();
 function post(o) { return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(o) }).then(function (r) { return r.json(); }); }
-if (API) fetch(API).then(function (r) { return r.json(); }).then(function (d) { if (d.videos && d.videos.length) VIDEOS = d.videos; }).catch(function () {});
+// 10 Nov 2026: the chapter video is now hosted here, so the Sheet's Videos tab no longer overrides it.
 function embed(u) {
   var y = u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([\w-]{6,})/);
   if (y) return 'https://www.youtube-nocookie.com/embed/' + y[1] + '?autoplay=1&mute=1&rel=0&playsinline=1';
@@ -410,7 +410,7 @@ function sign() { return '\n\n' + me.name + (me.company ? '\n' + me.company : ''
 function introMail(name) { return mail(addr(name), '', 'BNI Intrepid visitor: could we have a 1-2-1?', 'Hi ' + name.split(' ')[0] + ',\n\nI visited BNI Intrepid, and the How we can work together page suggested we could help each other. Could we arrange a 1-2-1?' + sign()); }
 function videoHtml() {
   var pick = VIDEOS[Math.floor(Math.random() * VIDEOS.length)];
-  return '<div class="q vid"><div class="meta"><span>All done</span><span>Putting your results together</span></div><div class="bar"><i class="run"></i></div><h2 class="ch">While we put your results together, meet the chapter</h2><div class="vf"><iframe src="' + esc(embed(pick)) + '" title="BNI Intrepid video" scrolling="no" allow="autoplay; fullscreen; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe></div><p class="eg" style="text-align:center">Want it bigger? Turn your phone sideways, or <a href="' + esc(pick) + '" target="_blank" rel="noopener">watch it full screen</a>.</p><button class="skip" type="button" id="skip">Skip to my results</button></div>';
+  return '<div class="q vid"><div class="meta"><span>All done</span><span>Putting your results together</span></div><div class="bar"><i class="run"></i></div><h2 class="ch">While we put your results together, meet the chapter</h2><div class="vf">' + (/\.mp4$/i.test(pick) ? '<video src="' + esc(pick) + '" poster="' + esc(pick.replace(/\.mp4$/i, '.jpg')) + '" autoplay muted playsinline controls preload="auto"></video>' : '<iframe src="' + esc(embed(pick)) + '" title="BNI Intrepid video" scrolling="no" allow="autoplay; fullscreen; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>') + '</div><p class="eg" style="text-align:center">Want it bigger? Turn your phone sideways, or <a href="' + esc(pick) + '" target="_blank" rel="noopener">watch it full screen</a>.</p><button class="skip" type="button" id="skip">Skip to my results</button></div>';
 }
 function basisHtml() {
   var used = aiRead && aiRead.placements && aiRead.placements.length;
