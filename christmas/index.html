@@ -119,25 +119,36 @@
   @keyframes eq { 0%,100% { height: 4px; } 50% { height: 14px; } }
   .snowman { font-size: 40px; display: block; margin-bottom: 4px; }
 
-  /* Fixed strip of members in Santa hats */
-  body { padding-bottom: 140px; }
-  .music { bottom: 152px; }
-  .team { position: fixed; left: 0; right: 0; bottom: 0; z-index: 55; height: 134px; overflow: hidden;
-    background: linear-gradient(180deg, var(--green) 0%, #164a31 100%); border-top: 3px solid var(--gold);
-    box-shadow: 0 -6px 18px rgba(0,0,0,.18); }
-  .team .ttl { position: absolute; left: 0; right: 0; top: 6px; text-align: center; color: #f6e7c1; font-size: 11px; font-weight: 700;
-    letter-spacing: .18em; text-transform: uppercase; z-index: 2; pointer-events: none; }
-  .track { display: flex; gap: 18px; width: max-content; padding: 48px 18px 0; animation: slide 70s linear infinite; }
-  .team:hover .track { animation-play-state: paused; }
-  @keyframes slide { to { transform: translateX(-50%); } }
-  .mem { flex: none; position: relative; width: 112px; height: 62px; background: #fff; border-radius: 12px; padding: 8px 10px;
-    display: grid; place-items: center; box-shadow: 0 3px 10px rgba(0,0,0,.25); border: 2px solid #f6e7c1; }
-  .mem:nth-child(odd) { transform: rotate(-2deg); } .mem:nth-child(even) { transform: rotate(2deg); }
-  .mem img { max-width: 100%; max-height: 44px; object-fit: contain; display: block; }
-  .mem img.dark { filter: brightness(0); }
-  .mem .hat { position: absolute; width: 44px; height: 35px; left: -14px; top: -22px; transform: rotate(-24deg); pointer-events: none;
-    filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
-  @media (prefers-reduced-motion: reduce) { .track { animation: none; } .team { overflow-x: auto; } }
+  /* Falling gifts behind the page: each member's logo on a gift tag */
+  main, footer, header.hero { position: relative; z-index: 1; }
+  .gifts { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .gift { position: absolute; top: -170px; width: 104px; animation: gfall linear infinite; will-change: transform; }
+  @keyframes gfall {
+    0% { transform: translate3d(0, 0, 0) rotate(var(--r0, -8deg)); }
+    25% { transform: translate3d(var(--sx, 18px), 30vh, 0) rotate(var(--r1, 6deg)); }
+    50% { transform: translate3d(0, 60vh, 0) rotate(var(--r0, -8deg)); }
+    75% { transform: translate3d(calc(var(--sx, 18px) * -1), 90vh, 0) rotate(var(--r1, 6deg)); }
+    100% { transform: translate3d(0, calc(100vh + 200px), 0) rotate(var(--r0, -8deg)); }
+  }
+  .gift .bow { display: block; width: 60%; height: auto; aspect-ratio: 120 / 64; margin: 0 auto -6%; position: relative; z-index: 2; }
+  .gift .box { position: relative; aspect-ratio: 1 / .92; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 6px 14px rgba(60,20,10,.25), inset 0 -6px 0 rgba(0,0,0,.08);
+    background: var(--wrap, #c8102e); }
+  .gift .box::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 14px; margin-left: -7px; background: var(--rib, #f2c94c); }
+  .gift .box::after { content: ""; position: absolute; left: 0; right: 0; top: 36%; height: 14px; background: var(--rib, #f2c94c); }
+  .gift .tag { position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%) rotate(-4deg); z-index: 2;
+    width: 78%; height: 50%; background: #fff; border-radius: 6px; padding: 5px 6px; display: grid; place-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,.25); border: 1.5px dashed #d8c08a; }
+  .gift .tag::before { content: ""; position: absolute; top: -9px; left: 50%; width: 2px; height: 10px; background: #8a6d2b; }
+  .gift .tag img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+  .gift .tag img.dark { filter: brightness(0); }
+  .w1 { --wrap: repeating-linear-gradient(45deg, #c8102e 0 12px, #d93a4f 12px 24px); --rib: #f2c94c; }
+  .w2 { --wrap: repeating-linear-gradient(-45deg, #1f5c3d 0 12px, #2c7a52 12px 24px); --rib: #e04155; }
+  .w3 { --wrap: radial-gradient(#fff 2px, transparent 2.5px) 0 0 / 16px 16px, #2a4a7b; --rib: #f2c94c; }
+  .w4 { --wrap: radial-gradient(#f2c94c 2px, transparent 2.5px) 0 0 / 14px 14px, #b3122a; --rib: #ffffff; }
+  .w5 { --wrap: repeating-linear-gradient(90deg, #c9a24b 0 10px, #d9b866 10px 20px); --rib: #b3122a; }
+  .w6 { --wrap: radial-gradient(#fff 1.8px, transparent 2.2px) 0 0 / 12px 12px, #6d2a7a; --rib: #f2c94c; }
+  @media (prefers-reduced-motion: reduce) { .gifts { display: none; } }
   @media (prefers-reduced-motion: reduce) { .flake, .bulb, .music.on .eq i { animation: none; } }
   footer { text-align: center; color: var(--muted); font-size: 13px; padding: 26px 0 40px; border-top: 1px solid var(--line); margin-top: 40px; }
   .holly { font-size: 20px; letter-spacing: 6px; }
@@ -313,10 +324,7 @@
       .then(function () { btn.disabled = false; });
   });
 </script>
-<div class="team" aria-label="The BNI Intrepid team">
-  <div class="ttl">🎅 Merry Christmas from the BNI Intrepid team 🎅</div>
-  <div class="track" id="track"></div>
-</div>
+<div class="gifts" id="gifts" aria-hidden="true"></div>
 
 <button class="music" id="music" type="button" aria-pressed="false">
   <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -355,22 +363,52 @@
     }
   })();
 
-  /* Members' company logos in Santa hats, shuffled into a new random order on every visit */
+  /* Members' company logos as wrapped gifts falling behind the page, in a random order on every visit */
   (function () {
-    var HAT = '<svg class="hat" viewBox="0 0 100 80" aria-hidden="true"><path d="M14 62 C 22 30, 52 4, 80 10 C 70 22, 66 40, 72 60 Z" fill="#d4182f"/>'
-      + '<path d="M14 62 C 22 30, 52 4, 80 10 C 74 16, 70 24, 68 34 C 56 26, 34 38, 24 62 Z" fill="#a50f22" opacity=".45"/>'
-      + '<rect x="6" y="56" width="74" height="16" rx="8" fill="#fff"/><circle cx="82" cy="10" r="9" fill="#fff"/></svg>';
+    if (reduce) return;
+    var BOW = function (c) {
+      return '<svg class="bow" viewBox="0 0 120 64"><path d="M60 34 C 40 6, 6 4, 8 26 C 10 44, 40 42, 60 34 Z" fill="' + c + '"/>'
+        + '<path d="M60 34 C 80 6, 114 4, 112 26 C 110 44, 80 42, 60 34 Z" fill="' + c + '"/>'
+        + '<path d="M60 34 C 46 20, 22 16, 20 26 C 30 26, 46 30, 60 34 Z M60 34 C 74 20, 98 16, 100 26 C 90 26, 74 30, 60 34 Z" fill="#000" opacity=".15"/>'
+        + '<path d="M54 36 L 40 62 L 50 58 L 54 64 Z M66 36 L 80 62 L 70 58 L 66 64 Z" fill="' + c + '"/>'
+        + '<circle cx="60" cy="34" r="9" fill="' + c + '"/><circle cx="57" cy="31" r="3" fill="#fff" opacity=".5"/></svg>';
+    };
     var M = [['The Gray House','L01.png'],['Utility Warehouse','L02.svg'],['SSF Vehicle Leasing','L03-ssf.png'],['TRALEX 365','L04.png'],
       ['The Agency UK','L05.png'],['SWS South Wales Safety','L06.png'],['Focus Shift Films','L07.png'],['Watkins & Gunn','L08w.png','dark'],
       ['MacManus Asset Finance','L09.png'],['AR Drainage Solutions','L10.png'],['2Wish','L11.png'],['Ajuda','L12.png'],['Westmore Insure','L13.png'],
       ['AVA Fire & Security','L14.png'],['Seamount','L15-navy.svg'],['Seriously','L16-wide.png'],['Cortile','L17.png'],['Mike Powell Mortgages','L18.png'],
       ['Atomos','L19.jpg'],['Trade Price Aluminium','L20.png'],['Flotek Group','L21.svg'],['RS Plumbing','L22.svg'],['Expose Photography','L23.png'],
       ['Coface','L24.png'],['Cost Cutting Solutions','L25.png'],['Sabre Office','L26-sabreoffice.png'],['Hammer & Pen','L27.png'],['Glenside Printing','L28.png']];
-    for (var i = M.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = M[i]; M[i] = M[j]; M[j] = t; }
-    var html = M.map(function (m) {
-      return '<div class="mem" title="' + m[0] + '"><img src="logos/' + m[1] + '" alt="' + m[0] + '"' + (m[2] ? ' class="' + m[2] + '"' : '') + '>' + HAT + '</div>';
-    }).join('');
-    document.getElementById('track').innerHTML = html + html;
+    function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    var queue = shuffle(M.slice()), qi = 0;
+    function nextLogo() { if (qi >= queue.length) { queue = shuffle(M.slice()); qi = 0; } return queue[qi++]; }
+    var RIB = { w1: '#f2c94c', w2: '#e04155', w3: '#f2c94c', w4: '#ffffff', w5: '#b3122a', w6: '#f2c94c' };
+    var box = document.getElementById('gifts');
+    var lanes = Math.max(4, Math.min(10, Math.floor(window.innerWidth / 140)));
+
+    function dress(g, lane) {
+      var m = nextLogo(), w = 'w' + (1 + Math.floor(Math.random() * 6));
+      var laneW = 100 / lanes;
+      g.className = 'gift ' + w;
+      g.style.left = 'calc(' + (lane * laneW + Math.random() * (laneW - 6)) + 'vw - 20px)';
+      g.style.setProperty('--sx', (10 + Math.random() * 30) + 'px');
+      g.style.setProperty('--r0', (-14 + Math.random() * 10) + 'deg');
+      g.style.setProperty('--r1', (4 + Math.random() * 10) + 'deg');
+      var s = 0.75 + Math.random() * 0.35; g.style.width = Math.round(104 * s) + 'px';
+      g.innerHTML = BOW(RIB[w]) + '<div class="box"><div class="tag"><img src="logos/' + m[1] + '" alt=""' + (m[2] ? ' class="' + m[2] + '"' : '') + '></div></div>';
+      g.title = m[0];
+    }
+
+    for (var l = 0; l < lanes * 2; l++) {
+      (function (lane) {
+        var g = document.createElement('div');
+        dress(g, lane % lanes);
+        g.style.animationDuration = (22 + Math.random() * 14) + 's';
+        g.style.animationDelay = (-Math.random() * 30) + 's';
+        g.addEventListener('animationiteration', function () { dress(g, lane % lanes); });
+        box.appendChild(g);
+      })(l);
+    }
   })();
 
   /* Countdown to Friday 18 December 2026, 10:30am */
