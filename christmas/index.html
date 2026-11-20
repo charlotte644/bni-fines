@@ -21,8 +21,8 @@
   /* Hero */
   .hero { position: relative; overflow: hidden; color: #fff; text-align: center;
     background: radial-gradient(120% 90% at 50% 0%, #d0233c 0%, var(--red) 45%, var(--red-d) 100%); padding: 44px 0 70px; }
-  .hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 46px; background: var(--cream);
-    clip-path: path('M0 30 C 120 0, 240 46, 380 22 S 640 0, 800 26 S 1100 46, 1400 18 L 1400 60 L 0 60 Z'); }
+  .hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 46px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1400 60' preserveAspectRatio='none'%3E%3Cpath fill='%23fdf8f1' d='M0 30 C 120 0, 240 46, 380 22 S 640 0, 800 26 S 1100 46, 1400 18 L 1400 60 L 0 60 Z'/%3E%3C/svg%3E") center bottom / 100% 100% no-repeat; }
   .snow { position: absolute; inset: 0; pointer-events: none; opacity: .5;
     background-image: radial-gradient(#fff 1.2px, transparent 1.6px), radial-gradient(#fff 1px, transparent 1.4px);
     background-size: 46px 46px, 28px 28px; background-position: 0 0, 14px 20px; animation: fall 18s linear infinite; }
