@@ -85,6 +85,10 @@
   .msg.err { color: var(--red); }
   .deadline { display: inline-block; background: #fff3d6; color: #7a5a12; border-radius: 999px; padding: 4px 12px; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
 
+  .steps { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 10px; }
+  .steps li { counter-increment: s; position: relative; padding-left: 40px; font-size: 15px; }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--red); color: #fff; font-weight: 800; font-size: 14px; display: grid; place-items: center; }
   footer { text-align: center; color: var(--muted); font-size: 13px; padding: 26px 0 40px; border-top: 1px solid var(--line); margin-top: 40px; }
   .holly { font-size: 20px; letter-spacing: 6px; }
 </style>
@@ -109,7 +113,7 @@
     <div class="card">
       <ul class="tl">
         <li><div class="t">10:30</div><div class="dot"></div><div><b>Arrive, coffee and mingle</b><span>Jumpers on! Guess the baby photos by the coffee and post your confession in the box.</span></div></li>
-        <li><div class="t">11:00</div><div class="dot"></div><div><b>Christmas meeting</b><span>"Dear Santa" pitches and Christmas BNI Bingo on the back of your meeting sheet. Keep an eye out for elves…</span></div></li>
+        <li><div class="t">11:00</div><div class="dot"></div><div><b>Christmas meeting</b><span>"Dear Santa" pitches, each finished with your cracker joke, and Christmas BNI Bingo on the back of your meeting sheet. Keep an eye out for elves…</span></div></li>
         <li><div class="t">12:30</div><div class="dot"></div><div><b>White elephant gift swap</b><span>Pick a new gift or steal one that's already been opened.</span></div></li>
         <li><div class="t">1:00</div><div class="dot"></div><div><b>Christmas dinner</b><span>Confessions read out, baby photo answers revealed, and the elves finally explained.</span></div></li>
       </ul>
@@ -129,12 +133,28 @@
   <section>
     <h2><span class="ic">✨</span>What's happening</h2>
     <div class="grid">
-      <div class="act"><h3><span class="em">🎅</span>"Dear Santa" pitches</h3><p>Start your 45-second pitch with "Dear Santa…" and tell him exactly who you'd love an introduction to this Christmas.</p></div>
-      <div class="act"><h3><span class="em">🔔</span>Christmas BNI Bingo</h3><p>Every meeting sheet has a unique bingo card on the back. Cross off phrases as you hear them, but not ones you say yourself. First full line shouts their company name!</p></div>
+      <div class="act"><h3><span class="em">🎅</span>"Dear Santa" pitches</h3><p>Start your 45-second pitch with "Dear Santa…" and tell him exactly who you'd love an introduction to this Christmas. Then read out the cracker joke on the back of your meeting sheet. Everyone's bingo depends on it!</p></div>
+      <div class="act"><h3><span class="em">🔔</span>Christmas BNI Bingo</h3><p>Every meeting sheet has a unique bingo card on the back, filled with the punchlines to everyone's jokes. Cross each one off as you hear it read out, but not your own. First full line shouts their company name!</p></div>
       <div class="act"><h3><span class="em">🧝</span>Spot the Elf</h3><p>Two elves are hiding somewhere in the room. Find the nice elf and you win a present. Find the naughty one and… there's a forfeit.</p></div>
       <div class="act"><h3><span class="em">👶</span>Guess the baby</h3><p>Childhood Christmas photos will be by the coffee. Work out who's who before dinner, when we reveal the answers.</p></div>
       <div class="act"><h3><span class="em">🤫</span>Christmas confessions</h3><p>Funny, anonymous confessions from our work year, read out at dinner. Can you guess whose is whose?</p></div>
-      <div class="act"><h3><span class="em">🐘</span>White elephant swap</h3><p>All the gifts go up front. One by one, take a new gift or steal one that's already been opened.</p></div>
+      <div class="act"><h3><span class="em">🐘</span>White elephant swap</h3><p>A gift swap with a cheeky twist: you might not keep the gift you open! The full rules are below.</p></div>
+    </div>
+  </section>
+
+  <section id="elephant">
+    <h2><span class="ic">🐘</span>How the white elephant swap works</h2>
+    <div class="card">
+      <ol class="steps">
+        <li><b>Bring one wrapped gift</b>, unisex and worth no more than £10, and add it to the pile at the front.</li>
+        <li><b>Everyone draws a number</b> to decide the order.</li>
+        <li><b>Number 1 opens a gift</b> from the pile and shows it to everyone.</li>
+        <li><b>Everyone after that has a choice:</b> open a new gift from the pile, <em>or</em> steal a gift someone has already opened.</li>
+        <li><b>If your gift is stolen</b>, you can open a new gift or steal from someone else. You can't steal straight back the gift that was just taken from you.</li>
+        <li><b>Each gift can only be stolen twice.</b> After the second steal it's frozen and stays with its new owner.</li>
+        <li><b>The game ends</b> when the last gift is opened. Then number 1 gets one final chance to swap with anyone.</li>
+      </ol>
+      <p class="note" style="margin-top:12px">Top tip: the best gifts are fun or useful. Think festive treats, a quirky mug, or something every business owner needs.</p>
     </div>
   </section>
 
