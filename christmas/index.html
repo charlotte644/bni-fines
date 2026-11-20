@@ -89,20 +89,55 @@
   .steps li { counter-increment: s; position: relative; padding-left: 40px; font-size: 15px; }
   .steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%;
     background: var(--red); color: #fff; font-weight: 800; font-size: 14px; display: grid; place-items: center; }
+  /* Festive extras */
+  body { background-color: var(--cream);
+    background-image: radial-gradient(rgba(201,162,75,.18) 1.2px, transparent 1.6px); background-size: 26px 26px; }
+  .flakes { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
+  .flake { position: absolute; top: -30px; color: #fff; text-shadow: 0 0 3px rgba(120,150,180,.8); user-select: none;
+    animation: drop linear infinite; }
+  @keyframes drop { to { transform: translate3d(var(--dx, 30px), 110vh, 0) rotate(360deg); } }
+  .lights { position: absolute; left: 0; right: 0; top: 0; height: 34px; display: flex; justify-content: space-around; pointer-events: none;
+    background: radial-gradient(120% 40px at 50% -16px, transparent 60%, rgba(0,0,0,.35) 61%, transparent 64%) repeat-x; background-size: 90px 34px; }
+  .bulb { width: 11px; height: 17px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; margin-top: 12px; position: relative; animation: twinkle 1.6s ease-in-out infinite; }
+  .bulb::before { content: ""; position: absolute; top: -4px; left: 3px; width: 5px; height: 5px; background: #4a4a4a; border-radius: 1px; }
+  @keyframes twinkle { 0%,100% { opacity: 1; filter: drop-shadow(0 0 6px currentColor); } 50% { opacity: .35; filter: none; } }
+  .hollyrow { font-size: 22px; letter-spacing: 6px; margin: 6px 0 2px; }
+  .countdown { display: inline-block; margin-top: 14px; background: #fff; color: var(--red); border-radius: 12px; padding: 8px 16px;
+    font-weight: 800; box-shadow: 0 4px 14px rgba(0,0,0,.18); border: 2px solid var(--gold); }
+  .countdown small { display: block; font-weight: 600; color: var(--muted); font-size: 12px; }
+  .card { border-top: 0; background-image: repeating-linear-gradient(45deg, var(--red) 0 10px, #fff 10px 20px); background-size: 100% 6px;
+    background-repeat: no-repeat; background-color: var(--card); padding-top: 24px; }
+  h2::after { content: "❄"; color: var(--gold); font-size: 16px; margin-left: auto; opacity: .8; }
+  .music { position: fixed; right: 16px; bottom: 16px; z-index: 60; display: flex; align-items: center; gap: 8px;
+    background: var(--green); color: #fff; border: 2px solid var(--gold); border-radius: 999px; padding: 10px 16px; font-weight: 700; font-size: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.22); cursor: pointer; }
+  .music:hover { background: #174a31; }
+  .music .eq { display: inline-flex; gap: 2px; align-items: flex-end; height: 14px; }
+  .music .eq i { width: 3px; background: #fff; height: 4px; border-radius: 1px; }
+  .music.on .eq i { animation: eq .9s ease-in-out infinite; }
+  .music.on .eq i:nth-child(2) { animation-delay: .2s; } .music.on .eq i:nth-child(3) { animation-delay: .4s; }
+  @keyframes eq { 0%,100% { height: 4px; } 50% { height: 14px; } }
+  .snowman { font-size: 40px; display: block; margin-bottom: 4px; }
+  @media (prefers-reduced-motion: reduce) { .flake, .bulb, .music.on .eq i { animation: none; } }
   footer { text-align: center; color: var(--muted); font-size: 13px; padding: 26px 0 40px; border-top: 1px solid var(--line); margin-top: 40px; }
   .holly { font-size: 20px; letter-spacing: 6px; }
 </style>
 </head>
 <body>
 
+<div class="flakes" id="flakes" aria-hidden="true"></div>
+
 <header class="hero">
   <div class="snow" aria-hidden="true"></div>
+  <div class="lights" id="lights" aria-hidden="true"></div>
   <div class="wrap" style="position:relative">
+    <div class="hollyrow" aria-hidden="true">🎄 🎁 ⭐ 🎁 🎄</div>
     <p class="eyebrow">BNI Intrepid &nbsp;•&nbsp; Givers Gain</p>
     <div class="script">Merry Christmas</div>
     <h1>Our Christmas meeting &amp; dinner</h1>
     <div class="when">Friday 18 December 2026 &nbsp;•&nbsp; please arrive by 10:30am</div>
     <p class="where">Whitchurch Golf Club, Pantmawr Road, Rhiwbina, Cardiff</p>
+    <div class="countdown" id="countdown" hidden></div>
   </div>
 </header>
 
@@ -193,6 +228,7 @@
 </main>
 
 <footer>
+  <span class="snowman" aria-hidden="true">⛄</span>
   <div class="holly">🎄 ⭐ 🎄</div>
   <p>Merry Christmas from all of us at BNI Intrepid<br>Questions? Ask Michelle or Charlotte.</p>
 </footer>
@@ -256,6 +292,128 @@
       .catch(function (err) { msg.className = 'msg err'; msg.textContent = err.message || 'Something went wrong. Please try again.'; })
       .then(function () { btn.disabled = false; });
   });
+</script>
+<button class="music" id="music" type="button" aria-pressed="false">
+  <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+  <span id="musicLabel">🎵 Play Christmas music</span>
+</button>
+
+<script>
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Fairy lights across the top of the header */
+  (function () {
+    var box = document.getElementById('lights'), cols = ['#ffd54a', '#ff4d4d', '#4dd2ff', '#7dff6b', '#ff8bd1'];
+    var n = Math.max(8, Math.round(window.innerWidth / 70));
+    for (var i = 0; i < n; i++) {
+      var b = document.createElement('span'); b.className = 'bulb';
+      var c = cols[i % cols.length]; b.style.background = c; b.style.color = c; b.style.animationDelay = (i % 5) * 0.3 + 's';
+      box.appendChild(b);
+    }
+  })();
+
+  /* Falling snowflakes */
+  (function () {
+    if (reduce) return;
+    var box = document.getElementById('flakes'), shapes = ['❄', '❅', '❆', '•'];
+    var n = window.innerWidth < 600 ? 22 : 40;
+    for (var i = 0; i < n; i++) {
+      var f = document.createElement('span'); f.className = 'flake';
+      f.textContent = shapes[i % shapes.length];
+      f.style.left = Math.random() * 100 + 'vw';
+      f.style.fontSize = (8 + Math.random() * 14) + 'px';
+      f.style.opacity = (0.45 + Math.random() * 0.5).toFixed(2);
+      f.style.setProperty('--dx', (Math.random() * 120 - 60) + 'px');
+      f.style.animationDuration = (9 + Math.random() * 12) + 's';
+      f.style.animationDelay = (-Math.random() * 20) + 's';
+      box.appendChild(f);
+    }
+  })();
+
+  /* Countdown to Friday 18 December 2026, 10:30am */
+  (function () {
+    var el = document.getElementById('countdown'), target = new Date(2026, 11, 18, 10, 30);
+    var days = Math.ceil((target - new Date()) / 86400000);
+    if (days > 1) el.innerHTML = '🎅 ' + days + ' sleeps to go!<small>until our Christmas meeting</small>';
+    else if (days === 1) el.innerHTML = '🎅 Just 1 sleep to go!<small>See you tomorrow</small>';
+    else if (days === 0) el.innerHTML = '🎄 It\'s today!<small>See you at 10:30am</small>';
+    else return;
+    el.hidden = false;
+  })();
+
+  /* Music box carols (traditional, out of copyright), played with the Web Audio API */
+  (function () {
+    var N = { B3: 246.94, C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.0, A4: 440.0, B4: 493.88,
+              C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99 };
+    var SONGS = [
+      { name: 'Jingle Bells', beat: 0.3, notes: [
+        ['E4',1],['E4',1],['E4',2],['E4',1],['E4',1],['E4',2],['E4',1],['G4',1],['C4',1.5],['D4',.5],['E4',4],
+        ['F4',1],['F4',1],['F4',1.5],['F4',.5],['F4',1],['E4',1],['E4',1],['E4',.5],['E4',.5],['E4',1],['D4',1],['D4',1],['E4',1],['D4',2],['G4',2],
+        ['E4',1],['E4',1],['E4',2],['E4',1],['E4',1],['E4',2],['E4',1],['G4',1],['C4',1.5],['D4',.5],['E4',4],
+        ['F4',1],['F4',1],['F4',1.5],['F4',.5],['F4',1],['E4',1],['E4',1],['E4',.5],['E4',.5],['G4',1],['G4',1],['F4',1],['D4',1],['C4',4]] },
+      { name: 'We Wish You a Merry Christmas', beat: 0.36, notes: [
+        ['G4',1],['C5',1],['C5',.5],['D5',.5],['C5',.5],['B4',.5],['A4',1],['A4',1],['A4',1],['D5',1],['D5',.5],['E5',.5],['D5',.5],['C5',.5],
+        ['B4',1],['G4',1],['G4',1],['E5',1],['E5',.5],['F5',.5],['E5',.5],['D5',.5],['C5',1],['A4',1],['G4',.5],['G4',.5],['A4',1],['D5',1],['B4',1],['C5',3]] },
+      { name: 'Deck the Halls', beat: 0.32, notes: [
+        ['G4',1.5],['F4',.5],['E4',1],['D4',1],['C4',1],['D4',1],['E4',1],['C4',1],['D4',.5],['E4',.5],['F4',.5],['D4',.5],['E4',1.5],['D4',.5],['C4',1],['B3',1],['C4',2],
+        ['G4',1.5],['F4',.5],['E4',1],['D4',1],['C4',1],['D4',1],['E4',1],['C4',1],['D4',.5],['E4',.5],['F4',.5],['D4',.5],['E4',1.5],['D4',.5],['C4',1],['B3',1],['C4',2]] }
+    ];
+    var ctx = null, master = null, playing = false, timer = null, songIx = 0;
+    var btn = document.getElementById('music'), label = document.getElementById('musicLabel');
+
+    function pref(v) { try { if (v === undefined) return localStorage.getItem('xmasMusic'); localStorage.setItem('xmasMusic', v); } catch (e) { return null; } }
+
+    function bell(freq, t, len) {
+      [[1, 0.5, 'sine'], [2, 0.12, 'triangle'], [3, 0.05, 'sine']].forEach(function (h) {
+        var o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = h[2]; o.frequency.value = freq * h[0];
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(h[1], t + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + Math.max(0.6, len * 2.2));
+        o.connect(g); g.connect(master); o.start(t); o.stop(t + Math.max(0.7, len * 2.4));
+      });
+    }
+
+    function playSong() {
+      if (!playing) return;
+      var s = SONGS[songIx % SONGS.length], t = ctx.currentTime + 0.1;
+      s.notes.forEach(function (n) { bell(N[n[0]], t, n[1] * s.beat); t += n[1] * s.beat; });
+      songIx++;
+      timer = setTimeout(playSong, (t - ctx.currentTime + 1.8) * 1000);
+    }
+
+    function start() {
+      if (playing) return;
+      try {
+        ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+        if (!master) { master = ctx.createGain(); master.gain.value = 0.18; master.connect(ctx.destination); }
+        if (ctx.state === 'suspended') ctx.resume();
+      } catch (e) { return; }
+      playing = true; btn.classList.add('on'); btn.setAttribute('aria-pressed', 'true'); label.textContent = '🔇 Turn music off';
+      playSong();
+    }
+
+    function stop() {
+      playing = false; clearTimeout(timer);
+      if (ctx) { try { master.disconnect(); } catch (e) {} master = null; ctx.close(); ctx = null; }
+      btn.classList.remove('on'); btn.setAttribute('aria-pressed', 'false'); label.textContent = '🎵 Play Christmas music';
+    }
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (playing) { stop(); pref('off'); } else { start(); pref('on'); }
+    });
+
+    /* Browsers only allow sound after a tap or key press, so the music starts on the first one (unless turned off before) */
+    function firstTouch(e) {
+      if (e && e.target && btn.contains(e.target)) return;
+      document.removeEventListener('pointerdown', firstTouch, true);
+      document.removeEventListener('keydown', firstTouch, true);
+      if (pref() !== 'off') start();
+    }
+    document.addEventListener('pointerdown', firstTouch, true);
+    document.addEventListener('keydown', firstTouch, true);
+  })();
 </script>
 </body>
 </html>
