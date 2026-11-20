@@ -118,6 +118,25 @@
   .music.on .eq i:nth-child(2) { animation-delay: .2s; } .music.on .eq i:nth-child(3) { animation-delay: .4s; }
   @keyframes eq { 0%,100% { height: 4px; } 50% { height: 14px; } }
   .snowman { font-size: 40px; display: block; margin-bottom: 4px; }
+
+  /* Fixed strip of members in Santa hats */
+  body { padding-bottom: 140px; }
+  .music { bottom: 152px; }
+  .team { position: fixed; left: 0; right: 0; bottom: 0; z-index: 55; height: 134px; overflow: hidden;
+    background: linear-gradient(180deg, var(--green) 0%, #164a31 100%); border-top: 3px solid var(--gold);
+    box-shadow: 0 -6px 18px rgba(0,0,0,.18); }
+  .team .ttl { position: absolute; left: 0; right: 0; top: 6px; text-align: center; color: #f6e7c1; font-size: 11px; font-weight: 700;
+    letter-spacing: .18em; text-transform: uppercase; z-index: 2; pointer-events: none; }
+  .track { display: flex; gap: 18px; width: max-content; padding: 48px 18px 0; animation: slide 70s linear infinite; }
+  .team:hover .track { animation-play-state: paused; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+  .mem { width: 66px; flex: none; text-align: center; color: #fff; font-size: 11.5px; font-weight: 600; line-height: 1.2; }
+  .face { position: relative; width: 56px; height: 56px; margin: 0 auto 4px; }
+  .face img, .face .ini { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; display: block; background: #fff; }
+  .face .ini { display: grid; place-items: center; background: var(--red); color: #fff; font-weight: 800; font-size: 18px; }
+  .face .hat { position: absolute; width: 50px; height: 40px; left: -10px; top: -24px; transform: rotate(-20deg); pointer-events: none;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
+  @media (prefers-reduced-motion: reduce) { .track { animation: none; } .team { overflow-x: auto; } }
   @media (prefers-reduced-motion: reduce) { .flake, .bulb, .music.on .eq i { animation: none; } }
   footer { text-align: center; color: var(--muted); font-size: 13px; padding: 26px 0 40px; border-top: 1px solid var(--line); margin-top: 40px; }
   .holly { font-size: 20px; letter-spacing: 6px; }
@@ -293,6 +312,11 @@
       .then(function () { btn.disabled = false; });
   });
 </script>
+<div class="team" aria-label="The BNI Intrepid team">
+  <div class="ttl">🎅 Merry Christmas from the BNI Intrepid team 🎅</div>
+  <div class="track" id="track"></div>
+</div>
+
 <button class="music" id="music" type="button" aria-pressed="false">
   <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
   <span id="musicLabel">🎵 Play Christmas music</span>
@@ -328,6 +352,22 @@
       f.style.animationDelay = (-Math.random() * 20) + 's';
       box.appendChild(f);
     }
+  })();
+
+  /* Members in Santa hats (photos from BNI Connect profiles; initials where there's no usable photo) */
+  (function () {
+    var HAT = '<svg class="hat" viewBox="0 0 100 80" aria-hidden="true"><path d="M14 62 C 22 30, 52 4, 80 10 C 70 22, 66 40, 72 60 Z" fill="#d4182f"/>'
+      + '<path d="M14 62 C 22 30, 52 4, 80 10 C 74 16, 70 24, 68 34 C 56 26, 34 38, 24 62 Z" fill="#a50f22" opacity=".45"/>'
+      + '<rect x="6" y="56" width="74" height="16" rx="8" fill="#fff"/><circle cx="82" cy="10" r="9" fill="#fff"/></svg>';
+    var M = [['Adam','adam'],['Alex','alex'],['Andy','andy'],['Anthony','',''+'AW'],['Charlotte','charlotte'],['Chris A','chrisa'],['Chris M','chrism'],
+      ['Clive','clive'],['Daniel','daniel'],['Dawn','','DE'],['Gareth','gareth'],['Jonathan','','JD'],['Kath','kath'],['Lee','lee'],['Martin','martin'],
+      ['Michelle','michelle'],['Philip','philip'],['Richard','','RM'],['Robbie','robbie'],['Seamus','seamus'],['Siân','','SR'],['Spencer','spencer'],
+      ['Steve We','','SW'],['Steve Wi','stevewi'],['Stuart B','stuartb'],['Stuart M','stuartm'],['Sue','sue'],['Trae','trae']];
+    var html = M.map(function (m) {
+      var pic = m[1] ? '<img src="members/' + m[1] + '.jpg" alt="" loading="lazy">' : '<span class="ini">' + m[2] + '</span>';
+      return '<div class="mem"><div class="face">' + pic + HAT + '</div>' + m[0] + '</div>';
+    }).join('');
+    document.getElementById('track').innerHTML = html + html;
   })();
 
   /* Countdown to Friday 18 December 2026, 10:30am */
