@@ -130,11 +130,12 @@
   .track { display: flex; gap: 18px; width: max-content; padding: 48px 18px 0; animation: slide 70s linear infinite; }
   .team:hover .track { animation-play-state: paused; }
   @keyframes slide { to { transform: translateX(-50%); } }
-  .mem { width: 66px; flex: none; text-align: center; color: #fff; font-size: 11.5px; font-weight: 600; line-height: 1.2; }
-  .face { position: relative; width: 56px; height: 56px; margin: 0 auto 4px; }
-  .face img, .face .ini { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; display: block; background: #fff; }
-  .face .ini { display: grid; place-items: center; background: var(--red); color: #fff; font-weight: 800; font-size: 18px; }
-  .face .hat { position: absolute; width: 50px; height: 40px; left: -10px; top: -24px; transform: rotate(-20deg); pointer-events: none;
+  .mem { flex: none; position: relative; width: 112px; height: 62px; background: #fff; border-radius: 12px; padding: 8px 10px;
+    display: grid; place-items: center; box-shadow: 0 3px 10px rgba(0,0,0,.25); border: 2px solid #f6e7c1; }
+  .mem:nth-child(odd) { transform: rotate(-2deg); } .mem:nth-child(even) { transform: rotate(2deg); }
+  .mem img { max-width: 100%; max-height: 44px; object-fit: contain; display: block; }
+  .mem img.dark { filter: brightness(0); }
+  .mem .hat { position: absolute; width: 44px; height: 35px; left: -14px; top: -22px; transform: rotate(-24deg); pointer-events: none;
     filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
   @media (prefers-reduced-motion: reduce) { .track { animation: none; } .team { overflow-x: auto; } }
   @media (prefers-reduced-motion: reduce) { .flake, .bulb, .music.on .eq i { animation: none; } }
@@ -354,18 +355,20 @@
     }
   })();
 
-  /* Members in Santa hats (photos from BNI Connect profiles; initials where there's no usable photo) */
+  /* Members' company logos in Santa hats, shuffled into a new random order on every visit */
   (function () {
     var HAT = '<svg class="hat" viewBox="0 0 100 80" aria-hidden="true"><path d="M14 62 C 22 30, 52 4, 80 10 C 70 22, 66 40, 72 60 Z" fill="#d4182f"/>'
       + '<path d="M14 62 C 22 30, 52 4, 80 10 C 74 16, 70 24, 68 34 C 56 26, 34 38, 24 62 Z" fill="#a50f22" opacity=".45"/>'
       + '<rect x="6" y="56" width="74" height="16" rx="8" fill="#fff"/><circle cx="82" cy="10" r="9" fill="#fff"/></svg>';
-    var M = [['Adam','adam'],['Alex','alex'],['Andy','andy'],['Anthony','',''+'AW'],['Charlotte','charlotte'],['Chris A','chrisa'],['Chris M','chrism'],
-      ['Clive','clive'],['Daniel','daniel'],['Dawn','','DE'],['Gareth','gareth'],['Jonathan','','JD'],['Kath','kath'],['Lee','lee'],['Martin','martin'],
-      ['Michelle','michelle'],['Philip','philip'],['Richard','','RM'],['Robbie','robbie'],['Seamus','seamus'],['Siân','','SR'],['Spencer','spencer'],
-      ['Steve We','','SW'],['Steve Wi','stevewi'],['Stuart B','stuartb'],['Stuart M','stuartm'],['Sue','sue'],['Trae','trae']];
+    var M = [['The Gray House','L01.png'],['Utility Warehouse','L02.svg'],['SSF Vehicle Leasing','L03-ssf.png'],['TRALEX 365','L04.png'],
+      ['The Agency UK','L05.png'],['SWS South Wales Safety','L06.png'],['Focus Shift Films','L07.png'],['Watkins & Gunn','L08w.png','dark'],
+      ['MacManus Asset Finance','L09.png'],['AR Drainage Solutions','L10.png'],['2Wish','L11.png'],['Ajuda','L12.png'],['Westmore Insure','L13.png'],
+      ['AVA Fire & Security','L14.png'],['Seamount','L15-navy.svg'],['Seriously','L16-wide.png'],['Cortile','L17.png'],['Mike Powell Mortgages','L18.png'],
+      ['Atomos','L19.jpg'],['Trade Price Aluminium','L20.png'],['Flotek Group','L21.svg'],['RS Plumbing','L22.svg'],['Expose Photography','L23.png'],
+      ['Coface','L24.png'],['Cost Cutting Solutions','L25.png'],['Sabre Office','L26-sabreoffice.png'],['Hammer & Pen','L27.png'],['Glenside Printing','L28.png']];
+    for (var i = M.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = M[i]; M[i] = M[j]; M[j] = t; }
     var html = M.map(function (m) {
-      var pic = m[1] ? '<img src="members/' + m[1] + '.jpg" alt="" loading="lazy">' : '<span class="ini">' + m[2] + '</span>';
-      return '<div class="mem"><div class="face">' + pic + HAT + '</div>' + m[0] + '</div>';
+      return '<div class="mem" title="' + m[0] + '"><img src="logos/' + m[1] + '" alt="' + m[0] + '"' + (m[2] ? ' class="' + m[2] + '"' : '') + '>' + HAT + '</div>';
     }).join('');
     document.getElementById('track').innerHTML = html + html;
   })();
