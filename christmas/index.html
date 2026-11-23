@@ -6,7 +6,7 @@
 <title>BNI Intrepid Christmas 2026</title>
 <meta name="description" content="Our BNI Intrepid Christmas meeting and dinner: Friday 18 December 2026.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --red: #b3122a; --red-d: #8c0d20; --green: #1f5c3d; --green-l: #e7f1ea;
@@ -117,7 +117,8 @@
   .quick .links { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
   .quick a { text-decoration: none; color: var(--ink); font-weight: 600; font-size: 14px; padding: 7px 13px; border-radius: 999px; background: var(--cream); border: 1px solid var(--line); }
   .quick a:hover { border-color: var(--gold); background: #fffaf0; }
-  .quick .dates { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; border-top: 1px dashed var(--line); padding-top: 12px; }
+  .quick .dates { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 8px; border-top: 1px dashed var(--line); padding-top: 12px; }
+  @media (min-width: 620px) { .quick .dates { grid-template-columns: repeat(4, 1fr); } }
   .quick .dates div { text-align: center; font-size: 12.5px; color: var(--muted); line-height: 1.35; }
   .quick .dates b { display: block; color: var(--red-d); font-size: 14px; }
   .bring { grid-template-columns: 1fr; }
@@ -180,10 +181,273 @@
   .award select { padding: 8px 10px; font-size: 14px; }
   @media (min-width: 620px) { .award { grid-template-columns: 1fr 230px; } }
   .voterbox { background: var(--green-l); border-radius: 12px; padding: 12px 14px; }
+  /* Christmas dinner menu + choices */
+  .courses { display: grid; gap: 18px; }
+  @media (min-width: 820px) { .courses { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+  .course h3 { margin: 0 0 8px; font-family: 'Great Vibes', cursive; font-weight: 400; font-size: 30px; color: var(--red); line-height: 1.1; }
+  .course fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .opt { position: relative; display: block; cursor: pointer; font-weight: 500; }
+  .opt input { position: absolute; opacity: 0; pointer-events: none; }
+  .opt .box { display: block; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px 10px 36px; background: #fff; position: relative; transition: border-color .15s, background .15s; }
+  .opt .box::before { content: ""; position: absolute; left: 12px; top: 13px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #cbbfb3; background: #fff; }
+  .opt input:checked + .box { border-color: var(--green); background: #f1f8f3; }
+  .opt input:checked + .box::before { border-color: var(--green); background: var(--green); box-shadow: inset 0 0 0 3px #fff; }
+  .opt input:focus-visible + .box { box-shadow: 0 0 0 3px rgba(31,92,61,.2); }
+  .opt b { display: block; font-size: 14.5px; line-height: 1.3; }
+  .opt small { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.4; margin-top: 2px; }
+  .tagv { display: inline-block; font-size: 11px; font-weight: 700; color: var(--green); background: var(--green-l); border-radius: 999px; padding: 1px 7px; margin-left: 4px; vertical-align: 1px; }
+  .sides { font-size: 12.5px; color: var(--muted); margin: 2px 0 0; }
+  input[type=text].diet { padding: 10px 12px; }
   .award.done { border-color: var(--green); background: #f1f8f3; }
   .progress { font-size: 13.5px; font-weight: 700; color: var(--green); }
   footer { text-align: center; color: var(--muted); font-size: 13px; padding: 26px 0 40px; border-top: 1px solid var(--line); margin-top: 40px; }
   .holly { font-size: 20px; letter-spacing: 6px; }
+  /* ===== Luxury & warm theme (23 Nov) ===== */
+  :root { --red: #7d1328; --red-d: #5a0c1c; --green: #1d3a2c; --green-l: #eef3ec; --gold: #b8913a; --gold-l: #e8d29b;
+    --cream: #f8f1e6; --ink: #2a201c; --muted: #6e625a; --card: #fffdf9; --line: #e8dcc6; }
+  body { background: linear-gradient(180deg, #faf5ec 0%, #f3e8d6 100%) fixed; background-image: linear-gradient(180deg, #faf5ec 0%, #f3e8d6 100%); }
+  h1, h2, h3, .tl b, .tl .t, .award .an, .chk b { font-family: 'Playfair Display', Georgia, serif; }
+  .hero { background: radial-gradient(120% 95% at 50% 0%, #a01f35 0%, #6e1022 48%, #3d0812 100%); padding: 52px 0 84px; }
+  .hero::after { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1400 60' preserveAspectRatio='none'%3E%3Cpath fill='%23faf5ec' d='M0 30 C 120 0, 240 46, 380 22 S 640 0, 800 26 S 1100 46, 1400 18 L 1400 60 L 0 60 Z'/%3E%3C/svg%3E") center bottom / 100% 100% no-repeat; }
+  .hero .eyebrow { color: var(--gold-l); letter-spacing: .3em; }
+  .script { background: linear-gradient(180deg, #fbeec4 0%, #e3c27a 55%, #b8913a 100%); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; }
+  .hero h1 { font-weight: 600; font-size: clamp(26px, 6vw, 38px); letter-spacing: .01em; }
+  .hero .when { background: rgba(255,255,255,.08); border: 1px solid rgba(232,210,155,.6); color: #fff7e6; }
+  .hero .where { color: #f3e3c3; }
+  .countdown { border: 1px solid var(--gold); box-shadow: 0 8px 24px rgba(40,5,10,.35); }
+  section { margin: 52px 0; }
+  h2 { font-size: 27px; font-weight: 600; color: var(--red-d); gap: 12px; }
+  h2::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold), rgba(184,145,58,0)); margin-left: 6px; }
+  h2 .ic { background: var(--card); border: 1px solid var(--gold); box-shadow: 0 2px 8px rgba(120,80,20,.15); }
+  .card, .act, .quick, .bring li, .chk, .award, .opt .box {
+    background: var(--card); border: 1px solid var(--line); box-shadow: inset 0 0 0 1px rgba(255,255,255,.6), 0 14px 34px -24px rgba(90,40,15,.45); }
+  .card { border-radius: 18px; border-top: 3px solid var(--gold); padding: 24px 26px; }
+  .act, .act:nth-child(3n+2), .act:nth-child(3n) { border-top: 3px solid var(--gold); border-radius: 16px; }
+  .act h3 { font-size: 18px; font-weight: 600; color: var(--red-d); }
+  .lead, .note, .act p, .tl span { color: var(--muted); }
+  .quick { border-radius: 18px; border-top: 3px solid var(--gold); }
+  .quick a { background: transparent; border: 1px solid var(--line); }
+  .quick a:hover { background: #fbf3e2; border-color: var(--gold); }
+  .quick .dates b { font-family: 'Playfair Display', Georgia, serif; color: var(--red); font-size: 15px; }
+  .tl::before { background: repeating-linear-gradient(var(--gold) 0 6px, transparent 6px 11px); }
+  .tl .t { color: var(--red); font-weight: 600; }
+  .tl .dot { background: var(--gold); box-shadow: 0 0 0 2px var(--gold-l); border-color: var(--card); }
+  .tl b { font-weight: 600; font-size: 17px; }
+  .bring li { border-left: 3px solid var(--gold); border-radius: 12px; }
+  .deadline { background: #f6ecd6; color: #6d5217; border: 1px solid var(--gold-l); font-size: 11.5px; text-transform: uppercase; letter-spacing: .1em; }
+  button { background: linear-gradient(180deg, #8f1b31 0%, #6a0f20 100%); border: 1px solid #a37c2c; letter-spacing: .03em; box-shadow: 0 8px 18px -10px rgba(90,12,28,.7); }
+  button:hover { background: linear-gradient(180deg, #7d1328 0%, #560b1a 100%); }
+  button.ghost { background: transparent; color: var(--red-d); border: 1.5px solid var(--gold); box-shadow: none; }
+  button.ghost:hover { background: #fbf3e2; }
+  #confForm { grid-template-columns: 1fr; }
+  .voterbox { background: #f8efdc; border: 1px solid var(--gold-l); }
+  .whobox { font-family: 'Playfair Display', Georgia, serif; font-size: 17px; color: var(--red-d); font-weight: 600; }
+  .whobox select { font-family: Inter, system-ui, sans-serif; font-size: 16px; padding: 12px 14px; margin-top: 4px; }
+  .checks { display: grid; gap: 10px; margin-top: 16px; }
+  @media (min-width: 620px) { .checks { grid-template-columns: 1fr 1fr; } }
+  .chk { display: grid; grid-template-columns: 34px 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 14px; text-decoration: none; color: var(--ink); transition: border-color .15s, transform .15s; }
+  .chk:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .chk .cn { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-family: 'Playfair Display', Georgia, serif; font-weight: 700; color: var(--gold); border: 1px solid var(--gold); background: #fffaf0; }
+  .chk b { display: block; font-size: 15.5px; font-weight: 600; }
+  .chk small { display: block; color: var(--muted); font-size: 12.5px; }
+  .chk .badge { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: #f1ebe1; color: var(--muted); white-space: nowrap; }
+  .chk.done { border-color: rgba(29,58,44,.35); background: #f6faf5; }
+  .chk.done .cn { background: var(--green); color: #fff; border-color: var(--green); }
+  .chk.done .badge { background: var(--green); color: #fff; }
+  .chk.todo .badge { background: #fbeef0; color: var(--red); border: 1px solid #ecc5cc; }
+  .alldone { margin: 16px 0 0; background: #f2f7f1; border: 1px solid rgba(29,58,44,.3); border-radius: 12px; padding: 12px 14px; color: var(--green); }
+  #whoNote { margin-top: 12px; }
+  .course h3 { color: var(--red); font-size: 32px; }
+  .opt input:checked + .box { border-color: var(--gold); background: #fbf3e2; }
+  .opt input:checked + .box::before { border-color: var(--red); background: var(--red); }
+  .tagv { color: var(--green); background: var(--green-l); }
+  .award.done { border-color: var(--gold); background: #fbf3e2; }
+  .awgroup { color: var(--gold); letter-spacing: .16em; }
+  .progress { color: var(--green); }
+  .file { border-color: var(--gold-l); background: #fdf7ea; }
+  .music { background: linear-gradient(180deg, #24493a, #1d3a2c); border: 1px solid var(--gold); }
+  footer { border-top: 1px solid var(--line); }
+  footer p { font-family: 'Playfair Display', Georgia, serif; font-size: 15px; color: var(--red-d); }
+  .tl li { padding: 14px 0; }
+  .tl .acts { display: grid; gap: 8px; margin-top: 10px; }
+  @media (min-width: 720px) { .tl .acts { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); } }
+  .tl .a { display: flex; gap: 10px; align-items: flex-start; background: #fbf5ea; border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 12px; padding: 10px 12px; }
+  .tl .a .em { font-size: 20px; line-height: 1.2; }
+  .tl .a b { display: block; font-family: 'Playfair Display', Georgia, serif; font-size: 15px; font-weight: 600; color: var(--red-d); }
+  .tl .a small { display: block; color: var(--muted); font-size: 13px; line-height: 1.45; margin-top: 2px; }
+  .tl span a { color: var(--red); font-weight: 600; }
+  /* ===== Burgundy night theme (23 Nov, v2) ===== */
+  :root { --ink: #fbefdc; --muted: rgba(251,239,220,.74); --gold: #d9b56a; --gold-l: #f1dca6; --line: rgba(217,181,106,.32);
+    --panel: rgba(64,8,20,.82); --panel2: rgba(255,240,220,.06); }
+  html { background: #3a0712; }
+  body { color: var(--ink); background: radial-gradient(1100px 620px at 50% -8%, #9a1d33 0%, rgba(154,29,51,0) 62%), linear-gradient(180deg, #6a0f22 0%, #4a0a18 45%, #33060f 100%) fixed; }
+  body::before { content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+    background-image: radial-gradient(rgba(255,255,255,.9) 1.3px, transparent 1.8px), radial-gradient(rgba(255,255,255,.7) 1px, transparent 1.5px), radial-gradient(rgba(255,255,255,.55) 2.2px, transparent 2.8px);
+    background-size: 48px 48px, 31px 31px, 97px 97px; background-position: 0 0, 15px 22px, 40px 10px; animation: snowbg 26s linear infinite; }
+  @keyframes snowbg { to { background-position: 0 480px, 15px 332px, 40px 980px; } }
+  @media (prefers-reduced-motion: reduce) { body::before { animation: none; } }
+  .hero { background: transparent; padding-bottom: 40px; }
+  .hero::after, .hero .snow { display: none; }
+  .script { background: linear-gradient(180deg, #fff3cf 0%, #ecd08a 55%, #c9a24b 100%); -webkit-background-clip: text; background-clip: text; }
+  a { color: var(--gold-l); }
+  h2 { color: var(--gold-l); }
+  h2 .ic { background: rgba(255,240,220,.06); border-color: var(--gold); }
+  h2::after { background: linear-gradient(90deg, var(--gold), rgba(217,181,106,0)); }
+  h3, .tl b, .chk b, .award .an, .ph { color: #fff4e2; }
+  .card, .quick, .bring li, .award, .opt .box, .tl .a {
+    background: var(--panel); border: 1px solid var(--line); box-shadow: 0 22px 44px -26px rgba(0,0,0,.75); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+  .card, .quick { border-top: 1px solid var(--gold); }
+  .tl .a { background: rgba(255,240,220,.05); border-left: 3px solid var(--gold); }
+  .tl .a b { color: var(--gold-l); }
+  .lead, .note, .tl span, .tl .a small, .award .ad, .opt small, .quick .dates div, .bring .note { color: var(--muted); }
+  .tl .t { color: var(--gold); }
+  .tl .dot { background: var(--gold); border-color: #4a0a18; box-shadow: 0 0 0 2px rgba(217,181,106,.4); }
+  .tl::before { background: repeating-linear-gradient(var(--gold) 0 6px, transparent 6px 11px); }
+  .quick a { color: var(--ink); border-color: var(--line); background: rgba(255,240,220,.04); }
+  .quick a:hover { background: rgba(217,181,106,.16); border-color: var(--gold); }
+  .quick .dates { border-top-color: var(--line); }
+  .quick .dates b { color: var(--gold-l); }
+  .deadline { background: rgba(217,181,106,.14); color: var(--gold-l); border: 1px solid var(--line); }
+  label { color: var(--ink); }
+  input[type=text], textarea, select { background: #fffaf2; color: #2a201c; border-color: rgba(217,181,106,.55); }
+  button { background: linear-gradient(180deg, #f0d48e 0%, #c9a24b 100%); color: #3a0712; border: 1px solid #f3e0ad; font-weight: 800; box-shadow: 0 10px 22px -12px rgba(0,0,0,.8); }
+  button:hover { background: linear-gradient(180deg, #f6dfa4 0%, #d4ad57 100%); }
+  button.ghost { background: transparent; color: var(--gold-l); border: 1.5px solid var(--gold); }
+  button.ghost:hover { background: rgba(217,181,106,.14); }
+  button.link { background: none; border: 0; box-shadow: none; color: var(--gold-l); font-weight: 600; padding: 6px 0; text-decoration: underline; text-underline-offset: 3px; justify-self: center; }
+  button.wide { width: 100%; }
+  .msg.ok { color: #b9ecc4; } .msg.err { color: #ffc2c2; }
+  .voterbox { background: rgba(217,181,106,.1); border: 1px solid var(--line); color: var(--gold-l); }
+  .course h3 { color: var(--gold-l); }
+  .opt .box { background: rgba(255,240,220,.05); }
+  .opt b { color: #fff4e2; }
+  .opt .box::before { background: transparent; border-color: rgba(217,181,106,.7); }
+  .opt input:checked + .box { border-color: var(--gold); background: rgba(217,181,106,.18); }
+  .opt input:checked + .box::before { border-color: var(--gold); background: var(--gold); box-shadow: inset 0 0 0 3px #4a0a18; }
+  .tagv { color: #3a0712; background: var(--gold-l); }
+  .award.done { border-color: var(--gold); background: rgba(217,181,106,.16); }
+  .awgroup { color: var(--gold); }
+  .progress { color: #b9ecc4; }
+  .file { background: rgba(255,240,220,.05); border: 1.5px dashed var(--gold); color: var(--ink); }
+  .file small { color: var(--muted); }
+  .bring li { border-left: 3px solid var(--gold); }
+  .countdown { background: rgba(64,8,20,.85); color: var(--gold-l); border: 1px solid var(--gold); }
+  .countdown small { color: var(--muted); }
+  footer { color: var(--muted); border-top-color: var(--line); }
+  footer p { color: var(--gold-l); }
+  .music { background: rgba(64,8,20,.9); color: var(--gold-l); border: 1px solid var(--gold); }
+  /* Wizard */
+  .wiz { padding-top: 18px; }
+  .stepper { list-style: none; margin: 0 0 20px; padding: 0 0 16px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; border-bottom: 1px solid var(--line); }
+  .stepper li { text-align: center; font-size: 12px; font-weight: 600; color: var(--muted); display: grid; justify-items: center; gap: 6px; }
+  .stepper li span { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 15px; color: var(--gold); background: rgba(255,240,220,.04); }
+  .stepper li.clickable { cursor: pointer; }
+  .stepper li.done span { background: rgba(217,181,106,.22); border-color: var(--gold); color: var(--gold-l); }
+  .stepper li.done span::after { content: "✓"; font-size: 0; }
+  .stepper li.active { color: var(--gold-l); }
+  .stepper li.active span { background: linear-gradient(180deg, #f0d48e, #c9a24b); color: #3a0712; border-color: #f3e0ad; box-shadow: 0 0 0 4px rgba(217,181,106,.18); }
+  .panel { display: grid; gap: 14px; }
+  .panel[hidden] { display: none; }
+  .ph { margin: 0; font-family: 'Playfair Display', Georgia, serif; font-size: 24px; font-weight: 600; }
+  .panel .deadline { justify-self: start; margin: 0; }
+  .panel .lead { margin: 0; }
+  .panel form { gap: 14px; }
+  .nav { display: grid; grid-template-columns: auto 1fr; gap: 10px; }
+  .donenote { margin: 0; background: rgba(120,200,140,.12); border: 1px solid rgba(160,220,170,.4); color: #cdf0d4; border-radius: 10px; padding: 8px 12px; font-weight: 600; font-size: 14px; }
+  .donenote[hidden] { display: none; }
+  .closednote { margin: 0; background: rgba(217,181,106,.12); border: 1px solid var(--gold); color: var(--gold-l); border-radius: 12px; padding: 12px 14px; font-weight: 600; }
+  .summary { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .summary li { display: grid; gap: 2px; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,240,220,.05); }
+  .summary li.ok { border-color: rgba(160,220,170,.45); }
+  .summary li b { color: #fff4e2; } .summary li.ok b { color: #cdf0d4; }
+  .summary li span { color: var(--muted); font-size: 14px; }
+  @media (max-width: 480px) { .stepper li { font-size: 10.5px; } .ph { font-size: 21px; } }
+  /* ===== Luxury pass 3 (23 Nov): script font, no emojis, programme timetable, luxe gifts ===== */
+  .script { font-family: 'Pinyon Script', 'Cormorant Garamond', serif; font-weight: 400; font-size: clamp(56px, 13vw, 96px); line-height: 1.05; letter-spacing: .01em;
+    margin: 14px 0 6px; padding: 0 .12em; filter: drop-shadow(0 2px 10px rgba(0,0,0,.35)); }
+  .hero .eyebrow { margin-top: 8px; }
+  .hero h1 { font-family: 'Cormorant Garamond', 'Playfair Display', serif; font-weight: 500; font-size: clamp(26px, 5.4vw, 40px); letter-spacing: .06em; text-transform: uppercase; }
+  .hero h1::before, .hero h1::after { content: ""; display: inline-block; width: 38px; height: 1px; background: var(--gold); vertical-align: middle; margin: 0 14px; }
+  @media (max-width: 520px) { .hero h1::before, .hero h1::after { width: 18px; margin: 0 8px; } }
+  h2 .ic { display: none; }
+  h2 { font-family: 'Cormorant Garamond', 'Playfair Display', serif; font-weight: 600; font-size: 32px; letter-spacing: .02em; }
+  h2::before { content: ""; width: 9px; height: 9px; flex: none; transform: rotate(45deg); background: linear-gradient(135deg, #f4e2a6, #b8913a); }
+  .course h3 { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 600; font-size: 30px; }
+  .ph { font-family: 'Cormorant Garamond', 'Playfair Display', serif; font-size: 30px; }
+  .countdown { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; letter-spacing: .02em; padding: 8px 22px; }
+  .countdown small { font-family: Inter, system-ui, sans-serif; letter-spacing: .12em; text-transform: uppercase; font-size: 10.5px; }
+  /* Programme-style timetable */
+  .programme { padding: 30px 34px; }
+  .pdate { margin: 0 0 22px; text-align: center; color: var(--gold); font-size: 12px; letter-spacing: .26em; text-transform: uppercase; }
+  .day { list-style: none; margin: 0; padding: 0; }
+  .day > li { display: grid; grid-template-columns: 96px 1fr; gap: 0 28px; padding: 22px 0; border-top: 1px solid var(--line); }
+  .day > li:first-child { border-top: 0; padding-top: 4px; }
+  .day .time { font-family: 'Cormorant Garamond', serif; font-size: 40px; line-height: 1; color: var(--gold-l); text-align: right; font-weight: 500; letter-spacing: .02em; }
+  .day h3 { margin: 4px 0 4px; font-family: 'Cormorant Garamond', 'Playfair Display', serif; font-size: 25px; font-weight: 600; color: #fff4e2; letter-spacing: .01em; }
+  .day p { margin: 0; color: var(--muted); font-size: 14.5px; }
+  .day .items { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 9px; }
+  .day .items li { position: relative; padding-left: 22px; color: var(--muted); font-size: 14.5px; line-height: 1.55; }
+  .day .items li::before { content: ""; position: absolute; left: 3px; top: .62em; width: 6px; height: 6px; transform: rotate(45deg); background: var(--gold); }
+  .day .items b { color: #fff4e2; font-weight: 600; }
+  @media (max-width: 560px) { .programme { padding: 22px 18px; } .day > li { grid-template-columns: 1fr; gap: 6px; } .day .time { text-align: left; font-size: 32px; } }
+  /* What to bring without emojis */
+  .bring li { padding: 14px 16px 14px 34px; position: relative; }
+  .bring li::before { content: ""; position: absolute; left: 16px; top: 21px; width: 7px; height: 7px; transform: rotate(45deg); background: var(--gold); }
+  .bring b { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 600; color: #fff4e2; }
+  /* Luxury gift boxes: deep matte wraps, metallic gold ribbon, ivory tag with a gold edge */
+  .gift .box { border-radius: 4px; box-shadow: 0 10px 22px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.14), inset 0 -8px 14px rgba(0,0,0,.25); }
+  .gift .box::before, .gift .box::after { background: linear-gradient(90deg, #8a6a24, #f4e2a6 45%, #c9a24b 60%, #7a5b1c); box-shadow: 0 0 6px rgba(0,0,0,.25); }
+  .gift .box::before { width: 12px; margin-left: -6px; }
+  .gift .box::after { height: 12px; background: linear-gradient(180deg, #8a6a24, #f4e2a6 45%, #c9a24b 60%, #7a5b1c); }
+  .gift .tag { background: #fbf6ec; border: 1px solid #c9a24b; border-radius: 3px; box-shadow: 0 3px 8px rgba(0,0,0,.3); }
+  .gift .tag::before { background: #c9a24b; }
+  .w1 { --wrap: linear-gradient(145deg, #8c1a30 0%, #5a0c1c 100%); }
+  .w2 { --wrap: linear-gradient(145deg, #1c5a40 0%, #0b2d1f 100%); }
+  .w3 { --wrap: linear-gradient(145deg, #23365e 0%, #101b33 100%); }
+  .w4 { --wrap: radial-gradient(rgba(201,162,75,.35) 1.2px, transparent 1.6px) 0 0 / 12px 12px, linear-gradient(145deg, #f7efe0 0%, #e3d3b4 100%); }
+  .w5 { --wrap: linear-gradient(145deg, #2a2121 0%, #0d0909 100%); }
+  .w6 { --wrap: linear-gradient(145deg, #e8cf92 0%, #b8913a 55%, #8a6a24 100%); }
+  .w6 .box::before, .w6 .box::after { background: linear-gradient(90deg, #4a0814, #8c1a30, #4a0814); }
+  /* Quieter snow so the gold reads */
+  .flake { color: #fff6e6; text-shadow: 0 0 4px rgba(255,240,210,.6); }
+  .hero h1::before, .hero h1::after { display: none; }
+  .hero h1 { position: relative; padding-bottom: 14px; }
+  .hero h1 + .when { margin-top: 22px; }
+  .quick { margin: 26px auto 0; }
+  :root { --panel: rgba(58,7,18,.94); }
+  /* ===== Programme timeline v2 (gold line icons, medallions, activity cards) ===== */
+  .programme { padding: 32px 30px 26px; background: linear-gradient(180deg, rgba(90,12,28,.96), rgba(52,6,16,.96)); position: relative; overflow: hidden; }
+  .programme::before { content: ""; position: absolute; inset: 10px; border: 1px solid rgba(217,181,106,.25); border-radius: 12px; pointer-events: none; }
+  .pdate { position: relative; }
+  .tline { list-style: none; margin: 0; padding: 0; position: relative; }
+  .tline::before { content: ""; position: absolute; left: 31px; top: 30px; bottom: 30px; width: 1px; background: linear-gradient(180deg, rgba(217,181,106,0), #d9b56a 12%, #d9b56a 88%, rgba(217,181,106,0)); }
+  .tline > li { position: relative; display: grid; grid-template-columns: 64px 1fr; gap: 0 22px; padding: 14px 0 22px; }
+  .medal { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; position: relative; z-index: 1;
+    background: radial-gradient(circle at 35% 30%, #7a1428, #3a0712 70%); border: 1px solid #d9b56a;
+    box-shadow: 0 0 0 5px rgba(217,181,106,.08), 0 0 22px rgba(217,181,106,.25), inset 0 1px 0 rgba(255,255,255,.12); }
+  .medal svg { width: 32px; height: 32px; fill: none; stroke: #e6c879; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .slot { padding-top: 4px; }
+  .when2 { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .when2 .time { font-family: 'Cormorant Garamond', serif; font-size: 38px; line-height: 1; font-weight: 500; letter-spacing: .02em;
+    background: linear-gradient(180deg, #fff1c8, #d9b56a 60%, #a8822f); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .when2 .what { font-family: 'Cormorant Garamond', 'Playfair Display', serif; font-size: 26px; font-weight: 600; color: #fff4e2; letter-spacing: .01em; }
+  .slot > p { margin: 6px 0 0; color: var(--muted); font-size: 14.5px; }
+  .slot > p a { color: var(--gold-l); font-weight: 600; }
+  .mini { display: grid; gap: 10px; margin-top: 14px; }
+  @media (min-width: 760px) { .mini { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); } }
+  .mini > div { position: relative; padding: 14px 14px 14px 16px; border-radius: 12px; border: 1px solid rgba(217,181,106,.28);
+    background: linear-gradient(160deg, rgba(255,236,200,.08), rgba(255,236,200,.02)); transition: border-color .2s, transform .2s; }
+  .mini > div:hover { border-color: #d9b56a; transform: translateY(-2px); }
+  .mini > div::before { content: ""; position: absolute; left: 16px; top: 0; width: 34px; height: 2px; background: linear-gradient(90deg, #f4e2a6, #b8913a); }
+  .mini b { display: block; font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--gold-l); margin: 2px 0 4px; }
+  .mini span { display: block; color: var(--muted); font-size: 13.5px; line-height: 1.5; }
+  @media (max-width: 560px) {
+    .programme { padding: 24px 16px 18px; }
+    .tline::before { left: 23px; }
+    .tline > li { grid-template-columns: 48px 1fr; gap: 0 14px; }
+    .medal { width: 48px; height: 48px; } .medal svg { width: 24px; height: 24px; }
+    .when2 { gap: 2px 10px; } .when2 .time { font-size: 30px; } .when2 .what { font-size: 21px; width: 100%; }
+  }
 </style>
 </head>
 <body>
@@ -194,7 +458,7 @@
   <div class="snow" aria-hidden="true"></div>
   <div class="lights" id="lights" aria-hidden="true"></div>
   <div class="wrap" style="position:relative">
-    <div class="hollyrow" aria-hidden="true">🎄 🎁 ⭐ 🎁 🎄</div>
+    
     <p class="eyebrow">BNI Intrepid &nbsp;•&nbsp; Givers Gain</p>
     <div class="script">Merry Christmas</div>
     <h1>Our Christmas meeting &amp; dinner</h1>
@@ -208,51 +472,176 @@
 
   <nav class="quick" aria-label="On this page">
     <div class="links">
-      <a href="#plan">🕰️ Plan</a><a href="#bring">🎁 What to bring</a><a href="#elephant">🐘 Gift swap</a><a href="#photo">📸 Baby photo</a><a href="#confess">🤫 Confess</a><a href="#awards">🏆 Vote</a>
+      <a href="#plan">The day</a><a href="#checklist">Your checklist</a><a href="#bring">What to bring</a><a href="#elephant">Gift swap</a>
     </div>
     <div class="dates">
-      <div><b>Fri 11 Dec</b>Baby photos in</div>
+      <div><b>Fri 4 Dec</b>Menu choices in</div>
+      <div><b>Fri 11 Dec</b>Photos in</div>
       <div><b>Fri 11 Dec</b>Award voting closes</div>
       <div><b>Fri 18 Dec</b>Meeting &amp; dinner</div>
     </div>
   </nav>
 
   <section id="plan">
-    <h2><span class="ic">🕰️</span>Plan for the day</h2>
-    <div class="card">
-      <ul class="tl">
-        <li><div class="t">10:30</div><div class="dot"></div><div><b>Arrive, coffee and mingle</b><span>Jumpers on! Guess the baby photos by the coffee. Haven't sent your confession online? Pop it in the confession box.</span></div></li>
-        <li><div class="t">11:00</div><div class="dot"></div><div><b>Christmas meeting</b><span>"Dear Santa" pitches, each finished with your cracker joke, and Christmas BNI Bingo on the back of your meeting sheet. Keep an eye out for elves…</span></div></li>
-        <li><div class="t">12:30</div><div class="dot"></div><div><b>White elephant gift swap</b><span>Take a wrapped gift or steal someone else's, in sheet-number order. Then everyone opens at the same time!</span></div></li>
-        <li><div class="t">1:00</div><div class="dot"></div><div><b>Christmas dinner</b><span>Confessions read out, baby photo answers revealed, the elves finally explained, and the Intrepid Awards 2026 announced!</span></div></li>
-      </ul>
+    <h2><span class="ic"></span>The day</h2>
+    <div class="card programme">
+      <p class="pdate">Friday 18 December 2026 &nbsp;·&nbsp; Whitchurch Golf Club</p>
+      <ol class="tline">
+        <li>
+          <div class="medal"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 20h22v10a9 9 0 0 1-9 9h-4a9 9 0 0 1-9-9z"/><path d="M32 23h3a4 4 0 0 1 0 8h-3"/><path d="M16 9c0 3 3 3 3 6M23 7c0 3 3 3 3 6"/><path d="M8 42h28"/></svg></div>
+          <div class="slot">
+            <div class="when2"><span class="time">10:30</span><span class="what">Arrival, coffee &amp; mingling</span></div>
+            <p>Christmas jumpers on, and a warm welcome.</p>
+            <div class="mini">
+              <div><b>Guess the baby</b><span>Everyone's childhood photos are on display by the coffee. Work out who's who before dinner.</span></div>
+              <div><b>The confession box</b><span>Writing yours on the day? Pop it in the box.</span></div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="medal"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="17" y="6" width="14" height="22" rx="7"/><path d="M11 23a13 13 0 0 0 26 0M24 36v6M17 42h14"/></svg></div>
+          <div class="slot">
+            <div class="when2"><span class="time">11:00</span><span class="what">The Christmas meeting</span></div>
+            <p>Our festive meeting, with a few twists.</p>
+            <div class="mini">
+              <div><b>"Dear Santa" pitches</b><span>Begin your 45 seconds with "Dear Santa…", ask for the introduction you'd love, then read the cracker joke on your sheet.</span></div>
+              <div><b>Christmas BNI Bingo</b><span>A bingo card of everyone's punchlines. First full line calls out their company name.</span></div>
+              <div><b>Spot the Elf</b><span>Two elves are hidden in the room. The nice one wins a present; the naughty one brings a forfeit.</span></div>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="medal"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="20" width="32" height="20" rx="2"/><path d="M6 14h36v6H6zM24 14v26"/><path d="M24 14c-4-8-13-8-12-2 1 3 8 2 12 2zM24 14c4-8 13-8 12-2-1 3-8 2-12 2z"/></svg></div>
+          <div class="slot">
+            <div class="when2"><span class="time">12:30</span><span class="what">The white elephant gift swap</span></div>
+            <p>Take a wrapped gift or steal one, in sheet-number order, then everyone opens together. <a href="#elephant">See the rules</a></p>
+          </div>
+        </li>
+        <li>
+          <div class="medal"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="25" r="11"/><circle cx="24" cy="25" r="6"/><path d="M8 8v10a3 3 0 0 0 3 3v19M8 8v8M11 8v8M14 8v10a3 3 0 0 1-3 3M38 8c-3 2-4 7-4 12h4v20"/></svg></div>
+          <div class="slot">
+            <div class="when2"><span class="time">1:00</span><span class="what">Christmas dinner</span></div>
+            <p>Three courses, followed by the reveals.</p>
+            <div class="mini">
+              <div><b>Confessions</b><span>Anonymous confessions from our year, read aloud. Can you guess whose is whose?</span></div>
+              <div><b>Baby photo answers</b><span>Who was who, and the elves explained.</span></div>
+              <div><b>The Intrepid Awards</b><span>Fifteen awards, from Networker of the Year to the Golden Stopwatch, voted for by you.</span></div>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="checklist">
+    <h2><span class="ic"></span>Your Christmas checklist</h2>
+    <div class="card wiz">
+      <ol class="stepper" id="stepper">
+        <li data-go="0"><span>1</span>Your name</li>
+        <li data-go="1"><span>2</span>Dinner</li>
+        <li data-go="2"><span>3</span>Photo</li>
+        <li data-go="3"><span>4</span>Confession</li>
+        <li data-go="4"><span>5</span>Awards</li>
+      </ol>
+
+      <!-- Step 0: name -->
+      <div class="panel" data-step="0">
+        <h3 class="ph">Let's get you ready for Christmas</h3>
+        <p class="lead">Choose your name and we'll take you through four quick steps: your dinner, a childhood photo, a confession and the Intrepid Awards. It takes about five minutes.</p>
+        <label class="voterbox whobox">Your name
+          <select id="who"><option value="">Choose your name…</option></select>
+        </label>
+        <button type="button" id="startBtn">Let's start</button>
+        <p class="msg" id="wMsg" role="status"></p>
+        <p class="note">Your name is only used to save your choices and email your confirmation. Confessions stay anonymous.</p>
+      </div>
+
+      <!-- Step 1: dinner -->
+      <div class="panel" data-step="1" hidden>
+        <h3 class="ph">Choose your Christmas dinner</h3>
+        <span class="deadline">Please choose by Friday 4 December</span>
+        <p class="donenote" data-done="meal">✓ You've already chosen. Change it below, or carry on.</p>
+        <p class="lead">Three courses at Whitchurch Golf Club. The club needs everyone's choices 10 days before.</p>
+        <form id="mealForm">
+          <div class="courses" id="courses"></div>
+          <label>Allergies or dietary needs <span class="note" style="font-weight:400">(optional)</span><input type="text" class="diet" id="mDiet" maxlength="200" placeholder="e.g. coeliac, nut allergy, no sauce"></label>
+          <div class="nav"><button type="button" class="ghost back">Back</button><button type="submit" id="mBtn">Save my dinner and continue</button></div>
+          <button type="button" class="link next" data-done="meal">Keep my choices and continue →</button>
+          <p class="msg" id="mMsg" role="status"></p>
+        </form>
+        <p class="note" style="margin-top:10px">(v) vegetarian &nbsp;•&nbsp; (gfa) gluten-free available &nbsp;•&nbsp; The club isn't providing Christmas crackers this year.</p>
+      </div>
+
+      <!-- Step 2: photo -->
+      <div class="panel" data-step="2" hidden>
+        <h3 class="ph">Upload your childhood photo</h3>
+        <span class="deadline">By Friday 11 December</span>
+        <p class="donenote" data-done="photo">✓ We've got your photo. Send another to replace it, or carry on.</p>
+        <p class="lead">Any photo of you as a child, for the "guess the baby" board. Only Charlotte sees who sent which photo, so the guessing stays fair.</p>
+        <form id="photoForm">
+          <label class="file" id="drop">
+            <input type="file" id="pFile" accept="image/*">
+            Tap to choose a photo
+            <small>A photo of you as a child</small>
+            <img class="preview" id="pPrev" alt="Your photo preview">
+          </label>
+          <div class="nav"><button type="button" class="ghost back">Back</button><button type="submit" id="pBtn">Send my photo and continue</button></div>
+          <button type="button" class="link" id="pSkip">Skip for now →</button>
+          <p class="msg" id="pMsg" role="status"></p>
+        </form>
+      </div>
+
+      <!-- Step 3: confession -->
+      <div class="panel" data-step="3" hidden>
+        <h3 class="ph">Your confession</h3>
+        <span class="deadline">Anonymous: your name isn't kept with it</span>
+        <p class="donenote" data-done="confession">✓ Done. You can change it below, or carry on.</p>
+        <p class="lead">Something funny from your work year. Keep it kind and Christmas-dinner friendly! Post it here, or write it on paper and pop it in the box on the day.</p>
+        <form id="confForm">
+          <label>Your confession<textarea id="cText" maxlength="600" placeholder="This year I…"></textarea></label>
+          <div class="nav"><button type="button" class="ghost back">Back</button><button type="submit" id="cBtn">Post my confession</button></div>
+          <button type="button" id="cDay" class="ghost wide">I'll write mine on the day</button>
+          <button type="button" class="link next" data-done="confession">Carry on →</button>
+          <p class="msg" id="cMsg" role="status"></p>
+        </form>
+      </div>
+
+      <!-- Step 4: awards -->
+      <div class="panel" data-step="4" hidden>
+        <h3 class="ph">Vote: The Intrepid Awards 2026</h3>
+        <span class="deadline">Voting closes Friday 11 December</span>
+        <p class="donenote" data-done="votes">✓ Your votes are in. Vote again to change them.</p>
+        <p class="lead">Pick a member for each award. Skip any you're not sure about, and you can't vote for yourself. Votes are private, and the winners are revealed at dinner.</p>
+        <form id="voteForm">
+          <div id="awardList" style="display:grid;gap:10px"></div>
+          <p class="progress" id="vProg"></p>
+          <div class="nav"><button type="button" class="ghost back">Back</button><button type="submit" id="vBtn">Send my votes</button></div>
+          <p class="msg" id="vMsg" role="status"></p>
+        </form>
+      </div>
+
+      <!-- Step 5: done -->
+      <div class="panel" data-step="5" hidden>
+        <h3 class="ph">You're all set, <span id="firstName"></span>!</h3>
+        <p class="lead" id="doneLead">Thank you! We've emailed you a confirmation of your choices, with a reminder of what to bring.</p>
+        <ul class="summary" id="summary"></ul>
+        <p class="note">Need to change something? Tap a step above. Menu choices close Friday 4 December, and photos and votes close Friday 11 December.</p>
+      </div>
     </div>
   </section>
 
   <section id="bring">
-    <h2><span class="ic">🎁</span>What to bring</h2>
+    <h2><span class="ic"></span>What to bring on the day</h2>
     <ul class="bring">
-      <li><span class="em">🧶</span><div><b>Your best Christmas jumper</b><br><span class="note">No jumper means a fine. You have been warned!</span></div></li>
-      <li><span class="em">🎀</span><div><b>One wrapped gift, no more than £10</b><br><span class="note">Unisex, please, so it suits anyone.</span></div></li>
-      <li><span class="em">👶</span><div><b>A childhood Christmas photo</b><br><span class="note">Upload it below before the day.</span></div></li>
-      <li><span class="em">🤫</span><div><b>A funny confession from your work year</b><br><span class="note">Anonymous. Either post it online below, or bring it on paper for the confession box on the day.</span></div></li>
+      <li><div><b>Your best Christmas jumper</b><br><span class="note">No jumper means a fine. You have been warned!</span></div></li>
+      <li><div><b>One wrapped gift, no more than £10</b><br><span class="note">Unisex, please, for the white elephant swap.</span></div></li>
+      <li><div><b>Your confession on paper</b><br><span class="note">Only if you chose to write it on the day.</span></div></li>
+      <li><div><b>Your Christmas spirit</b><br><span class="note">And an appetite for three courses!</span></div></li>
     </ul>
   </section>
 
-  <section id="happening">
-    <h2><span class="ic">✨</span>What's happening</h2>
-    <div class="grid">
-      <div class="act"><h3><span class="em">🎅</span>"Dear Santa" pitches</h3><p>Start your 45-second pitch with "Dear Santa…" and tell him exactly who you'd love an introduction to this Christmas. Then read out the cracker joke on the back of your meeting sheet. Everyone's bingo depends on it!</p></div>
-      <div class="act"><h3><span class="em">🔔</span>Christmas BNI Bingo</h3><p>Every meeting sheet has a unique bingo card on the back, filled with the punchlines to everyone's jokes. Cross each one off as you hear it read out, but not your own. First full line shouts their company name!</p></div>
-      <div class="act"><h3><span class="em">🧝</span>Spot the Elf</h3><p>Two elves are hiding somewhere in the room. Find the nice elf and you win a present. Find the naughty one and… there's a forfeit.</p></div>
-      <div class="act"><h3><span class="em">👶</span>Guess the baby</h3><p>Childhood Christmas photos will be by the coffee. Work out who's who before dinner, when we reveal the answers.</p></div>
-      <div class="act"><h3><span class="em">🤫</span>Christmas confessions</h3><p>Funny, anonymous confessions from our work year, read out at dinner. Can you guess whose is whose?</p></div>
-      <div class="act"><h3><span class="em">🏆</span>The Intrepid Awards 2026</h3><p>15 awards, from Networker of the Year to the Golden Stopwatch. You choose the winners: vote below by Friday 11 December, and we'll reveal them at dinner.</p></div>
-    </div>
-  </section>
-
   <section id="elephant">
-    <h2><span class="ic">🐘</span>How the white elephant swap works</h2>
+    <h2><span class="ic"></span>How the white elephant swap works</h2>
     <div class="card">
       <ol class="steps">
         <li><b>Bring one wrapped gift</b>, unisex and worth no more than £10, and add it to the pile at the front.</li>
@@ -267,71 +656,135 @@
     </div>
   </section>
 
-  <div class="pair">
-  <section id="photo">
-    <h2><span class="ic">📸</span>Your childhood photo</h2>
-    <div class="card">
-      <span class="deadline">Please upload by Friday 11 December</span>
-      <p class="lead">Only Charlotte sees who sent which photo, so the guessing stays fair. Your name is just for the answer sheet.</p>
-      <form id="photoForm">
-        <label>Your name<input type="text" id="pName" maxlength="60" autocomplete="name" required></label>
-        <label class="file" id="drop">
-          <input type="file" id="pFile" accept="image/*" required>
-          🎄 Tap to choose a photo
-          <small>A photo of you as a child at Christmas</small>
-          <img class="preview" id="pPrev" alt="Your photo preview">
-        </label>
-        <button type="submit" id="pBtn">Send my photo</button>
-        <p class="msg" id="pMsg" role="status"></p>
-      </form>
-    </div>
-  </section>
-
-  <section id="confess">
-    <h2><span class="ic">🤫</span>Confession box</h2>
-    <div class="card">
-      <span class="deadline">Anonymous: we don't ask for your name</span>
-      <p class="lead">Something funny from your work year. Keep it kind and Christmas-dinner friendly! Post it here, <b>or</b> write it down and pop it in the confession box on the day. Whichever you prefer, just one is plenty.</p>
-      <form id="confForm">
-        <label>Your confession<textarea id="cText" maxlength="600" placeholder="This year I…" required></textarea></label>
-        <button type="submit" id="cBtn">Post my confession</button>
-        <p class="msg" id="cMsg" role="status"></p>
-      </form>
-    </div>
-  </section>
-  </div>
-
-  <section id="awards">
-    <h2><span class="ic">🏆</span>Vote: The Intrepid Awards 2026</h2>
-    <div class="card">
-      <span class="deadline">Voting closes Friday 11 December</span>
-      <p class="lead">Choose your name, then pick a member for each award. Skip any you're not sure about, and you can't vote for yourself. Changed your mind? Just vote again before the deadline and your new votes replace the old ones. Votes are private, and the winners are revealed at Christmas dinner.</p>
-      <form id="voteForm">
-        <label class="voterbox">Your name<select id="vVoter" required><option value="">Choose your name…</option></select></label>
-        <div id="awardList" style="display:grid;gap:10px"></div>
-        <p class="progress" id="vProg"></p>
-        <button type="submit" id="vBtn">Send my votes</button>
-        <p class="msg" id="vMsg" role="status"></p>
-      </form>
-    </div>
-  </section>
-
 </main>
 
 <footer>
-  <span class="snowman" aria-hidden="true">⛄</span>
-  <div class="holly">🎄 ⭐ 🎄</div>
+  
+  
   <p>Merry Christmas from all of us at BNI Intrepid<br>Questions? Ask Michelle or Charlotte.</p>
 </footer>
 
 <script>
   var API = 'https://script.google.com/macros/s/AKfycbzCbI6160Rg6wSJIEoxfByd2Fa4q9x48exVTT570utUW686dT7GUOS--sRPIv91-_B0lw/exec';
-
   function post(data) {
     return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data) })
       .then(function (r) { return r.json(); });
   }
+  function say(id, cls, text) { var m = document.getElementById(id); m.className = 'msg' + (cls ? ' ' + cls : ''); m.textContent = text; }
+  function fail(id) { return function (err) { say(id, 'err', err.message || 'Something went wrong. Please try again.'); }; }
 
+  var MEMBERS = ['Adam Shephard', 'Alex Jones', 'Andy Mackinson', 'Anthony Williams', 'Charlotte Warren', 'Chris Ashley', 'Chris MacManus', 'Clive Thomas',
+    'Daniel Harris', 'Dawn Evans', 'Gareth Rees', 'Jonathan Davies', 'Kath Hiscock', 'Lee Howells', 'Martin Britton', 'Michelle Barber', 'Philip Grunewald',
+    'Richard Metcalfe', 'Robbie Williams', 'Seamus Sullivan', 'Siân Roberts', 'Spencer Clarke', 'Steve Western', 'Steve Williams', 'Stuart Bourne',
+    'Stuart Meikle', 'Sue Iannucci', 'Trae Williams'];
+
+  /* ---------- Step-by-step wizard ---------- */
+  var who = document.getElementById('who'), STATUS = null, step = 0, emailedNow = false;
+  MEMBERS.forEach(function (n) { who.add(new Option(n, n)); });
+  function me() { return who.value; }
+  var panels = [].slice.call(document.querySelectorAll('.panel'));
+  var steps = [].slice.call(document.querySelectorAll('#stepper li'));
+  function isDone(k) { if (!STATUS) return false; return k === 'votes' ? STATUS.votes > 0 : !!STATUS[k]; }
+  var KEYS = [null, 'meal', 'photo', 'confession', 'votes'];
+  function paint() {
+    steps.forEach(function (li, i) {
+      li.classList.toggle('active', i === step || (step === 5 && false));
+      li.classList.toggle('done', i === 0 ? !!me() && step > 0 : isDone(KEYS[i]));
+      li.classList.toggle('clickable', !!me());
+    });
+    [].forEach.call(document.querySelectorAll('[data-done]'), function (el) {
+      el.hidden = !isDone(el.getAttribute('data-done'));
+    });
+  }
+  function go(n, noScroll) {
+    step = n;
+    panels.forEach(function (p) { p.hidden = +p.getAttribute('data-step') !== n; });
+    if (n === 5) fillSummary();
+    if (n === 4) refreshSelf();
+    paint();
+    if (!noScroll) document.getElementById('checklist').scrollIntoView({ behavior: 'smooth' });
+  }
+  function nextStep() { go(step + 1); }
+  steps.forEach(function (li) { li.addEventListener('click', function () { if (me()) go(+li.getAttribute('data-go')); }); });
+  [].forEach.call(document.querySelectorAll('.panel .back'), function (b) { b.addEventListener('click', function () { go(Math.max(0, step - 1)); }); });
+  [].forEach.call(document.querySelectorAll('.panel .next'), function (b) { b.addEventListener('click', nextStep); });
+
+  function firstTodo() {
+    if (!isDone('meal')) return 1;
+    if (!isDone('confession')) return isDone('photo') ? 3 : 2;
+    if (!isDone('votes')) return 4;
+    return 5;
+  }
+  document.getElementById('startBtn').addEventListener('click', function () {
+    if (!me()) { say('wMsg', 'err', 'Please choose your name first.'); return; }
+    try { localStorage.setItem('xmasWho', me()); } catch (e) {}
+    var btn = this; btn.disabled = true; say('wMsg', '', 'Loading your checklist…');
+    fetch(API + '?name=' + encodeURIComponent(me())).then(function (r) { return r.json(); })
+      .then(function (r) { STATUS = r.ok ? r.status : null; say('wMsg', '', ''); go(firstTodo()); })
+      .catch(function () { STATUS = null; say('wMsg', '', ''); go(1); })
+      .then(function () { btn.disabled = false; });
+  });
+  who.addEventListener('change', function () { STATUS = null; paint(); });
+
+  function saved(r, msgId, text, then) {
+    if (!r.ok) throw new Error(r.error);
+    if (r.status) STATUS = r.status;
+    if (r.emailed) emailedNow = true;
+    say(msgId, 'ok', text);
+    setTimeout(function () { say(msgId, '', ''); then(); }, 900);
+  }
+  function fillSummary() {
+    document.getElementById('firstName').textContent = me().split(' ')[0];
+    var s = STATUS || {};
+    var done = s.meal && s.confession && s.votes > 0;
+    document.getElementById('doneLead').textContent = done
+      ? 'Thank you! We\'ve emailed you a confirmation of your choices, with a reminder of what to bring.'
+      : 'Nearly there! Finish the steps below and we\'ll email you a confirmation.';
+    var row = function (ok, label, txt) { return '<li class="' + (ok ? 'ok' : 'no') + '"><b>' + (ok ? '✓' : '•') + ' ' + label + '</b><span>' + txt + '</span></li>'; };
+    document.getElementById('summary').innerHTML =
+      row(s.meal, 'Christmas dinner', s.meal ? 'Chosen' : 'Not chosen yet') +
+      row(s.photo, 'Childhood photo', s.photo ? 'Uploaded' : 'Skipped for now. You can add it until 11 December') +
+      row(!!s.confession, 'Confession', s.confession === 'On the day' ? 'Writing it on the day: bring it on paper' : (s.confession ? 'Posted' : 'Not done yet')) +
+      row(s.votes > 0, 'Intrepid Awards', s.votes > 0 ? 'Voted in ' + s.votes + ' award' + (s.votes === 1 ? '' : 's') : 'Not voted yet');
+  }
+
+  /* ---------- Dinner ---------- */
+  var ROAST = 'With roast potatoes, homemade Yorkshire, pigs in blankets, stuffing, carrots, Brussels sprouts, garden peas, honey parsnips, red cabbage and roast gravy.';
+  var MENU = [
+    ['Starters', 'starter', [
+      ['Carrot & Parsnip Soup', 'Silky smooth and warmly spiced, with a freshly baked roll and butter.', 'v'],
+      ['Duck Liver & Pork Pâté', 'With orange & cognac liqueur, crostini and onion chutney.', 'gfa'],
+      ['Prawn Ravioli', 'With a black truffle & mushroom sauce.', '']]],
+    ['Mains', 'main', [
+      ['Roast Brisket of Beef', ROAST, ''],
+      ['Roast Turkey', ROAST, ''],
+      ['Pan-Fried Fillet of Sea Bass', 'With confit baby potatoes, chargrilled Mediterranean vegetables and a red pepper, tomato & garlic brunoise.', ''],
+      ['Beetroot & Butternut Squash Wellington', 'Vegan & vegetarian. With carrots, Brussels sprouts, garden peas, honey parsnips and red cabbage.', 'v']]],
+    ['Desserts', 'dessert', [
+      ['Traditional Christmas Pudding', 'Served with brandy sauce.', ''],
+      ['Chocolate Yule Log', 'With raspberry ripple ice cream and fresh raspberries.', ''],
+      ['White Chocolate & Orange Cheesecake', 'With fresh cream and chocolate orange segments.', ''],
+      ['Cheeseboard', 'Brie, Cheddar, Cranberry & Stilton with onion chutney, biscuits and grapes. £2.50 supplement.', ''],
+      ['Three Scoops of Ice Cream', 'Vanilla, chocolate, salted caramel and strawberry.', 'v']]]
+  ];
+  document.getElementById('courses').innerHTML = MENU.map(function (c) {
+    return '<div class="course"><h3>' + c[0] + '</h3><fieldset>' + c[2].map(function (d) {
+      return '<label class="opt"><input type="radio" name="' + c[1] + '" value="' + d[0] + '"><span class="box"><b>' + d[0] +
+        (d[2] ? '<span class="tagv">' + d[2] + '</span>' : '') + '</b><small>' + d[1] + '</small></span></label>';
+    }).join('') + '</fieldset></div>';
+  }).join('');
+  var mealForm = document.getElementById('mealForm');
+  mealForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (new Date() >= new Date('2026-12-05T00:00:00Z')) { say('mMsg', 'err', 'Menu choices have closed. Please message Michelle or Charlotte.'); return; }
+    var pick = function (n) { var r = mealForm.querySelector('input[name="' + n + '"]:checked'); return r ? r.value : ''; };
+    var d = { action: 'meal', name: me(), starter: pick('starter'), main: pick('main'), dessert: pick('dessert'), diet: document.getElementById('mDiet').value.trim() };
+    if (!d.starter || !d.main || !d.dessert) { say('mMsg', 'err', 'Please choose a starter, a main and a dessert.'); return; }
+    var btn = document.getElementById('mBtn'); btn.disabled = true; say('mMsg', '', 'Saving your dinner…');
+    post(d).then(function (r) { saved(r, 'mMsg', 'Saved! 🍽️', nextStep); }).catch(fail('mMsg')).then(function () { btn.disabled = false; });
+  });
+
+  /* ---------- Photo ---------- */
   function shrink(file) {
     return new Promise(function (resolve, reject) {
       var img = new Image(), url = URL.createObjectURL(file);
@@ -346,42 +799,54 @@
       img.src = url;
     });
   }
-
   var pFile = document.getElementById('pFile'), pPrev = document.getElementById('pPrev');
   pFile.addEventListener('change', function () {
     if (pFile.files[0]) { pPrev.src = URL.createObjectURL(pFile.files[0]); pPrev.style.display = 'block'; }
   });
-
   document.getElementById('photoForm').addEventListener('submit', function (e) {
     e.preventDefault();
-    var msg = document.getElementById('pMsg'), btn = document.getElementById('pBtn');
-    var name = document.getElementById('pName').value.trim();
-    if (!name || !pFile.files[0]) { msg.className = 'msg err'; msg.textContent = 'Please add your name and choose a photo.'; return; }
-    btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Sending…';
-    shrink(pFile.files[0]).then(function (img) { return post({ action: 'photo', name: name, image: img }); })
-      .then(function (r) {
-        if (!r.ok) throw new Error(r.error);
-        msg.className = 'msg ok'; msg.textContent = 'Thank you! Your photo is in. 🎄';
-        e.target.reset(); pPrev.style.display = 'none';
-      })
-      .catch(function (err) { msg.className = 'msg err'; msg.textContent = err.message || 'Something went wrong. Please try again.'; })
-      .then(function () { btn.disabled = false; });
+    if (!pFile.files[0]) { say('pMsg', 'err', 'Please choose a photo, or tap "Skip for now".'); return; }
+    var btn = document.getElementById('pBtn'); btn.disabled = true; say('pMsg', '', 'Uploading…');
+    shrink(pFile.files[0]).then(function (img) { return post({ action: 'photo', name: me(), image: img }); })
+      .then(function (r) { e.target.reset(); pPrev.style.display = 'none'; saved(r, 'pMsg', 'Got it! 👶', nextStep); })
+      .catch(fail('pMsg')).then(function () { btn.disabled = false; });
   });
 
-  // The Intrepid Awards 2026: 15 categories chosen from Michelle's ideas (21 Nov)
-  var MEMBERS = ['Adam Shephard', 'Alex Jones', 'Andy Mackinson', 'Anthony Williams', 'Charlotte Warren', 'Chris Ashley', 'Chris MacManus', 'Clive Thomas',
-    'Daniel Harris', 'Dawn Evans', 'Gareth Rees', 'Jonathan Davies', 'Kath Hiscock', 'Lee Howells', 'Martin Britton', 'Michelle Barber', 'Philip Grunewald',
-    'Richard Metcalfe', 'Robbie Williams', 'Seamus Sullivan', 'Siân Roberts', 'Spencer Clarke', 'Steve Western', 'Steve Williams', 'Stuart Bourne',
-    'Stuart Meikle', 'Sue Iannucci', 'Trae Williams'];
+  document.getElementById('pSkip').addEventListener('click', function () {
+    var btn = this; btn.disabled = true; say('pMsg', '', 'Skipping…');
+    post({ action: 'skipPhoto', name: me() })
+      .then(function (r) { if (r.status) STATUS = r.status; if (r.emailed) emailedNow = true; })
+      .catch(function () {})
+      .then(function () { btn.disabled = false; say('pMsg', '', ''); nextStep(); });
+  });
+
+  /* ---------- Confession ---------- */
+  document.getElementById('confForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var text = document.getElementById('cText').value.trim();
+    if (text.length < 3) { say('cMsg', 'err', 'Please write your confession, or tap "I\'ll write mine on the day".'); return; }
+    var btn = document.getElementById('cBtn'); btn.disabled = true; say('cMsg', '', 'Posting…');
+    post({ action: 'confession', name: me(), text: text })
+      .then(function (r) { e.target.reset(); saved(r, 'cMsg', 'Your secret is safe with Santa. 🤫', nextStep); })
+      .catch(fail('cMsg')).then(function () { btn.disabled = false; });
+  });
+  document.getElementById('cDay').addEventListener('click', function () {
+    var btn = this; btn.disabled = true; say('cMsg', '', 'Saving…');
+    post({ action: 'confessDay', name: me() })
+      .then(function (r) { saved(r, 'cMsg', 'Lovely! Bring it on paper on the day. ✍️', nextStep); })
+      .catch(fail('cMsg')).then(function () { btn.disabled = false; });
+  });
+
+  /* ---------- Intrepid Awards ---------- */
   var AWARDS = [
-    ['🌟 Recognition awards', [
+    ['Recognition awards', [
       ['Networker of the Year', 'Outstanding commitment to networking'],
       ['The Givers Gain Award', 'Someone who consistently puts others first'],
       ['Referral Champion', 'Outstanding contribution to generating referrals'],
       ['Visitor Champion', 'Bringing new faces and opportunities into the room'],
       ['Rising Star', 'A newer member who has made a significant impact'],
       ['Best Feature Presentation', 'The most engaging 10-minute presentation']]],
-    ['😂 Just for fun', [
+    ['Just for fun', [
       ['The Golden Stopwatch', 'For whom 60 seconds is merely a suggestion'],
       ['The Broken Record Award', 'For asking for the same referral every week'],
       ['The Hollywood Award', 'For the most theatrical weekly presentations'],
@@ -389,14 +854,11 @@
       ['The Human LinkedIn Award', 'For someone who seemingly knows everybody'],
       ['The WhatsApp Warrior', 'For keeping the chapter group chat permanently active'],
       ['The Chapter Comedian', 'For keeping everyone entertained']]],
-    ['🎄 Intrepid specials', [
+    ['Intrepid specials', [
       ['The Spirit of Intrepid Award', "Someone who embodies the chapter's values and culture"],
       ['The Intrepid Legend', 'A member whose contribution and personality make the chapter what it is']]]
   ];
-  var CLOSES = new Date('2026-12-12T00:00:00Z');
-  var vVoter = document.getElementById('vVoter'), list = document.getElementById('awardList');
-  MEMBERS.forEach(function (n) { vVoter.add(new Option(n, n)); });
-  var html = '';
+  var list = document.getElementById('awardList'), html = '';
   AWARDS.forEach(function (g) {
     html += '<p class="awgroup">' + g[0] + '</p>';
     g[1].forEach(function (a) {
@@ -407,59 +869,62 @@
   });
   list.innerHTML = html;
   var sels = [].slice.call(list.querySelectorAll('select'));
-  function refresh() {
-    var me = vVoter.value, n = 0;
+  function refreshSelf() {
+    var n = 0;
     sels.forEach(function (s) {
-      [].slice.call(s.options).forEach(function (o) { o.disabled = !!me && o.value === me; });
-      if (s.value && s.value === me) s.value = '';
+      [].slice.call(s.options).forEach(function (o) { o.disabled = !!me() && o.value === me(); });
+      if (s.value && s.value === me()) s.value = '';
       s.closest('.award').classList.toggle('done', !!s.value);
       if (s.value) n++;
     });
-    document.getElementById('vProg').textContent = n ? n + ' of ' + sels.length + ' awards voted' : '';
+    document.getElementById('vProg').textContent = n ? n + ' of ' + sels.length + ' awards picked' : '';
   }
-  vVoter.addEventListener('change', refresh);
-  sels.forEach(function (s) { s.addEventListener('change', refresh); });
-  if (new Date() >= CLOSES) {
-    document.getElementById('voteForm').innerHTML = '<p class="lead"><b>Voting has closed.</b> Thank you for voting! The winners will be revealed at Christmas dinner. 🏆</p>';
-  } else {
-    document.getElementById('voteForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      var msg = document.getElementById('vMsg'), btn = document.getElementById('vBtn'), votes = {};
-      sels.forEach(function (s) { if (s.value) votes[s.getAttribute('data-award')] = s.value; });
-      if (!vVoter.value) { msg.className = 'msg err'; msg.textContent = 'Please choose your name first.'; return; }
-      if (!Object.keys(votes).length) { msg.className = 'msg err'; msg.textContent = 'Please pick a member for at least one award.'; return; }
-      btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Sending your votes…';
-      post({ action: 'vote', voter: vVoter.value, votes: votes })
-        .then(function (r) {
-          if (!r.ok) throw new Error(r.error);
-          msg.className = 'msg ok'; msg.textContent = 'Thank you! Your ' + r.count + ' vote' + (r.count === 1 ? '' : 's') + ' are in. 🏆';
-        })
-        .catch(function (err) { msg.className = 'msg err'; msg.textContent = err.message || 'Something went wrong. Please try again.'; })
-        .then(function () { btn.disabled = false; });
-    });
-  }
-
-  document.getElementById('confForm').addEventListener('submit', function (e) {
+  sels.forEach(function (s) { s.addEventListener('change', refreshSelf); });
+  document.getElementById('voteForm').addEventListener('submit', function (e) {
     e.preventDefault();
-    var msg = document.getElementById('cMsg'), btn = document.getElementById('cBtn');
-    var text = document.getElementById('cText').value.trim();
-    if (text.length < 3) { msg.className = 'msg err'; msg.textContent = 'Please write your confession first.'; return; }
-    btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Posting…';
-    post({ action: 'confession', text: text })
-      .then(function (r) {
-        if (!r.ok) throw new Error(r.error);
-        msg.className = 'msg ok'; msg.textContent = 'Posted! Your secret is safe with Santa. 🤫';
-        e.target.reset();
-      })
-      .catch(function (err) { msg.className = 'msg err'; msg.textContent = err.message || 'Something went wrong. Please try again.'; })
-      .then(function () { btn.disabled = false; });
+    if (new Date() >= new Date('2026-12-12T00:00:00Z')) { say('vMsg', 'err', 'Voting has closed.'); return; }
+    var votes = {};
+    sels.forEach(function (s) { if (s.value) votes[s.getAttribute('data-award')] = s.value; });
+    if (!Object.keys(votes).length) { say('vMsg', 'err', 'Please pick a member for at least one award.'); return; }
+    var btn = document.getElementById('vBtn'); btn.disabled = true; say('vMsg', '', 'Sending your votes…');
+    post({ action: 'vote', name: me(), votes: votes })
+      .then(function (r) { saved(r, 'vMsg', 'Votes in! 🏆', function () { go(5); }); })
+      .catch(fail('vMsg')).then(function () { btn.disabled = false; });
   });
+
+  /* Deadlines: after each one, that step shows a closed message instead of its form */
+  var CLOSES = { 1: ['2026-12-05T00:00:00Z', 'Menu choices closed on Friday 4 December. If you need a change, please message Michelle or Charlotte.'],
+    2: ['2026-12-12T00:00:00Z', 'Sorry, photo uploads closed on Friday 11 December so we could print the "guess the baby" board.'],
+    3: ['2026-12-12T00:00:00Z', 'Online confessions closed on Friday 11 December. You can still bring yours on paper on the day!'],
+    4: ['2026-12-12T00:00:00Z', 'Sorry, voting closed on Friday 11 December. The winners will be revealed at dinner!'] };
+  Object.keys(CLOSES).forEach(function (k) {
+    if (new Date() < new Date(CLOSES[k][0])) return;
+    var p = document.querySelector('.panel[data-step="' + k + '"]'), f = p.querySelector('form');
+    var note = document.createElement('p'); note.className = 'closednote'; note.textContent = CLOSES[k][1];
+    var nav = document.createElement('div'); nav.className = 'nav';
+    nav.innerHTML = '<button type="button" class="ghost back">Back</button><button type="button" class="next">Continue</button>';
+    nav.querySelector('.back').addEventListener('click', function () { go(Math.max(0, step - 1)); });
+    nav.querySelector('.next').addEventListener('click', function () { go(Math.min(5, step + 1)); });
+    f.replaceWith(note); note.after(nav);
+  });
+
+  /* Remember the name on this device, and open personal links from the confirmation email (?who=Name&step=photo) */
+  var q = new URLSearchParams(location.search), qWho = q.get('who'), qStep = { dinner: 1, photo: 2, confession: 3, awards: 4 }[q.get('step')];
+  try { var saved0 = localStorage.getItem('xmasWho'); if (saved0 && MEMBERS.indexOf(saved0) > -1) who.value = saved0; } catch (e) {}
+  go(0, true);
+  if (qWho && MEMBERS.indexOf(qWho) > -1) {
+    who.value = qWho;
+    try { localStorage.setItem('xmasWho', qWho); } catch (e) {}
+    fetch(API + '?name=' + encodeURIComponent(qWho)).then(function (r) { return r.json(); })
+      .then(function (r) { STATUS = r.ok ? r.status : null; }).catch(function () {})
+      .then(function () { go(qStep || firstTodo()); });
+  }
 </script>
 <div class="gifts" id="gifts" aria-hidden="true"></div>
 
 <button class="music" id="music" type="button" aria-pressed="false">
   <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
-  <span id="musicLabel">🎵 Play Christmas music</span>
+  <span id="musicLabel">Play Christmas music</span>
 </button>
 
 <script>
@@ -502,7 +967,7 @@
         + '<path d="M60 34 C 80 6, 114 4, 112 26 C 110 44, 80 42, 60 34 Z" fill="' + c + '"/>'
         + '<path d="M60 34 C 46 20, 22 16, 20 26 C 30 26, 46 30, 60 34 Z M60 34 C 74 20, 98 16, 100 26 C 90 26, 74 30, 60 34 Z" fill="#000" opacity=".15"/>'
         + '<path d="M54 36 L 40 62 L 50 58 L 54 64 Z M66 36 L 80 62 L 70 58 L 66 64 Z" fill="' + c + '"/>'
-        + '<circle cx="60" cy="34" r="9" fill="' + c + '"/><circle cx="57" cy="31" r="3" fill="#fff" opacity=".5"/></svg>';
+        + '<circle cx="60" cy="34" r="9" fill="' + c + '"/><circle cx="57" cy="31" r="2.5" fill="#fff" opacity=".35"/></svg>';
     };
     var M = [['The Gray House','L01.png'],['Utility Warehouse','L02.svg'],['SSF Vehicle Leasing','L03-ssf.png'],['TRALEX 365','L04.png'],
       ['The Agency UK','L05.png'],['SWS South Wales Safety','L06.png'],['Focus Shift Films','L07.png'],['Watkins & Gunn','L08w.png','dark'],
@@ -513,7 +978,11 @@
     function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
     var queue = shuffle(M.slice()), qi = 0;
     function nextLogo() { if (qi >= queue.length) { queue = shuffle(M.slice()); qi = 0; } return queue[qi++]; }
-    var RIB = { w1: '#f2c94c', w2: '#e04155', w3: '#f2c94c', w4: '#ffffff', w5: '#b3122a', w6: '#f2c94c' };
+    // Every bow is metallic gold (gradient defined once in a hidden SVG below), except on the gold box.
+    var RIB = { w1: 'url(#giftGold)', w2: 'url(#giftGold)', w3: 'url(#giftGold)', w4: 'url(#giftGold)', w5: 'url(#giftGold)', w6: '#6e1022' };
+    document.body.insertAdjacentHTML('afterbegin', '<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>' +
+      '<linearGradient id="giftGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6a24"/><stop offset=".35" stop-color="#f4e2a6"/>' +
+      '<stop offset=".6" stop-color="#c9a24b"/><stop offset="1" stop-color="#7a5b1c"/></linearGradient></defs></svg>');
     var box = document.getElementById('gifts');
     var lanes = Math.max(4, Math.min(10, Math.floor(window.innerWidth / 140)));
 
@@ -546,9 +1015,9 @@
   (function () {
     var el = document.getElementById('countdown'), target = new Date(2026, 11, 18, 10, 30);
     var days = Math.ceil((target - new Date()) / 86400000);
-    if (days > 1) el.innerHTML = '🎅 ' + days + ' sleeps to go!<small>until our Christmas meeting</small>';
-    else if (days === 1) el.innerHTML = '🎅 Just 1 sleep to go!<small>See you tomorrow</small>';
-    else if (days === 0) el.innerHTML = '🎄 It\'s today!<small>See you at 10:30am</small>';
+    if (days > 1) el.innerHTML = days + ' sleeps to go<small>until our Christmas meeting</small>';
+    else if (days === 1) el.innerHTML = 'Just one sleep to go<small>See you tomorrow</small>';
+    else if (days === 0) el.innerHTML = 'It\'s today<small>See you at 10:30am</small>';
     else return;
     el.hidden = false;
   })();
@@ -601,14 +1070,14 @@
         if (!master) { master = ctx.createGain(); master.gain.value = 0.18; master.connect(ctx.destination); }
         if (ctx.state === 'suspended') ctx.resume();
       } catch (e) { return; }
-      playing = true; btn.classList.add('on'); btn.setAttribute('aria-pressed', 'true'); label.textContent = '🔇 Turn music off';
+      playing = true; btn.classList.add('on'); btn.setAttribute('aria-pressed', 'true'); label.textContent = 'Turn music off';
       playSong();
     }
 
     function stop() {
       playing = false; clearTimeout(timer);
       if (ctx) { try { master.disconnect(); } catch (e) {} master = null; ctx.close(); ctx = null; }
-      btn.classList.remove('on'); btn.setAttribute('aria-pressed', 'false'); label.textContent = '🎵 Play Christmas music';
+      btn.classList.remove('on'); btn.setAttribute('aria-pressed', 'false'); label.textContent = 'Play Christmas music';
     }
 
     btn.addEventListener('click', function (e) {
