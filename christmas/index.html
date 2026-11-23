@@ -150,6 +150,15 @@
   .w6 { --wrap: radial-gradient(#fff 1.8px, transparent 2.2px) 0 0 / 12px 12px, #6d2a7a; --rib: #f2c94c; }
   @media (prefers-reduced-motion: reduce) { .gifts { display: none; } }
   @media (prefers-reduced-motion: reduce) { .flake, .bulb, .music.on .eq i { animation: none; } }
+  /* Intrepid Awards voting */
+  select { font: inherit; padding: 11px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; width: 100%; color: var(--ink); }
+  select:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(31,92,61,.15); }
+  .awgroup { margin: 8px 0 2px; font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--red-d); }
+  .award { background: #fffaf0; border: 1.5px solid #efe0bd; border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; }
+  .award .an { font-weight: 800; font-size: 15.5px; }
+  .award .ad { color: var(--muted); font-size: 13.5px; font-weight: 500; margin-top: -6px; }
+  .award.done { border-color: var(--green); background: #f1f8f3; }
+  .progress { font-size: 13.5px; font-weight: 700; color: var(--green); }
   footer { text-align: center; color: var(--muted); font-size: 13px; padding: 26px 0 40px; border-top: 1px solid var(--line); margin-top: 40px; }
   .holly { font-size: 20px; letter-spacing: 6px; }
 </style>
@@ -181,7 +190,7 @@
         <li><div class="t">10:30</div><div class="dot"></div><div><b>Arrive, coffee and mingle</b><span>Jumpers on! Guess the baby photos by the coffee. Haven't sent your confession online? Pop it in the confession box.</span></div></li>
         <li><div class="t">11:00</div><div class="dot"></div><div><b>Christmas meeting</b><span>"Dear Santa" pitches, each finished with your cracker joke, and Christmas BNI Bingo on the back of your meeting sheet. Keep an eye out for elves…</span></div></li>
         <li><div class="t">12:30</div><div class="dot"></div><div><b>White elephant gift swap</b><span>Take a wrapped gift or steal someone else's, in sheet-number order. Then everyone opens at the same time!</span></div></li>
-        <li><div class="t">1:00</div><div class="dot"></div><div><b>Christmas dinner</b><span>Confessions read out, baby photo answers revealed, and the elves finally explained.</span></div></li>
+        <li><div class="t">1:00</div><div class="dot"></div><div><b>Christmas dinner</b><span>Confessions read out, baby photo answers revealed, the elves finally explained, and the Intrepid Awards 2026 announced!</span></div></li>
       </ul>
     </div>
   </section>
@@ -204,6 +213,7 @@
       <div class="act"><h3><span class="em">🧝</span>Spot the Elf</h3><p>Two elves are hiding somewhere in the room. Find the nice elf and you win a present. Find the naughty one and… there's a forfeit.</p></div>
       <div class="act"><h3><span class="em">👶</span>Guess the baby</h3><p>Childhood Christmas photos will be by the coffee. Work out who's who before dinner, when we reveal the answers.</p></div>
       <div class="act"><h3><span class="em">🤫</span>Christmas confessions</h3><p>Funny, anonymous confessions from our work year, read out at dinner. Can you guess whose is whose?</p></div>
+      <div class="act"><h3><span class="em">🏆</span>The Intrepid Awards 2026</h3><p>15 awards, from Networker of the Year to the Golden Stopwatch. You choose the winners: vote below by Friday 11 December, and we'll reveal them at dinner.</p></div>
       <div class="act"><h3><span class="em">🐘</span>White elephant swap</h3><p>A gift swap with a cheeky twist: you might not keep the gift you pick, and nobody finds out what's inside until the end! The full rules are below.</p></div>
     </div>
   </section>
@@ -252,6 +262,21 @@
         <label>Your confession<textarea id="cText" maxlength="600" placeholder="This year I…" required></textarea></label>
         <button type="submit" id="cBtn">Post my confession</button>
         <p class="msg" id="cMsg" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+  <section id="awards">
+    <h2><span class="ic">🏆</span>Vote: The Intrepid Awards 2026</h2>
+    <div class="card">
+      <span class="deadline">Voting closes Friday 11 December</span>
+      <p class="lead">Choose your name, then pick a member for each award. Skip any you're not sure about, and you can't vote for yourself. Changed your mind? Just vote again before the deadline and your new votes replace the old ones. Votes are private, and the winners are revealed at Christmas dinner.</p>
+      <form id="voteForm">
+        <label>Your name<select id="vVoter" required><option value="">Choose your name…</option></select></label>
+        <div id="awardList" style="display:grid;gap:10px"></div>
+        <p class="progress" id="vProg"></p>
+        <button type="submit" id="vBtn">Send my votes</button>
+        <p class="msg" id="vMsg" role="status"></p>
       </form>
     </div>
   </section>
@@ -307,6 +332,77 @@
       .catch(function (err) { msg.className = 'msg err'; msg.textContent = err.message || 'Something went wrong. Please try again.'; })
       .then(function () { btn.disabled = false; });
   });
+
+  // The Intrepid Awards 2026: 15 categories chosen from Michelle's ideas (21 Nov)
+  var MEMBERS = ['Adam Shephard', 'Alex Jones', 'Andy Mackinson', 'Anthony Williams', 'Charlotte Warren', 'Chris Ashley', 'Chris MacManus', 'Clive Thomas',
+    'Daniel Harris', 'Dawn Evans', 'Gareth Rees', 'Jonathan Davies', 'Kath Hiscock', 'Lee Howells', 'Martin Britton', 'Michelle Barber', 'Philip Grunewald',
+    'Richard Metcalfe', 'Robbie Williams', 'Seamus Sullivan', 'Siân Roberts', 'Spencer Clarke', 'Steve Western', 'Steve Williams', 'Stuart Bourne',
+    'Stuart Meikle', 'Sue Iannucci', 'Trae Williams'];
+  var AWARDS = [
+    ['🌟 Recognition awards', [
+      ['Networker of the Year', 'Outstanding commitment to networking'],
+      ['The Givers Gain Award', 'Someone who consistently puts others first'],
+      ['Referral Champion', 'Outstanding contribution to generating referrals'],
+      ['Visitor Champion', 'Bringing new faces and opportunities into the room'],
+      ['Rising Star', 'A newer member who has made a significant impact'],
+      ['Best Feature Presentation', 'The most engaging 10-minute presentation']]],
+    ['😂 Just for fun', [
+      ['The Golden Stopwatch', 'For whom 60 seconds is merely a suggestion'],
+      ['The Broken Record Award', 'For asking for the same referral every week'],
+      ['The Hollywood Award', 'For the most theatrical weekly presentations'],
+      ['The Breakfast Bandit', 'For taking breakfast more seriously than networking'],
+      ['The Human LinkedIn Award', 'For someone who seemingly knows everybody'],
+      ['The WhatsApp Warrior', 'For keeping the chapter group chat permanently active'],
+      ['The Chapter Comedian', 'For keeping everyone entertained']]],
+    ['🎄 Intrepid specials', [
+      ['The Spirit of Intrepid Award', "Someone who embodies the chapter's values and culture"],
+      ['The Intrepid Legend', 'A member whose contribution and personality make the chapter what it is']]]
+  ];
+  var CLOSES = new Date('2026-12-12T00:00:00Z');
+  var vVoter = document.getElementById('vVoter'), list = document.getElementById('awardList');
+  MEMBERS.forEach(function (n) { vVoter.add(new Option(n, n)); });
+  var html = '';
+  AWARDS.forEach(function (g) {
+    html += '<p class="awgroup">' + g[0] + '</p>';
+    g[1].forEach(function (a) {
+      html += '<label class="award"><span class="an">' + a[0] + '</span><span class="ad">' + a[1] + '</span>' +
+        '<select data-award="' + a[0] + '"><option value="">Choose a member (or skip)</option>' +
+        MEMBERS.map(function (n) { return '<option value="' + n + '">' + n + '</option>'; }).join('') + '</select></label>';
+    });
+  });
+  list.innerHTML = html;
+  var sels = [].slice.call(list.querySelectorAll('select'));
+  function refresh() {
+    var me = vVoter.value, n = 0;
+    sels.forEach(function (s) {
+      [].slice.call(s.options).forEach(function (o) { o.disabled = !!me && o.value === me; });
+      if (s.value && s.value === me) s.value = '';
+      s.closest('.award').classList.toggle('done', !!s.value);
+      if (s.value) n++;
+    });
+    document.getElementById('vProg').textContent = n ? n + ' of ' + sels.length + ' awards voted' : '';
+  }
+  vVoter.addEventListener('change', refresh);
+  sels.forEach(function (s) { s.addEventListener('change', refresh); });
+  if (new Date() >= CLOSES) {
+    document.getElementById('voteForm').innerHTML = '<p class="lead"><b>Voting has closed.</b> Thank you for voting! The winners will be revealed at Christmas dinner. 🏆</p>';
+  } else {
+    document.getElementById('voteForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var msg = document.getElementById('vMsg'), btn = document.getElementById('vBtn'), votes = {};
+      sels.forEach(function (s) { if (s.value) votes[s.getAttribute('data-award')] = s.value; });
+      if (!vVoter.value) { msg.className = 'msg err'; msg.textContent = 'Please choose your name first.'; return; }
+      if (!Object.keys(votes).length) { msg.className = 'msg err'; msg.textContent = 'Please pick a member for at least one award.'; return; }
+      btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Sending your votes…';
+      post({ action: 'vote', voter: vVoter.value, votes: votes })
+        .then(function (r) {
+          if (!r.ok) throw new Error(r.error);
+          msg.className = 'msg ok'; msg.textContent = 'Thank you! Your ' + r.count + ' vote' + (r.count === 1 ? '' : 's') + ' are in. 🏆';
+        })
+        .catch(function (err) { msg.className = 'msg err'; msg.textContent = err.message || 'Something went wrong. Please try again.'; })
+        .then(function () { btn.disabled = false; });
+    });
+  }
 
   document.getElementById('confForm').addEventListener('submit', function (e) {
     e.preventDefault();
