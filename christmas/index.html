@@ -105,9 +105,29 @@
   .countdown { display: inline-block; margin-top: 14px; background: #fff; color: var(--red); border-radius: 12px; padding: 8px 16px;
     font-weight: 800; box-shadow: 0 4px 14px rgba(0,0,0,.18); border: 2px solid var(--gold); }
   .countdown small { display: block; font-weight: 600; color: var(--muted); font-size: 12px; }
-  .card { border-top: 0; background-image: repeating-linear-gradient(45deg, var(--red) 0 10px, #fff 10px 20px); background-size: 100% 6px;
-    background-repeat: no-repeat; background-color: var(--card); padding-top: 24px; }
-  h2::after { content: "❄"; color: var(--gold); font-size: 16px; margin-left: auto; opacity: .8; }
+  .card { border-top: 3px solid var(--gold); padding: 20px 22px; }
+
+  /* Neater layout (23 Nov) */
+  .wrap { max-width: 900px; }
+  section { margin: 44px 0; scroll-margin-top: 16px; }
+  h2 { font-size: 21px; letter-spacing: -.01em; margin-bottom: 16px; }
+  h2 .ic { width: 32px; height: 32px; font-size: 16px; }
+  .quick { position: relative; z-index: 2; margin: -38px auto 0; background: #fff; border: 1px solid var(--line); border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(80,30,20,.10); padding: 14px 16px; display: grid; gap: 12px; }
+  .quick .links { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .quick a { text-decoration: none; color: var(--ink); font-weight: 600; font-size: 14px; padding: 7px 13px; border-radius: 999px; background: var(--cream); border: 1px solid var(--line); }
+  .quick a:hover { border-color: var(--gold); background: #fffaf0; }
+  .quick .dates { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; border-top: 1px dashed var(--line); padding-top: 12px; }
+  .quick .dates div { text-align: center; font-size: 12.5px; color: var(--muted); line-height: 1.35; }
+  .quick .dates b { display: block; color: var(--red-d); font-size: 14px; }
+  .bring { grid-template-columns: 1fr; }
+  @media (min-width: 620px) { .bring { grid-template-columns: 1fr 1fr; } }
+  .bring li { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--green); }
+  @media (min-width: 820px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  .act { padding: 16px 16px 18px; }
+  .act p { font-size: 14px; }
+  .pair { display: grid; gap: 0 22px; grid-template-columns: 1fr; }
+  @media (min-width: 820px) { .pair { grid-template-columns: 1fr 1fr; align-items: start; } .pair section { margin-bottom: 0; } .pair .card { min-height: 100%; } }
   .music { position: fixed; right: 16px; bottom: 16px; z-index: 60; display: flex; align-items: center; gap: 8px;
     background: var(--green); color: #fff; border: 2px solid var(--gold); border-radius: 999px; padding: 10px 16px; font-weight: 700; font-size: 14px;
     box-shadow: 0 6px 18px rgba(0,0,0,.22); cursor: pointer; }
@@ -154,9 +174,12 @@
   select { font: inherit; padding: 11px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; width: 100%; color: var(--ink); }
   select:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(31,92,61,.15); }
   .awgroup { margin: 8px 0 2px; font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--red-d); }
-  .award { background: #fffaf0; border: 1.5px solid #efe0bd; border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; }
-  .award .an { font-weight: 800; font-size: 15.5px; }
-  .award .ad { color: var(--muted); font-size: 13.5px; font-weight: 500; margin-top: -6px; }
+  .award { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 6px 14px; align-items: center; }
+  .award .an { font-weight: 700; font-size: 15px; display: block; }
+  .award .ad { color: var(--muted); font-size: 13px; font-weight: 500; display: block; }
+  .award select { padding: 8px 10px; font-size: 14px; }
+  @media (min-width: 620px) { .award { grid-template-columns: 1fr 230px; } }
+  .voterbox { background: var(--green-l); border-radius: 12px; padding: 12px 14px; }
   .award.done { border-color: var(--green); background: #f1f8f3; }
   .progress { font-size: 13.5px; font-weight: 700; color: var(--green); }
   footer { text-align: center; color: var(--muted); font-size: 13px; padding: 26px 0 40px; border-top: 1px solid var(--line); margin-top: 40px; }
@@ -183,7 +206,18 @@
 
 <main class="wrap">
 
-  <section>
+  <nav class="quick" aria-label="On this page">
+    <div class="links">
+      <a href="#plan">🕰️ Plan</a><a href="#bring">🎁 What to bring</a><a href="#elephant">🐘 Gift swap</a><a href="#photo">📸 Baby photo</a><a href="#confess">🤫 Confess</a><a href="#awards">🏆 Vote</a>
+    </div>
+    <div class="dates">
+      <div><b>Fri 11 Dec</b>Baby photos in</div>
+      <div><b>Fri 11 Dec</b>Award voting closes</div>
+      <div><b>Fri 18 Dec</b>Meeting &amp; dinner</div>
+    </div>
+  </nav>
+
+  <section id="plan">
     <h2><span class="ic">🕰️</span>Plan for the day</h2>
     <div class="card">
       <ul class="tl">
@@ -195,7 +229,7 @@
     </div>
   </section>
 
-  <section>
+  <section id="bring">
     <h2><span class="ic">🎁</span>What to bring</h2>
     <ul class="bring">
       <li><span class="em">🧶</span><div><b>Your best Christmas jumper</b><br><span class="note">No jumper means a fine. You have been warned!</span></div></li>
@@ -205,7 +239,7 @@
     </ul>
   </section>
 
-  <section>
+  <section id="happening">
     <h2><span class="ic">✨</span>What's happening</h2>
     <div class="grid">
       <div class="act"><h3><span class="em">🎅</span>"Dear Santa" pitches</h3><p>Start your 45-second pitch with "Dear Santa…" and tell him exactly who you'd love an introduction to this Christmas. Then read out the cracker joke on the back of your meeting sheet. Everyone's bingo depends on it!</p></div>
@@ -214,7 +248,6 @@
       <div class="act"><h3><span class="em">👶</span>Guess the baby</h3><p>Childhood Christmas photos will be by the coffee. Work out who's who before dinner, when we reveal the answers.</p></div>
       <div class="act"><h3><span class="em">🤫</span>Christmas confessions</h3><p>Funny, anonymous confessions from our work year, read out at dinner. Can you guess whose is whose?</p></div>
       <div class="act"><h3><span class="em">🏆</span>The Intrepid Awards 2026</h3><p>15 awards, from Networker of the Year to the Golden Stopwatch. You choose the winners: vote below by Friday 11 December, and we'll reveal them at dinner.</p></div>
-      <div class="act"><h3><span class="em">🐘</span>White elephant swap</h3><p>A gift swap with a cheeky twist: you might not keep the gift you pick, and nobody finds out what's inside until the end! The full rules are below.</p></div>
     </div>
   </section>
 
@@ -234,8 +267,9 @@
     </div>
   </section>
 
+  <div class="pair">
   <section id="photo">
-    <h2><span class="ic">📸</span>Upload your childhood Christmas photo</h2>
+    <h2><span class="ic">📸</span>Your childhood photo</h2>
     <div class="card">
       <span class="deadline">Please upload by Friday 11 December</span>
       <p class="lead">Only Charlotte sees who sent which photo, so the guessing stays fair. Your name is just for the answer sheet.</p>
@@ -254,7 +288,7 @@
   </section>
 
   <section id="confess">
-    <h2><span class="ic">🤫</span>Christmas confession box</h2>
+    <h2><span class="ic">🤫</span>Confession box</h2>
     <div class="card">
       <span class="deadline">Anonymous: we don't ask for your name</span>
       <p class="lead">Something funny from your work year. Keep it kind and Christmas-dinner friendly! Post it here, <b>or</b> write it down and pop it in the confession box on the day. Whichever you prefer, just one is plenty.</p>
@@ -265,6 +299,7 @@
       </form>
     </div>
   </section>
+  </div>
 
   <section id="awards">
     <h2><span class="ic">🏆</span>Vote: The Intrepid Awards 2026</h2>
@@ -272,7 +307,7 @@
       <span class="deadline">Voting closes Friday 11 December</span>
       <p class="lead">Choose your name, then pick a member for each award. Skip any you're not sure about, and you can't vote for yourself. Changed your mind? Just vote again before the deadline and your new votes replace the old ones. Votes are private, and the winners are revealed at Christmas dinner.</p>
       <form id="voteForm">
-        <label>Your name<select id="vVoter" required><option value="">Choose your name…</option></select></label>
+        <label class="voterbox">Your name<select id="vVoter" required><option value="">Choose your name…</option></select></label>
         <div id="awardList" style="display:grid;gap:10px"></div>
         <p class="progress" id="vProg"></p>
         <button type="submit" id="vBtn">Send my votes</button>
@@ -365,7 +400,7 @@
   AWARDS.forEach(function (g) {
     html += '<p class="awgroup">' + g[0] + '</p>';
     g[1].forEach(function (a) {
-      html += '<label class="award"><span class="an">' + a[0] + '</span><span class="ad">' + a[1] + '</span>' +
+      html += '<label class="award"><span><span class="an">' + a[0] + '</span><span class="ad">' + a[1] + '</span></span>' +
         '<select data-award="' + a[0] + '"><option value="">Choose a member (or skip)</option>' +
         MEMBERS.map(function (n) { return '<option value="' + n + '">' + n + '</option>'; }).join('') + '</select></label>';
     });
