@@ -343,7 +343,13 @@
   .stepper li span { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 15px; color: var(--gold); background: rgba(255,240,220,.04); }
   .stepper li.clickable { cursor: pointer; }
   .stepper li.done span { background: rgba(217,181,106,.22); border-color: var(--gold); color: var(--gold-l); }
-  .stepper li.done span::after { content: "✓"; font-size: 0; }
+  .stepper li.done span { font-size: 0; }
+  .stepper li.done span::after { content: "✓"; font-size: 15px; }
+  .stepper li.clickable:hover span { border-color: var(--gold); }
+  .sumbtn { all: unset; box-sizing: border-box; width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; cursor: pointer; }
+  .sumbtn .sl { display: grid; gap: 2px; }
+  .sumbtn .chg { flex: none; font-size: 13px; font-weight: 700; color: var(--gold-l); border: 1px solid var(--gold); border-radius: 999px; padding: 5px 12px; }
+  .summary li:hover { border-color: var(--gold); }
   .stepper li.active { color: var(--gold-l); }
   .stepper li.active span { background: linear-gradient(180deg, #f0d48e, #c9a24b); color: #3a0712; border-color: #f3e0ad; box-shadow: 0 0 0 4px rgba(217,181,106,.18); }
   .panel { display: grid; gap: 14px; }
@@ -627,7 +633,7 @@
         <h3 class="ph">You're all set, <span id="firstName"></span>!</h3>
         <p class="lead" id="doneLead">Thank you! We've emailed you a confirmation of your choices, with a reminder of what to bring.</p>
         <ul class="summary" id="summary"></ul>
-        <p class="note">Need to change something? Tap a step above. Menu choices close Friday 4 December, and photos and votes close Friday 11 December.</p>
+        <p class="note">Need to change something? Tap any item above. Menu choices close Friday 4 December, and photos and votes close Friday 11 December.</p>
       </div>
     </div>
   </section>
@@ -703,6 +709,7 @@
     panels.forEach(function (p) { p.hidden = +p.getAttribute('data-step') !== n; });
     if (n === 5) fillSummary();
     if (n === 4) refreshSelf();
+    if (n === 1) prefillMeal();
     paint();
     if (!noScroll) document.getElementById('checklist').scrollIntoView({ behavior: 'smooth' });
   }
@@ -742,12 +749,24 @@
     document.getElementById('doneLead').textContent = done
       ? 'Thank you! We\'ve emailed you a confirmation of your choices, with a reminder of what to bring.'
       : 'Nearly there! Finish the steps below and we\'ll email you a confirmation.';
-    var row = function (ok, label, txt) { return '<li class="' + (ok ? 'ok' : 'no') + '"><b>' + (ok ? '✓' : '•') + ' ' + label + '</b><span>' + txt + '</span></li>'; };
+    var row = function (ok, label, txt, n) {
+      return '<li class="' + (ok ? 'ok' : 'no') + '"><button type="button" class="sumbtn" data-to="' + n + '"><span class="sl"><b>' + (ok ? '✓' : '•') + ' ' + label + '</b><span>' + txt + '</span></span><span class="chg">' + (ok ? 'Change' : 'Do it now') + ' →</span></button></li>';
+    };
+    var m = s.mealChoice;
     document.getElementById('summary').innerHTML =
-      row(s.meal, 'Christmas dinner', s.meal ? 'Chosen' : 'Not chosen yet') +
-      row(s.photo, 'Childhood photo', s.photo ? 'Uploaded' : 'Skipped for now. You can add it until 11 December') +
-      row(!!s.confession, 'Confession', s.confession === 'On the day' ? 'Writing it on the day: bring it on paper' : (s.confession ? 'Posted' : 'Not done yet')) +
-      row(s.votes > 0, 'Intrepid Awards', s.votes > 0 ? 'Voted in ' + s.votes + ' award' + (s.votes === 1 ? '' : 's') : 'Not voted yet');
+      row(s.meal, 'Christmas dinner', m ? m.starter + ', ' + m.main + ', ' + m.dessert : (s.meal ? 'Chosen' : 'Not chosen yet'), 1) +
+      row(s.photo, 'Childhood photo', s.photo ? 'Uploaded' : 'Skipped for now. You can add it until 11 December', 2) +
+      row(!!s.confession, 'Confession', s.confession === 'On the day' ? 'Writing it on the day: bring it on paper' : (s.confession ? 'Posted' : 'Not done yet'), 3) +
+      row(s.votes > 0, 'Intrepid Awards', s.votes > 0 ? 'Voted in ' + s.votes + ' award' + (s.votes === 1 ? '' : 's') : 'Not voted yet', 4);
+    [].forEach.call(document.querySelectorAll('.sumbtn'), function (b) { b.addEventListener('click', function () { go(+b.getAttribute('data-to')); }); });
+  }
+  /* Pre-select the member's saved dinner when they come back to change it */
+  function prefillMeal() {
+    var m = STATUS && STATUS.mealChoice; if (!m) return;
+    ['starter', 'main', 'dessert'].forEach(function (k) {
+      [].forEach.call(document.querySelectorAll('#mealForm input[name="' + k + '"]'), function (r) { r.checked = r.value === m[k]; });
+    });
+    var d = document.getElementById('mDiet'); if (d && !d.value) d.value = m.diet || '';
   }
 
   /* ---------- Dinner ---------- */
