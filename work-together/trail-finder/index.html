@@ -196,6 +196,7 @@ var EV = [
   ['daniel','Win more customers with social media video','Would you like more enquiries from social media?',false],
   ['sian','Update your photos','Are your website and social media photos out of date?',false],
   ['chrism','Fund the next step','Do you need funding to grow?',false],
+  ['richard','Upgrade the coffee for customers and staff','Would better coffee help your customers or your team?',false],
   ['martin','Lease vans or cars for the business','Do you need vans or cars for the business?',false],
   ['stuartb','Plan for your own future','Have you already planned your pension and the future of the business?',true],
   ['gareth','Show customers you give back','Would you like a local charity partner?',false] ] },
@@ -205,6 +206,7 @@ var EV = [
   ['dawn','Train your new starters in first aid and fire safety','Will your new starters need first aid or fire safety training?',false],
   ['lee','Review your risk assessments','Are your risk assessments up to date?',true],
   ['stuartm','Set up IT and phones','Will your staff need computers, emails or phones?',false],
+  ['martin','Lease cars or vans for the team','Will your staff need vehicles?',false],
   ['stevew','Stock the workplace','Do you need desks, supplies or PPE for your staff?',false],
   ['gareth','Offer payroll giving to a local charity','Would you like to give your team a way to support a local charity?',false],
   ['charlotte','Take on the extra admin','Would you like help with the extra admin?',false],
@@ -239,6 +241,7 @@ var EV = [
   ['stevew','Supply packaging, tape and warehouse kit','Do you need packaging and warehouse supplies?',false],
   ['andy','Design your branded packaging','Do you need branded packaging for your products?',false],
   ['dawn','Train the warehouse team in manual handling and first aid','Would your team benefit from manual handling or first aid training?',false],
+  ['lee','Inspect the forklifts and lifting gear','Do you use forklifts or lifting equipment?',false],
   ['spencer','Keep overheads down'],
   ['stuartm','Protect your IT','Is your IT and cyber security already looked after?',true],
   ['charlotte','Keep orders, invoices and messages moving','Would you like help with orders, invoices and customer messages?',false] ] },
@@ -357,10 +360,12 @@ var EV = [
  { g:'Life', n:'Planning to retire', s:'Stepping back', steps:[
   ['kath','Get the accounts and tax in order','Are you selling or closing a business?',false],
   ['stuartb','Build your retirement plan'],
+  ['michelle','Let a property for income in retirement','Do you own a second property you could let?',false],
   ['sue','Value your home if you plan to downsize','Are you thinking of downsizing?',false],
   ['clive','Write or update your Will','Do you already have an up-to-date Will?',true],
   ['chrisa','Review your mortgage','Do you still have a mortgage?',false],
   ['seamus','Cut your household bills for retirement','Would you like to lower your household bills before you retire?',false] ] },
+  ['martin','Lease a car when the company car goes','Are you handing back a company car?',false],
  { g:'Life', n:'A leak at a rental home', s:'Fixed fast', steps:[
   ['michelle','Take the tenant’s call','Would you like an agent to deal with tenants for you?',false],
   ['alex','Fix the leak'],
@@ -386,7 +391,15 @@ var EV = [
   ['adam','Upgrade the windows and doors','Are your windows or doors draughty?',false],
   ['philip','Add an alarm and CCTV','Would you like an alarm or CCTV?',false],
   ['trae','Fit an EV charger or solar electrics','Would you like an EV charger or solar panels?',false],
-  ['anthony','Protect your home from flooding','Is your home at risk of flooding?',false] ] }
+  ['anthony','Protect your home from flooding','Is your home at risk of flooding?',false] ] },
+ { g:'Life', n:'Moving away for work', s:'Keeping your home while you go', steps:[
+  ['michelle','Let and manage your home while you’re away','Would you like someone to let and manage your home?',false],
+  ['chrisa','Arrange consent to let or a let-to-buy mortgage','Does your lender already know you plan to let your home?',true],
+  ['westen','Switch to landlord insurance','Is your landlord insurance already sorted?',true],
+  ['kath','Handle the tax on the rental income','Do you already have an accountant for your rental income?',true],
+  ['seamus','Move the bills into the tenant’s name'],
+  ['martin','Lease a car for the new job','Will you need a car in your new area?',false],
+  ['charlotte','Keep the move and the paperwork on track','Would you like help keeping the move and the paperwork on track?',false] ] }
 ];
 var me = null, ev = null, qs = [], ans = [], slot = null, err = '', coord = null;
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
