@@ -121,6 +121,7 @@ var EV = [
   ['alex','Service your kitchen gas','Is your kitchen gas safety certificate up to date?',true],
   ['anthony','Keep grease out of your drains','Do your drains ever block or smell?',false],
   ['westen','Review your insurance','Is your business insurance already sorted?',true],
+  ['kath','Run the staff payroll and tips','Is your payroll, including tips, already sorted?',true],
   ['spencer','Cut your energy, water and card fees'],
   ['stevew','Stock catering supplies and tableware','Would you like one supplier for catering and cleaning supplies?',false],
   ['richard','Serve better coffee','Would you like to improve your coffee?',false],
@@ -132,7 +133,7 @@ var EV = [
   ['charlotte','Answer your calls, enquiries and bookings','Do calls and messages get missed during service?',false],
   ['stuartm','Set up reliable Wi-Fi and phone lines','Is your Wi-Fi or phone line letting you down?',false] ] },
  { g:'Business', n:'Opening a café', s:'New premises, new venture', steps:[
-  ['kath','Set up your books and VAT','Do you already have an accountant?',true],
+  ['kath','Set up your books, VAT and payroll','Do you already have an accountant?',true],
   ['clive','Advise on hiring staff','Will you be taking on staff?',false],
   ['chrism','Fund the equipment','Do you need funding for equipment?',false],
   ['trae','Wire the premises','Does the premises need electrical work?',false],
@@ -153,7 +154,7 @@ var EV = [
   ['jonathan','Print your menus','Do you need menus printed?',false],
   ['sian','Photograph your food and space','Would you like professional photos of your food and café?',false] ] },
  { g:'Business', n:'Starting in the trades', s:'Going it alone', steps:[
-  ['kath','Set up your books','Do you already have an accountant?',true],
+  ['kath','Set up your books and register for tax','Do you already have an accountant?',true],
   ['martin','Supply your van','Do you need a van?',false],
   ['westen','Arrange your insurance','Is your business insurance already sorted?',true],
   ['lee','Get your health and safety accreditation','Do you need health and safety paperwork or accreditation for site work?',false],
@@ -162,7 +163,7 @@ var EV = [
   ['spencer','Set up card payments and business bills','Do you need card payments or business bills set up?',false],
   ['robbie','Check new customers can pay','Would you like to check new customers can pay before you start work?',false] ] },
  { g:'Business', n:'Starting a small business', s:'From idea to open', steps:[
-  ['kath','Set up the company, your books and VAT','Do you already have an accountant?',true],
+  ['kath','Set up the company, your books, VAT and tax','Do you already have an accountant?',true],
   ['clive','Get the legal side right from day one','Do you need help with contracts, terms or setting up the company?',false],
   ['chrism','Fund the start-up equipment','Do you need funding for equipment or vehicles?',false],
   ['westen','Arrange your business insurance','Is your business insurance already sorted?',true],
@@ -177,7 +178,7 @@ var EV = [
   ['robbie','Check new customers can pay','Will you sell to other businesses on credit?',false],
   ['charlotte','Set up your admin so nothing slips','Would you like help with calls, invoices and admin?',false] ] },
  { g:'Business', n:'Improving your small business', s:'Run it better, grow it further', steps:[
-  ['kath','Get clear numbers every month','Do you already know your numbers each month?',true],
+  ['kath','Get clear numbers every month and your tax in order','Do you already know your numbers each month?',true],
   ['spencer','Cut your energy, water and card fees'],
   ['charlotte','Take the admin off your plate','Does admin eat into your evenings and weekends?',false],
   ['robbie','Protect against customers who don’t pay','Do customers ever pay you late or not at all?',false],
@@ -194,7 +195,7 @@ var EV = [
   ['gareth','Show customers you give back','Would you like a local charity partner?',false] ] },
  { g:'Business', n:'Taking on your first staff', s:'From one to a team', steps:[
   ['clive','Advise on contracts and employment law','Do you already have employment contracts in place?',true],
-  ['kath','Set up payroll','Is your payroll already set up?',true],
+  ['kath','Set up payroll and PAYE','Is your payroll already set up?',true],
   ['dawn','Train your new starters in first aid and fire safety','Will your new starters need first aid or fire safety training?',false],
   ['lee','Review your risk assessments','Are your risk assessments up to date?',true],
   ['stuartm','Set up IT and phones','Will your staff need computers, emails or phones?',false],
@@ -206,6 +207,7 @@ var EV = [
  { g:'Business', n:'Winning a big contract', s:'Scaling up safely', steps:[
   ['robbie','Protect against non-payment','Is the customer paying you on credit terms?',false],
   ['chrism','Fund the cashflow','Will you need funding to deliver the work?',false],
+  ['kath','Scale up payroll and plan the tax','Will you be taking on extra staff?',false],
   ['martin','Add more vans','Will you need more vehicles?',false],
   ['lee','Meet the ISO standards','Does the contract ask for ISO standards?',false],
   ['dawn','Train the bigger team in first aid and manual handling','Will the bigger team need first aid or manual handling training?',false],
@@ -224,7 +226,7 @@ var EV = [
   ['chrism','Fund the fit-out or the premises','Do you need funding for the move or the premises?',false] ] },
  { g:'Business', n:'Growing a wholesale business', s:'More stock, more customers', steps:[
   ['robbie','Insure the credit you give','Do you sell to customers on credit?',false],
-  ['kath','Keep the numbers clear','Do you already have an accountant?',true],
+  ['kath','Handle the VAT returns and payroll','Do you already have an accountant?',true],
   ['chrism','Fund the stock and growth','Do you need funding to grow?',false],
   ['martin','Lease the delivery vans','Do you need delivery vehicles?',false],
   ['andy','Design your branded packaging','Do you need branded packaging for your products?',false],
@@ -283,7 +285,7 @@ var EV = [
   ['spencer','Review the energy contract'],
   ['westen','Update the fleet insurance','Is your fleet insurance already sorted?',true],
   ['dawn','Train your drivers in emergency first aid','Would your drivers benefit from first aid training?',false],
-  ['kath','Keep the numbers clear','Do you already have an accountant?',true] ] },
+  ['kath','Work out the tax savings on electric vehicles','Would you like the tax savings on electric vehicles worked out?',false] ] },
  { g:'Life', n:'Buying a home', s:'First home or next move', steps:[
   ['sue','Find the right home','Have you already found your home?',true],
   ['chrisa','Arrange your mortgage','Do you already have a mortgage agreed?',true],
@@ -303,8 +305,7 @@ var EV = [
  { g:'Life', n:'A new baby on the way', s:'Making room and planning ahead', steps:[
   ['sian','Take the newborn photos','Would you like newborn photos?',false],
   ['sue','Find a bigger home','Are you thinking of moving?',false],
-  ['chrisa','Arrange the new mortgage','Will you need a new mortgage?',false],
-  ['westen','Set up life insurance','Do you already have life insurance?',true],
+  ['chrisa','Arrange the new mortgage and life cover','Will you need a new mortgage or life cover?',false],
   ['clive','Update your Wills'],
   ['stuartb','Plan for your child’s future','Would you like to start saving or investing for your child?',false],
   ['martin','Lease a bigger family car','Will you need a bigger car for the family?',false],
@@ -329,6 +330,7 @@ var EV = [
   ['westen','Arrange landlord insurance','Is your landlord insurance already sorted?',true],
   ['charlotte','Get the paperwork ready for your first tenant','Would you like help getting the certificates and paperwork in order?',false],
   ['michelle','Find tenants and manage it','Would you like someone to manage it for you?',false],
+  ['kath','Handle the tax on the rental income','Do you already have an accountant for your rental income?',true],
   ['seamus','Set up the bills at the rental','Will you be paying the bills at the rental, for example on a bills-included let?',false] ] },
  { g:'Life', n:'Selling up and downsizing', s:'The next chapter', steps:[
   ['alex','Fix the niggles before viewings','Are there any plumbing jobs to fix before you sell?',false],
@@ -339,7 +341,7 @@ var EV = [
   ['michelle','Find a rental while you look','Will you need somewhere to rent in between?',false],
   ['seamus','Move the bills across'] ] },
  { g:'Life', n:'Planning to retire', s:'Stepping back', steps:[
-  ['kath','Get the numbers in order','Are you selling or closing a business?',false],
+  ['kath','Get the accounts and tax in order','Are you selling or closing a business?',false],
   ['stuartb','Build your retirement plan'],
   ['clive','Write or update your Will','Do you already have an up-to-date Will?',true],
   ['chrisa','Review your mortgage','Do you still have a mortgage?',false],
@@ -354,6 +356,7 @@ var EV = [
   ['clive','Handle probate and the legal side'],
   ['charlotte','Keep track of the paperwork and deadlines','Would you like help keeping track of the paperwork and deadlines?',false],
   ['sue','Value or sell the property','Are you thinking of selling?',false],
+  ['kath','Work out any tax due on the sale or income','Will you sell it or earn rent from it?',false],
   ['stuartb','Plan the next steps for the money','Would you like advice on the money?',false],
   ['michelle','Let it, if the family keep it','Are you thinking of letting it out?',false],
   ['seamus','Move the bills over','Do the household bills need moving into a new name?',false] ] },
