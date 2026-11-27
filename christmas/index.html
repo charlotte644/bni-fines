@@ -547,15 +547,15 @@
       <ol class="stepper" id="stepper">
         <li data-go="0"><span>1</span>Your name</li>
         <li data-go="1"><span>2</span>Dinner</li>
-        <li data-go="2"><span>3</span>Photo</li>
-        <li data-go="3"><span>4</span>Confession</li>
-        <li data-go="4"><span>5</span>Awards</li>
+        <li data-go="2"><span>3</span>Awards</li>
+        <li data-go="3"><span>4</span>Photo</li>
+        <li data-go="4"><span>5</span>Confession</li>
       </ol>
 
       <!-- Step 0: name -->
       <div class="panel" data-step="0">
         <h3 class="ph">Let's get you ready for Christmas</h3>
-        <p class="lead">Choose your name and we'll take you through four quick steps: your dinner, a childhood photo, a confession and the Intrepid Awards. It takes about five minutes.</p>
+        <p class="lead">Choose your name and we'll take you through four quick steps: your dinner, the Intrepid Awards, a childhood photo and a confession. It takes about five minutes.</p>
         <label class="voterbox whobox">Your name
           <select id="who"><option value="">Choose your name…</option></select>
         </label>
@@ -581,7 +581,7 @@
       </div>
 
       <!-- Step 2: photo -->
-      <div class="panel" data-step="2" hidden>
+      <div class="panel" data-step="3" hidden>
         <h3 class="ph">Upload your childhood photo</h3>
         <span class="deadline">By Friday 11 December</span>
         <p class="donenote" data-done="photo">✓ We've got your photo. Send another to replace it, or carry on.</p>
@@ -600,7 +600,7 @@
       </div>
 
       <!-- Step 3: confession -->
-      <div class="panel" data-step="3" hidden>
+      <div class="panel" data-step="4" hidden>
         <h3 class="ph">Your confession</h3>
         <span class="deadline">Anonymous: your name isn't kept with it</span>
         <p class="donenote" data-done="confession">✓ Done. You can change it below, or carry on.</p>
@@ -615,7 +615,7 @@
       </div>
 
       <!-- Step 4: awards -->
-      <div class="panel" data-step="4" hidden>
+      <div class="panel" data-step="2" hidden>
         <h3 class="ph">Vote: The Intrepid Awards 2026</h3>
         <span class="deadline">Voting closes Friday 11 December</span>
         <p class="donenote" data-done="votes">✓ Your votes are in. Vote again to change them.</p>
@@ -693,7 +693,7 @@
   var panels = [].slice.call(document.querySelectorAll('.panel'));
   var steps = [].slice.call(document.querySelectorAll('#stepper li'));
   function isDone(k) { if (!STATUS) return false; return k === 'votes' ? STATUS.votes > 0 : !!STATUS[k]; }
-  var KEYS = [null, 'meal', 'photo', 'confession', 'votes'];
+  var KEYS = [null, 'meal', 'votes', 'photo', 'confession'];
   function paint() {
     steps.forEach(function (li, i) {
       li.classList.toggle('active', i === step || (step === 5 && false));
@@ -708,7 +708,7 @@
     step = n;
     panels.forEach(function (p) { p.hidden = +p.getAttribute('data-step') !== n; });
     if (n === 5) fillSummary();
-    if (n === 4) refreshSelf();
+    if (n === 2) refreshSelf();
     if (n === 1) prefillMeal();
     paint();
     if (!noScroll) document.getElementById('checklist').scrollIntoView({ behavior: 'smooth' });
@@ -720,8 +720,9 @@
 
   function firstTodo() {
     if (!isDone('meal')) return 1;
-    if (!isDone('confession')) return isDone('photo') ? 3 : 2;
-    if (!isDone('votes')) return 4;
+    if (!isDone('votes')) return 2;
+    if (!isDone('photo') && !(STATUS && STATUS.photoSkipped)) return 3;
+    if (!isDone('confession')) return 4;
     return 5;
   }
   document.getElementById('startBtn').addEventListener('click', function () {
@@ -755,9 +756,9 @@
     var m = s.mealChoice;
     document.getElementById('summary').innerHTML =
       row(s.meal, 'Christmas dinner', m ? m.starter + ', ' + m.main + ', ' + m.dessert : (s.meal ? 'Chosen' : 'Not chosen yet'), 1) +
-      row(s.photo, 'Childhood photo', s.photo ? 'Uploaded' : 'Skipped for now. You can add it until 11 December', 2) +
-      row(!!s.confession, 'Confession', s.confession === 'On the day' ? 'Writing it on the day: bring it on paper' : (s.confession ? 'Posted' : 'Not done yet'), 3) +
-      row(s.votes > 0, 'Intrepid Awards', s.votes > 0 ? 'Voted in ' + s.votes + ' award' + (s.votes === 1 ? '' : 's') : 'Not voted yet', 4);
+      row(s.votes > 0, 'Intrepid Awards', s.votes > 0 ? 'Voted in ' + s.votes + ' award' + (s.votes === 1 ? '' : 's') : 'Not voted yet', 2) +
+      row(s.photo, 'Childhood photo', s.photo ? 'Uploaded' : 'Skipped for now. You can add it until 11 December', 3) +
+      row(!!s.confession, 'Confession', s.confession === 'On the day' ? 'Writing it on the day: bring it on paper' : (s.confession ? 'Posted' : 'Not done yet'), 4);
     [].forEach.call(document.querySelectorAll('.sumbtn'), function (b) { b.addEventListener('click', function () { go(+b.getAttribute('data-to')); }); });
   }
   /* Pre-select the member's saved dinner when they come back to change it */
@@ -909,15 +910,15 @@
     if (!Object.keys(votes).length) { say('vMsg', 'err', 'Please pick a member for at least one award.'); return; }
     var btn = document.getElementById('vBtn'); btn.disabled = true; say('vMsg', '', 'Sending your votes…');
     post({ action: 'vote', name: me(), votes: votes })
-      .then(function (r) { saved(r, 'vMsg', 'Votes in! 🏆', function () { go(5); }); })
+      .then(function (r) { saved(r, 'vMsg', 'Votes in! 🏆', nextStep); })
       .catch(fail('vMsg')).then(function () { btn.disabled = false; });
   });
 
   /* Deadlines: after each one, that step shows a closed message instead of its form */
   var CLOSES = { 1: ['2026-12-05T00:00:00Z', 'Menu choices closed on Friday 4 December. If you need a change, please message Michelle or Charlotte.'],
-    2: ['2026-12-12T00:00:00Z', 'Sorry, photo uploads closed on Friday 11 December so we could print the "guess the baby" board.'],
-    3: ['2026-12-12T00:00:00Z', 'Online confessions closed on Friday 11 December. You can still bring yours on paper on the day!'],
-    4: ['2026-12-12T00:00:00Z', 'Sorry, voting closed on Friday 11 December. The winners will be revealed at dinner!'] };
+    3: ['2026-12-12T00:00:00Z', 'Sorry, photo uploads closed on Friday 11 December so we could print the "guess the baby" board.'],
+    4: ['2026-12-12T00:00:00Z', 'Online confessions closed on Friday 11 December. You can still bring yours on paper on the day!'],
+    2: ['2026-12-12T00:00:00Z', 'Sorry, voting closed on Friday 11 December. The winners will be revealed at dinner!'] };
   Object.keys(CLOSES).forEach(function (k) {
     if (new Date() < new Date(CLOSES[k][0])) return;
     var p = document.querySelector('.panel[data-step="' + k + '"]'), f = p.querySelector('form');
@@ -930,7 +931,7 @@
   });
 
   /* Remember the name on this device, and open personal links from the confirmation email (?who=Name&step=photo) */
-  var q = new URLSearchParams(location.search), qWho = q.get('who'), qStep = { dinner: 1, photo: 2, confession: 3, awards: 4 }[q.get('step')];
+  var q = new URLSearchParams(location.search), qWho = q.get('who'), qStep = { dinner: 1, awards: 2, photo: 3, confession: 4 }[q.get('step')];
   try { var saved0 = localStorage.getItem('xmasWho'); if (saved0 && MEMBERS.indexOf(saved0) > -1) who.value = saved0; } catch (e) {}
   go(0, true);
   if (qWho && MEMBERS.indexOf(qWho) > -1) {
